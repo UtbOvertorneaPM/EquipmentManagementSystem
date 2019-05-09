@@ -51,7 +51,7 @@ namespace EquipmentManagementSystem {
             var path = "";
 
 #if DEBUG
-            path = @"C:\Users\peter\source\repos\MacMS\MacMS\prodSettings.json";
+            path = @"C:\Users\peter\source\repos\prodSettings.json";
 #else
             path = @"C:\EMS\prodSettings.json";
 #endif

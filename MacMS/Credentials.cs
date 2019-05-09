@@ -10,9 +10,6 @@ namespace EquipmentManagementSystem {
     public class Credentials {
         public string User { get; set; }
         public string Password { get; set; }
-
-        [JsonProperty("VaultIP")]
-        public string IP { get; set; }
     }
 
 }
