@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-
+﻿
 namespace EquipmentManagementSystem {
 
     public class Rootobject {
