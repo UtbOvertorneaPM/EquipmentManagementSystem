@@ -1,0 +1,78 @@
+﻿@model EquipmentManagementSystem.Models.Equipment
+
+@using EquipmentManagementSystem
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $('form').on("submit", function (e) {
+
+            var dialog = document.getElementById("confirmDialog");
+            dialog.title = "Delete Equipment";
+            ConfirmClick(e, Delete);
+        });
+
+        function Delete() {
+
+            var form = $('#form');
+
+            $.getScript("ajaxPost.js", function (data) {
+                PostForm(form, callBack);
+            });
+        }
+
+        function callBack(success) {
+
+            if (success) {
+
+                window.location = "@Url.Action("Index")";
+            }
+        };
+
+    </script>
+}
+
+<h2>Delete</h2>
+
+@using (Html.BeginForm("Delete", "Home", FormMethod.Post, new { id = "form" })) {
+    @Html.AntiForgeryToken()
+    <h3></h3>
+    <div>
+        <div>
+            @Html.HiddenFor(model => model.ID)
+        </div>
+        <table>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Model):  </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Model)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Serial): </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Serial)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Location): </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Location)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Owner): </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.FullName)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Notes): </p></td>
+                <td>@Html.TextAreaFor(model => model.Notes, new { @class = "NotesField" })</td>
+            </tr>
+        </table>
+    </div>
+    <div id="additionalInformation"></div>
+    <div class="SubmitDiv">
+        <input type="submit" value="Delete" />
+        <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Home")'" />
+    </div>
+}

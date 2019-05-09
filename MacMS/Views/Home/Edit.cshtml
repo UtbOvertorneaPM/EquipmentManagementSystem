@@ -1,0 +1,222 @@
+﻿@model EquipmentManagementSystem.Models.Equipment
+
+@using EquipmentManagementSystem
+
+@using EquipmentManagementSystem.Models
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@section scripts {
+
+<script type="text/javascript">
+
+        $('document').ready(function () {
+
+            GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
+
+            var row = document.getElementById('AdditionalInformation');
+            var td = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var p = document.createElement('p');
+            var input = document.createElement('input');
+            p.classList = "CategoryText Bold";
+            input.classList = "CategoryText";
+
+            switch("@Html.ValueFor(model => model.EquipType)") {
+
+                case "Mobil":
+
+                    input.type = "text";
+                    input.id = "MobileNumber";
+                    p.appendChild(document.createTextNode("Mobil Nummer"));
+                    input.textContent = "@Html.DisplayFor(model => model.MobileNumber)";
+                    break;
+
+                case "Skrivare":
+
+                    input.type = "text";
+                    input.id = "IP";
+                    p.appendChild(document.createTextNode("IP Address"));
+                    input.textContent = "@Html.DisplayFor(model => model.IP)";
+                    break;
+
+                case "Router":
+                case "Switch":
+
+                    input.type = "number";
+                    input.id = "Ports";
+                    p.appendChild(document.createTextNode("Ports"));
+                    input.value = "@Html.DisplayFor(model => model.Ports)";
+                    break;
+
+                case "Projektor":
+
+                    input.type = "text";
+                    input.id = "Resolution";
+                    p.appendChild(document.createTextNode("Upplösning"));
+                    input.value = "@Html.DisplayFor(model => model.Resolution)";
+                    break;
+
+                default:
+                    return;
+            }
+
+            td.appendChild(p);
+            td2.appendChild(input);
+
+            row.appendChild(td);
+            row.appendChild(td2);
+
+            var bool = document.getElementById('IDCheck');
+            bool.value = nameInput.value.trim() ? true : false;
+        });
+
+
+        $('#confirmButton').click(function (e) {
+
+            var dialog = document.getElementById("confirmDialog");
+            dialog.title = "Edit Equipment";
+
+            ConfirmClick(e, submitted);
+        });
+
+
+        $('#Owner_FullName').keyup(function() {
+
+            var nameInput = document.getElementById('Owner_FullName');
+
+            if (nameInput.value.length > 1) {
+                Search(nameInput, document.getElementById('ownerList'));
+
+                var bool = document.getElementById('IDCheck');
+                bool.value = nameInput.value.trim() ? true : false;
+            }
+
+        });
+
+
+        $(document).click(function () {
+
+            var list = document.getElementById("ownerList");
+            list.style.display = "none";
+        });
+
+
+        function ClickName(event) {
+
+            event.preventDefault();
+
+            var input = document.getElementById("Owner_FullName");
+            input.value = event.target.textContent;
+
+            var ownerID = document.getElementById("Owner_ID");
+            ownerID.value = event.target.id;
+
+            var list = document.getElementById("ownerList");
+            list.style.display = "none";
+
+            var bool = document.getElementById('IDCheck');
+            bool.value = false;
+        };
+
+        function submitted() {
+
+            event.preventDefault();
+            var form = $('#form');
+
+            var ownerID = document.getElementById("Owner_ID");
+            var ownerName = document.getElementById("Owner_FullName");
+
+            if (ownerName.value.length < 1) {
+                ownerID.value = -1;
+            }
+
+            $.getScript("/js/ajaxPost.js", function (data) {
+                PostForm(form, callBackUser);
+            });
+        };
+
+
+        function callBackUser(success) {
+
+            if (!success) {
+
+                $("#confirmDialog").dialog("close");
+
+                var phElement = $('#modal-placeholder');
+
+                $.get("@Url.Action("CreateModal", "Owner")").done(function (data2) {
+
+                    phElement.html(data2);
+                    phElement.find('.modal').modal('show');
+                });
+
+                var x = document.getElementById("modal-placeholder");
+                x.style.display = "block";
+            }
+            else if (success) {
+
+                window.location = "@Url.Action("Index")";
+            }
+
+        };
+
+
+</script>
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { id = "form", @class = "postAjax" })) {
+
+    @Html.AntiForgeryToken()
+    <h3></h3>
+    <div>
+        <div>
+            @Html.HiddenFor(model => model.ID)
+            @Html.HiddenFor(model => model.IDCheck)
+            @Html.HiddenFor(model => model.Owner.ID)
+        </div>
+        <table>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Model)  </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Model)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Serial) </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.EquipType) </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.EquipType)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Location) </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Location)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Owner.FullName) </p></td>
+                <td>
+                    @Html.EditorFor(model => model.Owner.FullName)
+                    <ul class="DropDownContent" id="ownerList"></ul>
+                </td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Notes)</p></td>
+                <td>@Html.TextAreaFor(model => model.Notes, new { @class = "NotesField" })</td>
+            </tr>
+            <tr id="AdditionalInformation"></tr>
+        </table>
+        <div class="ModalForm" id="modal-placeholder"></div>
+    </div>
+    <div class="SubmitDiv">
+        <input type="button" id="confirmButton" />
+        <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Home")'" />
+    </div>
+}
+
+

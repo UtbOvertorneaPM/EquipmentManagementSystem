@@ -1,0 +1,101 @@
+﻿@model EquipmentManagementSystem.Models.Owner
+
+@{
+    ViewData["Title"] = "CreateOwner";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        function callBackOwner(data) {
+
+
+            if (data) {
+
+                var modal = document.getElementById('modal-placeholder');
+                modal.style.display = "none";
+                window.location.reload(true);
+            }
+        };
+
+        $('#modalForm').on("submit", function (event) {
+
+            event.preventDefault();
+            var form = $('#modalForm');
+
+            $.getScript("ajaxPost.js", function (data) {
+                PostForm(form, callBackOwner);
+            });
+        });
+
+
+    </script>
+
+}
+
+<h2>CreateOwner</h2>
+
+@using (Html.BeginForm("PostModal", "Owner", FormMethod.Post, new { id = "modalForm" })) {
+    @Html.AntiForgeryToken()
+
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.FirstName):  </p>
+                </td>
+                <td>
+                    <p class="CategoryText">@Html.EditorFor(model => model.FirstName)</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.LastName):  </p>
+                </td>
+                <td>
+                    <p class="CategoryText">@Html.EditorFor(model => model.LastName)</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Mail):  </p>
+                </td>
+                <td>
+                    <p class="CategoryText">@Html.EditorFor(model => model.Mail)</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Address):  </p>
+                </td>
+                <td>
+                    <p class="CategoryText">@Html.EditorFor(model => model.Address)</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.TelNr):  </p>
+                </td>
+                <td>
+                    <p class="CategoryText">@Html.EditorFor(model => model.TelNr)</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.SSN):  </p>
+                </td>
+                <td>
+                    <p class="CategoryText">@Html.EditorFor(model => model.SSN)</p>
+                </td>
+            </tr>
+
+        </table>
+
+
+        <div class="SubmitDiv">
+            <input type="submit" value="Submit" id="modalSubmit"/>
+        </div>
+    </div>
+}

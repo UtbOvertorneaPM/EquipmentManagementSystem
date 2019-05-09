@@ -1,0 +1,129 @@
+[
+  {
+    "outputFileName": "wwwroot/js/jquery.js",
+    "inputFiles": [
+      "node_modules/jquery/dist/jquery.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery.min.js",
+    "inputFiles": [
+      "node_modules/jquery/dist/jquery.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery.unobtrusive-ajax.js",
+    "inputFiles": [
+      "node_modules/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery.unobtrusive-ajax.min.js",
+    "inputFiles": [
+      "node_modules/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery-ui.js",
+    "inputFiles": [
+      "node_modules/jqueryui/jquery-ui.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery-ui.min.js",
+    "inputFiles": [
+      "node_modules/jqueryui/jquery-ui.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery.validate.js",
+    "inputFiles": [
+      "node_modules/jquery-validation/dist/jquery.validate.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery.validate.min.js",
+    "inputFiles": [
+      "node_modules/jquery-validation/dist/jquery.validate.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery.validate.unobtrusive.js",
+    "inputFiles": [
+      "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery.validate.unobtrusive.min.js",
+    "inputFiles": [
+      "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/bootstrap.js",
+    "inputFiles": [
+      "node_modules/bootstrap/dist/js/bootstrap.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/bootstrap.min.js",
+    "inputFiles": [
+      "node_modules/bootstrap/dist/js/bootstrap.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/jquery-ui.css",
+    "inputFiles": [
+      "node_modules/jqueryui/jquery-ui.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/ajaxPost.js",
+    "inputFiles": [
+      "scripts/ajaxPost.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/ConfirmationDialogue.js",
+    "inputFiles": [
+      "scripts/ConfirmationDialogue.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/getOwnerList.js",
+    "inputFiles": [
+      "scripts/getOwnerList.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Index-Table.js",
+    "inputFiles": [
+      "scripts/Index-Table.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Search.js",
+    "inputFiles": [
+      "scripts/Search.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/CRUD.css",
+    "inputFiles": [
+      "Content/CRUD.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/site.css",
+    "inputFiles": [
+      "Content/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/Table.css",
+    "inputFiles": [
+      "Content/Table.css"
+    ]
+  }
+
+]

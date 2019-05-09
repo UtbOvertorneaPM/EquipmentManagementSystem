@@ -1,0 +1,202 @@
+﻿@model EquipmentManagementSystem.Models.Equipment
+
+@using EquipmentManagementSystem
+
+@{
+    ViewData["Title"] = "Create Equipment";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@section scripts {
+
+    <script type="text/javascript">
+
+
+        $('document').ready(function () {
+
+            GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
+
+            var nameInput = document.getElementById('Owner_FullName');
+
+            var bool = document.getElementById('IDCheck');
+            bool.value = nameInput.value.trim() ? true : false;
+        });
+
+
+        $('#typeSelect').change(function (event) {
+
+            
+            var row = document.getElementById('AdditionalInformation');
+            $('#AdditionalInformation').empty();
+
+            var td = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var p = document.createElement('p');
+            var input = document.createElement('input');
+
+            p.classList = "CategoryText Bold";
+            input.classList = "CategoryText";
+
+            switch (this[this.value].innerHTML) {
+
+                case "Mobil":
+
+                    input.type = "text";
+                    input.id = "MobileNumber";
+                    p.appendChild(document.createTextNode("Mobil Nummer"));
+                    input.textContent = "@Html.DisplayFor(model => model.MobileNumber)";
+                    break;
+
+                case "Skrivare":
+
+                    input.type = "text";
+                    input.id = "IP";
+                    p.appendChild(document.createTextNode("IP Address"));
+                    input.textContent = "@Html.DisplayFor(model => model.IP)";
+                    break;
+
+                case "Router":
+                case "Switch":
+
+                    input.type = "number";
+                    input.id = "Ports";
+                    p.appendChild(document.createTextNode("Ports"));
+                    input.value = "@Html.DisplayFor(model => model.MobileNumber)";
+                    break;
+
+                case "Projektor":
+
+                    input.type = "text";
+                    input.id = "Resolution";
+                    p.appendChild(document.createTextNode("Upplösning"));
+                    input.value = "@Html.DisplayFor(model => model.MobileNumber)";
+                    break;
+
+                default:
+                    return;
+            }
+
+            td.appendChild(p);
+            td2.appendChild(input);
+
+            row.appendChild(td);
+            row.appendChild(td2);
+        });
+
+        $('#Owner_FullName').keyup(function () {
+
+            var nameInput = document.getElementById('Owner_FullName');
+
+            Search(nameInput, document.getElementById('ownerList'));
+
+            var bool = document.getElementById('IDCheck');
+            bool.value = nameInput.value.trim() ? true : false;
+        });
+
+        $(document).click(function () {
+
+            var list = document.getElementById("ownerList");
+            list.style.display = "none";
+
+        });
+
+        function ClickName(event) {
+
+            event.preventDefault();
+
+            var input = document.getElementById("Owner_FullName");
+            input.value = event.target.textContent;
+
+            var list = document.getElementById("ownerList");
+            list.style.display = "none";
+
+            var bool = document.getElementById('IDCheck');
+            bool.value = false;
+        };
+
+
+        $('#form').on("submit", function (event) {
+
+            event.preventDefault();
+            var form = $('#form');
+
+            $.getScript("/js/ajaxPost.js", function(data) {
+                PostForm(form, callBackUser);
+            });
+
+        });
+
+        function callBackUser(data) {
+
+            if (!data) {
+
+                var phElement = $('#modal-placeholder');
+
+                $.get("@Url.Action("CreateModal", "Owner")").done(function (data2) {
+
+                    phElement.html(data2);
+                    phElement.find('.modal').modal('show');
+                });
+
+                var x = document.getElementById("modal-placeholder");
+                x.style.display = "block";
+            }
+            else {
+
+                window.location.href = "@Url.Action("Index", "Home")";
+            }
+
+        };
+    </script>
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Create", "Home", FormMethod.Post, new { id = "form", @class = "postAjax" })) {
+
+    @Html.AntiForgeryToken()
+    <h3></h3>
+    <div>
+        @Html.HiddenFor(model => model.IDCheck)
+        <table>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Model):  </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Model)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Serial): </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Location): </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Location)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">Owner: </p></td>
+                <td>
+                    <p class=" CategoryText">@Html.EditorFor(model => model.Owner.FullName)</p>
+                    <ul class="DropDownContent" id="ownerList"></ul>
+                    <div class="ModalForm" id="modal-placeholder"></div>
+                </td>
+
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Notes): </p></td>
+                <td>@Html.TextAreaFor(model => model.Notes, new { @class = "NotesField" })</td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.EquipType)</p></td>
+                <td><select asp-for="EquipType" id="typeSelect" asp-items="Html.GetEnumSelectList<EquipmentManagementSystem.Models.Equipment.EquipmentType>()"></select></td>
+            </tr>
+            <tr id="AdditionalInformation"></tr>
+        </table>
+    </div>
+    <div id="additionalInformation"></div>
+    <div class="SubmitDiv">
+        <input type="submit" id="test" />
+        <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Home")'" />
+    </div>
+}
+
+

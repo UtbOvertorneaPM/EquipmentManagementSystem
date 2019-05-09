@@ -1,0 +1,68 @@
+
+table {
+    font-family: Consolas;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    border-collapse: collapse;
+    align-content: center;
+}
+    table > thead {
+        background-color: lightgray;
+    }
+
+        table > thead > tr > th > a {
+            color: black;
+        }
+
+    table > tbody > tr > td > a {
+        font-family: Calibri;
+        font-weight: bold;
+        color: darkblue;
+    }
+
+    table > tbody tr:nth-child(4n+1) {
+        background-color: darkgray;
+    }
+
+tr {
+    height: 50px;
+}
+
+td {
+    overflow: hidden;
+    text-align: center;
+}
+
+.ownerTable {
+    font-family: Consolas;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    border-collapse: collapse;
+    align-content: center;
+}
+    .ownerTable tr:nth-child(odd) {
+        background-color: darkgray;
+    }
+
+.ParentRow {
+    padding: 50px 0px 50px 0px;
+    background-color: lightgray;
+}
+
+    .ParentRow:hover {
+        background-color: dodgerblue !important;
+    }
+
+    .ParentRow td:hover {
+        cursor: pointer;
+    }
+
+.ChildRow {
+    display: none;
+    border-radius: 25px 0 0 0;
+    background-color: aliceblue;
+}
+
+

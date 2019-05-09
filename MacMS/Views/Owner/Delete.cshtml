@@ -1,0 +1,97 @@
+﻿@model Owner
+
+@using EquipmentManagementSystem.Models
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $('form').on("submit", function (e) {
+
+            var dialog = document.getElementById("confirmDialog");
+            dialog.title = "Delete Owner";
+            ConfirmClick(e, Delete);
+        });
+
+        function Delete() {
+
+            var form = $('#form');
+
+            $.getScript("/js/ajaxPost.js", function (data) {
+                PostForm(form, callBack);
+            });
+        }
+
+        function callBack(success) {
+
+            if (success) {
+
+                window.location = "@Url.Action("Index")";
+            }
+            else {
+
+                alert("oops");
+            }
+        };
+
+    </script>
+}
+
+<h2>Delete</h2>
+
+@using (Html.BeginForm("Delete", "Owner", FormMethod.Post, new { id = "form" })) {
+    @Html.AntiForgeryToken()
+    <div>
+        <div>
+            @Html.HiddenFor(model => model.ID)
+        </div>
+        <table>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.FirstName):  </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.FirstName)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.LastName): </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.LastName)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.TelNr): </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.TelNr)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Mail): </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Mail)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.SSN): </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.SSN)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Address): </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Address)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Equipment): </p></td>
+                <td>
+                    <ul>
+                        @foreach (Equipment eqp in Model.Equipment) {
+                            <li>
+                                <p class="CategoryText">@eqp.Serial</p>
+                                <p class="CategoryText">@eqp.Model</p>
+                            </li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="SubmitDiv">
+        <input type="submit" value="Delete" />
+        <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Owner")'" />
+    </div>
+}
