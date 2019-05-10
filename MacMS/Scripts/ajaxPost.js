@@ -26,3 +26,25 @@
         }
     });
 };
+
+function Post(url, value) {
+
+    $.ajax({
+        dataType: 'JSON',
+        type: 'POST',
+        url: url,
+        data: JSON.stringify(value),
+        success: function (data) {
+            switch (data) {
+                case true:
+                    alert("Succes");
+                    break;
+                case false:
+                    alert("Failed");
+                    break;
+                default:
+            }
+        }
+
+    });
+};

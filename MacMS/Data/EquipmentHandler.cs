@@ -48,7 +48,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IQueryable<Equipment> Search(string searchString, int page) {
+        public IQueryable<Equipment> Search(string searchString) {
 
             var queryableData = GetAll();
             return GetData(ParseSearchString(searchString), queryableData);

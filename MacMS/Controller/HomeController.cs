@@ -43,7 +43,7 @@ namespace EquipmentManagementSystem.Controller {
             }
             else if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
 
-                data = repo.Sort(repo.Search(searchString, page), sortVariable, page);
+                data = repo.Sort(repo.Search(searchString), sortVariable, page);
                 return View(new PagedList<Equipment>(data, data.Count(), page, pageSize));
 
             }
@@ -53,7 +53,7 @@ namespace EquipmentManagementSystem.Controller {
                 return View(new PagedList<Equipment>(data, repo.Count<Equipment>(), page, pageSize));
             }
 
-            data = repo.Search(searchString, page);
+            data = repo.Search(searchString).Skip(page * pageSize).Take(pageSize);
             return View(new PagedList<Equipment>(data, data.Count(), page, pageSize));
         }
 
@@ -64,6 +64,32 @@ namespace EquipmentManagementSystem.Controller {
             RandomMigration.GetRandomTest(repo, new OwnerHandler(repo.context));
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Export(string searchString, string exportType) {
+
+            var data = Enumerable.Empty<Equipment>();
+            data = string.IsNullOrEmpty(searchString) ? repo.GetAll() : repo.Search(searchString);
+
+            throw new NotImplementedException();
+
+            try {
+
+                switch (exportType) {
+                    case "JSON":
+                        break;
+                    case "Excel":
+                        break;
+                    default:
+                        break;
+                }
+
+                return Json(true);
+            }
+            catch (Exception) {
+                throw;
+                return null;
+            }
         }
 
 

@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-//using MySql.Data.EntityFrameworkCore.Extensions;
-using Pomelo.EntityFrameworkCore.MySql;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +9,6 @@ using Newtonsoft.Json;
 
 using EquipmentManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
@@ -44,12 +37,9 @@ namespace EquipmentManagementSystem {
             });
 
             services.AddMemoryCache();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // TODO: Move this out
             var path = "";
-
 #if DEBUG
             path = @"C:\Users\peter\source\repos\prodSettings.json";
 #else
