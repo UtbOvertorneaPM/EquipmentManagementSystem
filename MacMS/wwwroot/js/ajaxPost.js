@@ -29,11 +29,13 @@ function PostForm(form, callBack) {
 
 function Post(url, value) {
 
+    alert(value);
+
     $.ajax({
         dataType: 'JSON',
         type: 'POST',
         url: url,
-        data: JSON.stringify(value),
+        data: value,
         success: function (data) {
             switch (data) {
                 case true:

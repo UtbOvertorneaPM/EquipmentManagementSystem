@@ -9,6 +9,10 @@
     <link href="~/css/jquery-ui.css" rel="stylesheet" type="text/css" />
 
     <script src="~/js/jquery.js" type="text/javascript"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/js/jquery.validate.js"></script>
+    <script src="~/js/jquery.validate.unobtrusive.js"></script>
     <script src="~/js/jquery-ui.js" type="text/javascript"></script>
     <script src="~/js/Index-Table.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -29,16 +33,15 @@
             var dialog = document.getElementById('#exportDialog');
             $.getScript("/js/ConfirmationDialogue.js", function () {
                 ConfirmClickGeneric(Export, dialog);
-            });            
+            });
         };
 
         function Export() {
 
-            //var select = document.getElementById('exportSelect');
-            var exportType = $('#exportSelect option: selected').text()
-            $.getScript("/js/ajaxPost.js", function () {
-                Post("@Url.Action("Export")", exportType);
-            });
+            var element = document.getElementById('exportSelect');
+            var exportTypeVal = element.options[element.selectedIndex].text;
+
+            $.post("@Url.Action("Export")", {exportType: exportTypeVal});
         };
 
     </script>
@@ -60,7 +63,7 @@
 
     <div id="exportDialog" class="Dialog" title="" hidden>
         <select id="exportSelect" style="position:relative">
-            <option value="0">Excel</option>
+            <option value="0" selected>Excel</option>
             <option value="1">JSON</option>
         </select>
         <p style="position:relative">Are you sure you wish to Export?</p>

@@ -66,12 +66,12 @@ namespace EquipmentManagementSystem.Controller {
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Export(string searchString, string exportType) {
+        [HttpPost]
+        public IActionResult Export(string exportType) {
 
-            var data = Enumerable.Empty<Equipment>();
-            data = string.IsNullOrEmpty(searchString) ? repo.GetAll() : repo.Search(searchString);
-
-            throw new NotImplementedException();
+            // TODO: Re-enable once export options are available
+            //var data = Enumerable.Empty<Equipment>();
+            //data = string.IsNullOrEmpty(ViewData["SearchString"]) ? repo.GetAll() : repo.Search(searchString);
 
             try {
 
@@ -88,7 +88,6 @@ namespace EquipmentManagementSystem.Controller {
             }
             catch (Exception) {
                 throw;
-                return null;
             }
         }
 
