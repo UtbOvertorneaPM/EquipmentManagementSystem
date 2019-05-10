@@ -6,7 +6,10 @@
     <title>@ViewBag.Title</title>
     <link href="~/css/site.css" rel="stylesheet" type="text/css" />
     <link href="~/css/Table.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+
     <script src="~/js/jquery.js" type="text/javascript"></script>
+    <script src="~/js/jquery-ui.js" type="text/javascript"></script>
     <script src="~/js/Index-Table.js" type="text/javascript"></script>
     <script type="text/javascript">
 
@@ -21,10 +24,11 @@
             }, false);
         });
 
-        var handler = function(e) {
+        var handler = function () {
 
+            var dialog = document.getElementById('#exportDialog');
             $.getScript("/js/ConfirmationDialogue.js", function () {
-                ConfirmClick(e, Export);
+                ConfirmClickGeneric(Export, dialog);
             });            
         };
 
@@ -49,16 +53,17 @@
             </li>
         </nav>
     </header>
+
     <div class="body-content">
         @RenderBody()
     </div>
 
-    <div id="exportDialog" title="" hidden>
-        <select id="exportSelect">
+    <div id="exportDialog" class="Dialog" title="" hidden>
+        <select id="exportSelect" style="position:relative">
             <option value="0">Excel</option>
             <option value="1">JSON</option>
         </select>
-        <p>Are you sure you wish to Export?</p>
+        <p style="position:relative">Are you sure you wish to Export?</p>
     </div>
 
     @RenderSection("Scripts", false/*required*/)

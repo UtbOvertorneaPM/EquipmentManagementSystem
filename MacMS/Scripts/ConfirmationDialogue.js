@@ -18,3 +18,24 @@ function ConfirmClick(e, callBack) {
 
     $('#confirmDialog').dialog("open");
 }
+
+
+function ConfirmClickGeneric(callBack, dialogId) {
+
+    $('#exportDialog').dialog({
+        autoOpen: false,
+        modal: true,
+        resizable: false,
+        buttons: {
+            "Confirm": function () {
+                callBack();
+            },
+            "Cancel": function (e) {
+                $(this).dialog("close");
+            }
+        },
+    });
+
+    $('#exportDialog').dialog("open");
+}
+
