@@ -23,14 +23,16 @@
 
         var handler = function(e) {
 
-            ConfirmClick(e, Export);
+            $.getScript("/js/ConfirmationDialogue.js", function () {
+                ConfirmClick(e, Export);
+            });            
         };
 
         function Export() {
 
             //var select = document.getElementById('exportSelect');
             var exportType = $('#exportSelect option: selected').text()
-            $.getScript("/js/ajaxPost.js", function (data) {
+            $.getScript("/js/ajaxPost.js", function () {
                 Post("@Url.Action("Export")", exportType);
             });
         };
