@@ -80,31 +80,31 @@
   {
     "outputFileName": "wwwroot/js/ajaxPost.js",
     "inputFiles": [
-      "scripts/ajaxPost.js"
+      "Scripts/ajaxPost.js"
     ]
   },
   {
     "outputFileName": "wwwroot/js/ConfirmationDialogue.js",
     "inputFiles": [
-      "scripts/ConfirmationDialogue.js"
+      "Scripts/ConfirmationDialogue.js"
     ]
   },
   {
     "outputFileName": "wwwroot/js/getOwnerList.js",
     "inputFiles": [
-      "scripts/getOwnerList.js"
+      "Scripts/getOwnerList.js"
     ]
   },
   {
     "outputFileName": "wwwroot/js/Index-Table.js",
     "inputFiles": [
-      "scripts/Index-Table.js"
+      "Scripts/Index-Table.js"
     ]
   },
   {
     "outputFileName": "wwwroot/js/Search.js",
     "inputFiles": [
-      "scripts/Search.js"
+      "Scripts/Search.js"
     ]
   },
   {

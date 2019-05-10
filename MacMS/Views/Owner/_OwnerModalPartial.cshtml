@@ -6,17 +6,19 @@
 }
 
 @section scripts {
-
+    <script src="~/js/ajaxPost.js" type="text/javascript"></script>
     <script type="text/javascript">
 
         function callBackOwner(data) {
-
 
             if (data) {
 
                 var modal = document.getElementById('modal-placeholder');
                 modal.style.display = "none";
                 window.location.reload(true);
+            }
+            else {
+                alert("something went wrong");
             }
         };
 
@@ -25,7 +27,7 @@
             event.preventDefault();
             var form = $('#modalForm');
 
-            $.getScript("ajaxPost.js", function (data) {
+            $.getScript("/js/ajaxPost.js", function (data) {
                 PostForm(form, callBackOwner);
             });
         });
