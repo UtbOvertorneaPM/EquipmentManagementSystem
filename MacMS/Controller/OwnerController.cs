@@ -44,7 +44,7 @@ namespace EquipmentManagementSystem.Controller {
 
             if (string.IsNullOrEmpty(sortVariable) && string.IsNullOrEmpty(searchString)) {
 
-                data = repo.Sort(repo.GetAll(), "Date_desc", page);
+                data = repo.Sort(repo.GetAll((int)page), "Date_desc", page);
                 return View(new PagedList<Owner>(data, repo.Count<Owner>(), page, pageSize));
             }
             else if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {

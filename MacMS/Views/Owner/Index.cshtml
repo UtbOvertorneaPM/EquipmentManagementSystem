@@ -1,8 +1,11 @@
 ﻿@using EquipmentManagementSystem.Models
 @model PagedList<Owner>
 
-@{ 
-    ViewData["Title"] = "Användare";
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Owner"];
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -25,6 +28,7 @@
             var count = @Model.TotalPages;
             var lastPos = @Model.TotalPages - 1;
 
+            
             var posList = [0, lastPos];
 
             for (var i = (curPage - 2); i < (curPage + 3); i++) {
@@ -44,7 +48,7 @@
                 a.appendChild(document.createTextNode(posList[i]));
 
                 a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
-                a.href = "@Url.Action("Index", "Owner", new { page = "linkUri" })"
+                a.href = "@Url.Action("Index", "Home", new { page = "linkUri" })"
                     .replace("linkUri", encodeURIComponent(posList[i]));
 
                 if (i == 0 && posList[i] != curPage) {
@@ -75,7 +79,7 @@
 
             var input = document.getElementById('search');
             if (input.value.length < 1) {
-                $(this).attr('value', 'Sök model/datum/ägare...');
+                $(this).attr('value', "@Localizer["Find model/date/owner..."]");
             }
             else {
 
@@ -95,7 +99,7 @@
 
             var input = document.getElementById('search');
             if (input.value.length < 1) {
-                $(this).attr('value', 'Sök model/datum/ägare...');
+                $(this).attr('value', "@Localizer["Find model/date/owner..."]");
             }
 
         });
@@ -114,43 +118,43 @@
 
 @using (Html.BeginForm()) {
 
-<div style="display:flex">
-    @Html.TextBox("SearchString", "Sök Namn/datum/SSN...", new { id = "search", @class = "Search" })
-    <input type="submit" value="Sök" class="searchBox" />
-</div>
-<div>
-    <ul class="DropDownContent" id="ownerList"></ul>
-</div>
+    <div style="display:flex">
+        @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
+        <input type="submit" value="@Localizer["Search"]" class="searchBox" />
+    </div>
+    <div>
+        <ul class="DropDownContent" id="ownerList"></ul>
+    </div>
 
 }
 
-    <p>     
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
 <table class="ownerTable table NoPaddingMargin" id="table">
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Date", "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc" })
+                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc" })
             </th>
             <th>
-                @Html.ActionLink("FirstName", "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "FirstName" ? "FirstName_desc" : "FirstName" })
+                @Html.ActionLink(Localizer["FirstName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "FirstName" ? "FirstName_desc" : "FirstName" })
             </th>
             <th>
-                @Html.ActionLink("LastName", "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "LastName" ? "LastName_desc" : "LastName" })
+                @Html.ActionLink(Localizer["LastName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "LastName" ? "LastName_desc" : "LastName" })
             </th>
             <th>
-                SSN
+                @Localizer["SSN"]
             </th>
             <th>
-                Address
+                @Localizer["Address"]
             </th>
             <th>
-                TelNr
+                @Localizer["TelNr"]
             </th>
             <th>
-                Mail
+                @Localizer["Mail"]
             </th>
             <th></th>
         </tr>
@@ -180,8 +184,8 @@
                     @Html.DisplayFor(modelItem => item.Mail)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                    @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
+                    @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
                 </td>
             </tr>
         }
