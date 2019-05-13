@@ -43,8 +43,13 @@
 
             var element = document.getElementById('exportSelect');
             var exportTypeVal = element.options[element.selectedIndex].text;
+            //alert(exportTypeVal);
+            var str = "@Url.Action("Export", new { exportType = "_exportType_", searchString = ViewData["SearchString"] })"
+                .replace("_exportType_", exportTypeVal);
+            window.location = str;
 
-            $.post("@Url.Action("Export")", {exportType: exportTypeVal});
+            //$.get("@Url.Action("Export")", { exportType: exportTypeVal });
+            //$.post("@Url.Action("Export")", { exportType: exportTypeVal });
         };
 
         var languageClick = function (event) {

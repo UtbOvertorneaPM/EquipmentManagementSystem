@@ -11,6 +11,9 @@ using System.Text;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
+using System.Net.Http;
+using System.IO;
+using Microsoft.Win32.SafeHandles;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -79,28 +82,23 @@ namespace EquipmentManagementSystem.Controller {
         }
 
         [HttpPost]
-        public IActionResult Export(string exportType) {
+        [HttpGet]
+        public IActionResult Export(string exportType, string searchString) {
 
-            // TODO: Re-enable once export options are available
-            //var data = Enumerable.Empty<Equipment>();
-            //data = string.IsNullOrEmpty(ViewData["SearchString"]) ? repo.GetAll() : repo.Search(searchString);
+            var file = new ExportHandler().Export(repo, searchString, exportType);
+            var stream = new MemoryStream(file.Data);
+            stream.Position = 0;
 
-            try {
+            return File(stream, file.ContentType, file.FileName);
+        }
 
-                switch (exportType) {
-                    case "JSON":
-                        break;
-                    case "Excel":
-                        break;
-                    default:
-                        break;
-                }
+        [HttpGet]
+        public FileStreamResult ExportFile(ExportFile file) {
 
-                return Json(true);
-            }
-            catch (Exception) {
-                throw;
-            }
+            var stream = new MemoryStream(file.Data);
+            stream.Position = 0;
+
+            return File(stream, file.ContentType, file.FileName);
         }
 
 

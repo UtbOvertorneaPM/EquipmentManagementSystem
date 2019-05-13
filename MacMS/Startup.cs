@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Localization;
 using System.Reflection;
 using Microsoft.Extensions.Options;
 using EquipmentManagementSystem.Data;
+using Microsoft.Extensions.FileProviders;
 
 namespace EquipmentManagementSystem {
 

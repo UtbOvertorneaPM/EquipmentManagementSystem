@@ -10,6 +10,7 @@ using EquipmentManagementSystem.Models;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
+using System.IO;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -24,6 +25,7 @@ namespace EquipmentManagementSystem.Controller {
             repo = new OwnerHandler(ctx);
             Localizer = new Localizer(factory);
         }
+
 
         // GET: Owner
         public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
@@ -79,6 +81,7 @@ namespace EquipmentManagementSystem.Controller {
 
             return PartialView("_OwnerModalPartial", owner);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> PostModal(Owner owner) {
@@ -201,5 +204,18 @@ namespace EquipmentManagementSystem.Controller {
 
             return Json(repo.Get(id, false));
         }
+
+
+        [HttpPost]
+        public IActionResult Export(string exportType, string searchString) {
+
+            var file = new ExportHandler().Export(repo, searchString, exportType);
+            var stream = new MemoryStream(file.Data);
+            stream.Position = 0;
+
+            return File(stream, file.ContentType, file.FileName);
+        }
+
+
     }
 }
