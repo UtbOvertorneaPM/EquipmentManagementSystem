@@ -16,14 +16,18 @@ namespace EquipmentManagementSystem.Models {
 
         public bool IDCheck { get; set; }
 
+        [Display(Name = "Model")]
         public string Model { get; set; }
 
+        [Display(Name = "Serial")]
         public string Serial { get; set; }
 
+        [Display(Name = "Notes")]
         public string Notes { get; set; }
 
         private Owner _owner;
-            
+
+        [Display(Name = "Owner")]
         public Owner Owner {
 
             get {
@@ -37,9 +41,10 @@ namespace EquipmentManagementSystem.Models {
                 _owner = value;
             }
         }
-
+        [Display(Name = "Location")]
         public string Location { get; set; }
 
+        [Display(Name = "EquipType")]
         public EquipmentType EquipType { get; set; }
 
 
@@ -80,11 +85,11 @@ namespace EquipmentManagementSystem.Models {
             Chromebook,
             Mac,
             Desktop,
-            Projektor,
+            Projector,
             Tablet,
-            Mobil,
-            Skrivare,
-            Övrigt
+            Mobile,
+            Printer,
+            Misc
         }
 
 

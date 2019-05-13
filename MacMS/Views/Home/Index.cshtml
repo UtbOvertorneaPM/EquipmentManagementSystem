@@ -1,9 +1,12 @@
 ﻿@using EquipmentManagementSystem.Models
 @model PagedList<Equipment>
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
 
 @{
-    ViewData["Title"] = "Utrustning";
+
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Localizer["Equipment"]; //Localizer.GetLocalizedHtmlString("Equipment");
 }
 
 
@@ -71,14 +74,14 @@
             $(this).attr('value', '');
         });
 
-    
+
         $('#search').focusout(function () {
 
             var input = document.getElementById('search');
             if (input.value.length < 1) {
                 $(this).attr('value', 'Sök model/datum/ägare...');
             }
-            
+
         });
 
 

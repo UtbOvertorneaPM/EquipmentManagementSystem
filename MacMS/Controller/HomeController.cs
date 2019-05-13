@@ -9,6 +9,8 @@ using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Localization;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -18,10 +20,13 @@ namespace EquipmentManagementSystem.Controller {
         // TODO: Add [Authorized] attributes, switch project to windows authentication
         // TODO: Remove comment tags in Properties\launchSettings.json and web.config
         EquipmentHandler repo;
+        private readonly Localizer Localizer;
 
-        public HomeController(ManagementContext ctx) {
+        public HomeController(ManagementContext ctx, IStringLocalizerFactory factory) {
+
             ctx.Database.EnsureCreated();
             repo = new EquipmentHandler(ctx);
+            Localizer = new Localizer(factory);
         }
 
 
@@ -31,7 +36,15 @@ namespace EquipmentManagementSystem.Controller {
             ViewData["CurrentSort"] = sortVariable is null ? "Date_desc" : sortVariable;
             ViewData["SearchString"] = string.IsNullOrEmpty(searchString) ? ViewData["SearchString"] : searchString;
             ViewData["Page"] = page;
-            
+
+            if (ViewData["Language"] is null) { ViewData["Language"] = "en-GB"; }            
+
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(ViewData["Language"].ToString())),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
             var data = Enumerable.Empty<Equipment>();
             var pageSize = repo.PageSize;
 
