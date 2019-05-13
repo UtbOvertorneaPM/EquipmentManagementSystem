@@ -66,6 +66,8 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Owner/Create
         public IActionResult Create(string culture) {
 
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+
             return View();
         }
 
@@ -73,7 +75,8 @@ namespace EquipmentManagementSystem.Controller {
         public IActionResult CreateModal(string culture) {
 
             var owner = new Owner();
-            
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+
             return PartialView("_OwnerModalPartial", owner);
         }
 
@@ -122,6 +125,8 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Owner/Edit/5
         public IActionResult Edit(int id, string culture) {
 
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+
             return View(repo.Get(id));
         }
 
@@ -151,6 +156,8 @@ namespace EquipmentManagementSystem.Controller {
 
         // GET: Owner/Delete/5
         public IActionResult Delete(int id, string culture) {
+
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
             return View(repo.Get(id));
         }
