@@ -35,7 +35,7 @@
 
                     input.type = "text";
                     input.id = "MobileNumber";
-                    p.appendChild(document.createTextNode(Localizer["Mobile Number"]));
+                    p.appendChild(document.createTextNode(@Localizer["Mobile Number"]));
                     input.textContent = "@Html.DisplayFor(model => model.MobileNumber)";
                     break;
 
@@ -43,7 +43,7 @@
 
                     input.type = "text";
                     input.id = "IP";
-                    p.appendChild(document.createTextNode(Localizer["IP"]));
+                    p.appendChild(document.createTextNode(@Localizer["IP"]));
                     input.textContent = "@Html.DisplayFor(model => model.IP)";
                     break;
 
@@ -52,7 +52,7 @@
 
                     input.type = "number";
                     input.id = "Ports";
-                    p.appendChild(document.createTextNode("@Localizer["Ports"]"));
+                    p.appendChild(document.createTextNode(@Localizer["Ports"]));
                     input.value = "@Html.DisplayFor(model => model.Ports)";
                     break;
 
@@ -60,7 +60,7 @@
 
                     input.type = "text";
                     input.id = "Resolution";
-                    p.appendChild(document.createTextNode(Localizer["Resolution"]));
+                    p.appendChild(document.createTextNode(@Localizer["Resolution"]));
                     input.value = "@Html.DisplayFor(model => model.Resolution)";
                     break;
 
@@ -82,7 +82,7 @@
         $('#confirmButton').click(function (e) {
 
             var dialog = document.getElementById("confirmDialog");
-            dialog.title = "Edit " + Localizer["Equipment"];
+            dialog.title = "Edit " + "@Localizer["Equipment"]";
 
             ConfirmClick(e, submitted);
         });

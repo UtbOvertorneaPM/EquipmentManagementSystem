@@ -49,7 +49,7 @@
 
         var languageClick = function (event) {
 
-            var str = "@Url.Action("Index", "Home", new { culture ="_language_"})"
+            var str = "@Url.Action("Index", new { culture ="_language_"})"
                 .replace("_language_", encodeURIComponent(event.value));
 
             window.location = str;
