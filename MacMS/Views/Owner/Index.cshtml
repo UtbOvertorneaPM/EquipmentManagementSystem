@@ -89,9 +89,13 @@
         });
 
 
+
         $('#search').focusin(function () {
 
             $(this).attr('value', '');
+
+            var list = document.getElementById("ownerList");
+            list.style.display = "";
         });
 
 
@@ -102,8 +106,8 @@
                 $(this).attr('value', '@Localizer["Find model/date/owner..."]');
             }
 
-
-
+            var list = document.getElementById("ownerList");
+            list.style.display = "none";
         });
 
         function ClickName(event) {

@@ -27,7 +27,6 @@
 
         $('#typeSelect').change(function (event) {
 
-
             var row = document.getElementById('AdditionalInformation');
             $('#AdditionalInformation').empty();
 
@@ -96,11 +95,10 @@
             bool.value = nameInput.value.trim() ? true : false;
         });
 
-        $(document).click(function () {
+        $('document').click(function () {
 
             var list = document.getElementById("ownerList");
             list.style.display = "none";
-
         });
 
         function ClickName(event) {
