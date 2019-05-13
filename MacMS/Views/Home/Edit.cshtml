@@ -4,6 +4,9 @@
 
 @using EquipmentManagementSystem.Models
 
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout1.cshtml";
@@ -11,7 +14,7 @@
 
 @section scripts {
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
         $('document').ready(function () {
 
@@ -32,7 +35,7 @@
 
                     input.type = "text";
                     input.id = "MobileNumber";
-                    p.appendChild(document.createTextNode("Mobil Nummer"));
+                    p.appendChild(document.createTextNode(Localizer["Mobile Number"]));
                     input.textContent = "@Html.DisplayFor(model => model.MobileNumber)";
                     break;
 
@@ -40,7 +43,7 @@
 
                     input.type = "text";
                     input.id = "IP";
-                    p.appendChild(document.createTextNode("IP Address"));
+                    p.appendChild(document.createTextNode(Localizer["IP"]));
                     input.textContent = "@Html.DisplayFor(model => model.IP)";
                     break;
 
@@ -49,7 +52,7 @@
 
                     input.type = "number";
                     input.id = "Ports";
-                    p.appendChild(document.createTextNode("Ports"));
+                    p.appendChild(document.createTextNode("@Localizer["Ports"]"));
                     input.value = "@Html.DisplayFor(model => model.Ports)";
                     break;
 
@@ -57,7 +60,7 @@
 
                     input.type = "text";
                     input.id = "Resolution";
-                    p.appendChild(document.createTextNode("Upplösning"));
+                    p.appendChild(document.createTextNode(Localizer["Resolution"]));
                     input.value = "@Html.DisplayFor(model => model.Resolution)";
                     break;
 
@@ -79,7 +82,7 @@
         $('#confirmButton').click(function (e) {
 
             var dialog = document.getElementById("confirmDialog");
-            dialog.title = "Edit Equipment";
+            dialog.title = "Edit " + Localizer["Equipment"];
 
             ConfirmClick(e, submitted);
         });
@@ -166,7 +169,7 @@
         };
 
 
-</script>
+    </script>
 }
 
 <h2>Edit</h2>
@@ -183,30 +186,30 @@
         </div>
         <table>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Model)  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Model"]</p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.Model)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Serial) </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Serial"] </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.Serial)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.EquipType) </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Equip Type"] </p></td>
                 <td><p class="CategoryText">@Html.DisplayFor(model => model.EquipType)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Location) </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Location"] </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.Location)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Owner.FullName) </p></td>
+                <td><p class="CategoryText Bold">@Localizer["FullName"] </p></td>
                 <td>
                     @Html.EditorFor(model => model.Owner.FullName)
                     <ul class="DropDownContent" id="ownerList"></ul>
                 </td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Notes)</p></td>
+                <td><p class="CategoryText Bold">@Localizer["Notes"]</p></td>
                 <td>@Html.TextAreaFor(model => model.Notes, new { @class = "NotesField" })</td>
             </tr>
             <tr id="AdditionalInformation"></tr>

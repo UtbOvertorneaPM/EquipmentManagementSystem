@@ -104,7 +104,7 @@
 </p>
 
 <p>
-    @Html.ActionLink(Localizer["Create New"], "Create")
+    @Html.ActionLink(Localizer["Create New"], "Create", new { culture = ViewData["Language"] })
 </p>
 
 <hr />
@@ -149,8 +149,8 @@
                 @Html.DisplayFor(modelItem => item.EquipType)
             </td>
             <td class="Actions">
-                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID }) |
-                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID })
+                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"]}) |
+                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
             </td>
         </tr>
 

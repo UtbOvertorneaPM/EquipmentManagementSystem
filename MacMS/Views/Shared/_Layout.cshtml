@@ -49,9 +49,8 @@
 
         var languageClick = function (event) {
 
-            alert(event.textContent);
             var str = "@Url.Action("Index", "Home", new { culture ="_language_"})"
-                .replace("_language_", encodeURIComponent(event.textContent));
+                .replace("_language_", encodeURIComponent(event.value));
 
             window.location = str;
         };
@@ -62,17 +61,18 @@
     <header class="HeaderStyle">
         <nav>
             <li>
-                @Html.ActionLink(Localizer["Equipment"], "Index", "Home")
-                @Html.ActionLink(Localizer["Owner"], "Index", "Owner")
-                <a href="#" onclick="handler()" id="exportButton">Export</a>
+                @Html.ActionLink(Localizer["Equipment"], "Index", "Home", new { culture = ViewData["Language"] })
+                @Html.ActionLink(Localizer["Owner"], "Index", "Owner", new { culture = ViewData["Language"] })
+                <a href="#" onclick="handler()" id="exportButton">@Localizer["Export"]</a>
 
             </li>
 
         </nav>
-        <div style="float:right; padding-top:12px; display:inline-flex">
-            <button onclick="languageClick(this)" style="width:35px; height:25px;">en-GB</button>
-            <text style="font-size:25px; color:white; padding:0px 5px 0px 5px">/</text>
-            <button onclick="languageClick(this)" style="width:35px; height:25px;">sv-SE</button>
+        <div style="float:right; padding-top:12px; padding-right:20px; display:inline-flex">
+            <text style="font-size:25px; color:white; margin-right:20px; margin-top:2px;">Language:</text>
+            <button onclick="languageClick(this)" style="margin-top:5px; width:45px; height:25px; text-align:center;" value="en-GB">ENG</button>
+            <text style="font-size:25px; color:white; padding:4px 5px 0px 5px">/</text>
+            <button onclick="languageClick(this)" style="margin-top:5px; width:45px; height:25px; text-align:center;" value="sv-SE">SWE</button>
         </div>
     </header>
 

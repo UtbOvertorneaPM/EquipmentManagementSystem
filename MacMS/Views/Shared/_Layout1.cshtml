@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 
-
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
 
 <html>
 <head>
@@ -31,7 +32,7 @@
     </div>
 
     <div id="confirmDialog" class="Dialog" title="" hidden>
-        <p>Are you sure you wish to confirm?</p>
+        <p>@Localizer["Are you sure you wish to confirm?"]</p>
     </div>
 
     @RenderSection("Scripts", false/*required*/)

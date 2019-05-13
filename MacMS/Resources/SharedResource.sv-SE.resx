@@ -198,4 +198,7 @@
   <data name="Import" xml:space="preserve">
     <value>Importera</value>
   </data>
+  <data name="Are you sure you wish to confirm?" xml:space="preserve">
+    <value>Är du säker på att du vill verkställa?</value>
+  </data>
 </root>

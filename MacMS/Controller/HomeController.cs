@@ -105,7 +105,8 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Home/Create
-        public IActionResult Create() {
+        public IActionResult Create(string culture) {
+
 
             return View(new Equipment());
         }
@@ -142,7 +143,7 @@ namespace EquipmentManagementSystem.Controller {
 
         // GET: Home/Edit/5
         [HttpGet]
-        public IActionResult Edit(int id) {
+        public IActionResult Edit(int id, string culture) {
 
             ViewData["IDCheck"] = false;
 
@@ -181,7 +182,9 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Home/Delete/5
-        public IActionResult Delete(int id) {
+        public IActionResult Delete(int id, string culture) {
+
+
                         
             return View(repo.Get(id));
         }

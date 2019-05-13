@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using EquipmentManagementSystem.Data;
 using EquipmentManagementSystem.Models;
 using Newtonsoft.Json;
-
+using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Localization;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -16,18 +17,27 @@ namespace EquipmentManagementSystem.Controller {
     public class OwnerController : Microsoft.AspNetCore.Mvc.Controller {
 
         OwnerHandler repo;
+        private readonly Localizer Localizer;
 
-        public OwnerController(ManagementContext ctx) {
+        public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) {
 
             repo = new OwnerHandler(ctx);
+            Localizer = new Localizer(factory);
         }
 
         // GET: Owner
-        public IActionResult Index(string sortVariable, string searchString, int page = 0) {
+        public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
 
-            ViewData["CurrentSort"] = sortVariable is null ? "Date_desc" : sortVariable;
+            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             ViewData["SearchString"] = string.IsNullOrEmpty(searchString) ? ViewData["SearchString"] : searchString;
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
             ViewData["Page"] = page;
+
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(ViewData["Language"].ToString())),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
 
             var data = Enumerable.Empty<Owner>();
             var pageSize = repo.PageSize;

@@ -2,6 +2,9 @@
 
 @using EquipmentManagementSystem
 
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout1.cshtml";
@@ -49,23 +52,23 @@
         </div>
         <table>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Model):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Model"]:  </p></td>
                 <td><p class="CategoryText">@Html.DisplayFor(model => model.Model)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Serial): </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Serial"]: </p></td>
                 <td><p class="CategoryText">@Html.DisplayFor(model => model.Serial)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Location): </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Location"]: </p></td>
                 <td><p class="CategoryText">@Html.DisplayFor(model => model.Location)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Owner): </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Owner"]: </p></td>
                 <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.FullName)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Notes): </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Notes"]: </p></td>
                 <td>@Html.TextAreaFor(model => model.Notes, new { @class = "NotesField" })</td>
             </tr>
         </table>
