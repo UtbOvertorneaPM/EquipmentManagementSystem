@@ -1,5 +1,8 @@
 ﻿<!DOCTYPE html>
 
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -44,17 +47,33 @@
             $.post("@Url.Action("Export")", {exportType: exportTypeVal});
         };
 
+        var languageClick = function (event) {
+
+            alert(event.textContent);
+            var str = "@Url.Action("Index", "Home", new { culture ="_language_"})"
+                .replace("_language_", encodeURIComponent(event.textContent));
+
+            window.location = str;
+        };
+
     </script>
 </head>
 <body>
     <header class="HeaderStyle">
         <nav>
             <li>
-                @Html.ActionLink("Utrustning", "Index", "Home")
-                @Html.ActionLink("Ägare", "Index", "Owner")
+                @Html.ActionLink(Localizer["Equipment"], "Index", "Home")
+                @Html.ActionLink(Localizer["Owner"], "Index", "Owner")
                 <a href="#" onclick="handler()" id="exportButton">Export</a>
+
             </li>
+
         </nav>
+        <div style="float:right; padding-top:12px; display:inline-flex">
+            <button onclick="languageClick(this)" style="width:35px; height:25px;">en-GB</button>
+            <text style="font-size:25px; color:white; padding:0px 5px 0px 5px">/</text>
+            <button onclick="languageClick(this)" style="width:35px; height:25px;">sv-SE</button>
+        </div>
     </header>
 
     <div class="body-content">
@@ -66,7 +85,7 @@
             <option value="0" selected>Excel</option>
             <option value="1">JSON</option>
         </select>
-        <p style="position:relative">Are you sure you wish to Export?</p>
+        <p style="position:relative">@Localizer["Are you sure you wish to Export?"]</p>
     </div>
 
     @RenderSection("Scripts", false/*required*/)

@@ -31,14 +31,13 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Home
-        public IActionResult Index(string sortVariable, string searchString, int page = 0) {
+        public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
 
-            ViewData["CurrentSort"] = sortVariable is null ? "Date_desc" : sortVariable;
+            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             ViewData["SearchString"] = string.IsNullOrEmpty(searchString) ? ViewData["SearchString"] : searchString;
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
             ViewData["Page"] = page;
-
-            if (ViewData["Language"] is null) { ViewData["Language"] = "en-GB"; }            
-
+              
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(ViewData["Language"].ToString())),

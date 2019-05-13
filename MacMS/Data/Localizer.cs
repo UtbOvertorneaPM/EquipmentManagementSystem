@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Data {
 
-    public class Localizer : StringLocalizer<string> {
+    public class Localizer {
 
         private readonly IStringLocalizer _Localizer;
 
-        public Localizer(IStringLocalizerFactory factory) : base(factory) { 
+        public Localizer(IStringLocalizerFactory factory) { 
 
             var type = typeof(SharedResource);
             var assemblyName = new AssemblyName(type.GetTypeInfo().Assembly.FullName);
             _Localizer = factory.Create("SharedResource", assemblyName.Name);
         }
 
-        public LocalizedString GetLocalizedHtmlString(string key) {
-            return _Localizer[key];
+        public LocalizedString this[string key] {
+            get => _Localizer[key];
         }
     }
 

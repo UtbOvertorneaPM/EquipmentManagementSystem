@@ -66,6 +66,7 @@ namespace EquipmentManagementSystem {
                     options.DefaultRequestCulture = new RequestCulture("en-GB");
                     options.SupportedCultures = supportedCultures;
                     options.SupportedUICultures = supportedCultures;
+                    options.RequestCultureProviders.Insert(0, new AcceptLanguageHeaderRequestCultureProvider());
                 }
             );
 

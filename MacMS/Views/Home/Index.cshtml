@@ -6,7 +6,7 @@
 @{
 
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = Localizer["Equipment"]; //Localizer.GetLocalizedHtmlString("Equipment");
+    ViewData["Title"] = Localizer["Equipment"];
 }
 
 
@@ -89,22 +89,22 @@
     </script>
 }
 
-<h2>Utrustning</h2>
+<h2>@Localizer["Equipment"]</h2>
 
 @using (Html.BeginForm()) {
 
     <div>
-        @Html.TextBox("SearchString", "Sök model/datum/ägare...", new { id = "search", @class = "Search" })
-        <input type="submit" value="Sök" class="searchBox" />
+        @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
+        <input type="submit" value="@Localizer["Search"]" class="searchBox" />
     </div>
 }
 
 <p>
-    @Html.ActionLink("Import", "Import")
+    @Html.ActionLink(Localizer["Import"], "Import")
 </p>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink(Localizer["Create New"], "Create")
 </p>
 
 <hr />
@@ -113,19 +113,19 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Date", "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc" })
+                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc" })
             </th>
             <th>
-                Model
+                @Localizer["Model"]
             </th>
             <th>
-                Serial
+                @Localizer["Serial"]
             </th>
             <th>
-                @Html.ActionLink("Owner", "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Owner" ? "Owner_desc" : "Owner" })
+                @Html.ActionLink(Localizer["Owner"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Owner" ? "Owner_desc" : "Owner" })
             </th>
             <th>
-                Equip Type
+                @Localizer["EquipType"]
             </th>
             <th class="Actions">
             </th>
@@ -149,8 +149,8 @@
                 @Html.DisplayFor(modelItem => item.EquipType)
             </td>
             <td class="Actions">
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID }) |
+                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID })
             </td>
         </tr>
 

@@ -159,4 +159,43 @@
   <data name="SSN" xml:space="preserve">
     <value>PersonNr</value>
   </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Mail" xml:space="preserve">
+    <value>Mail</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Sök</value>
+  </data>
+  <data name="Telnr" xml:space="preserve">
+    <value>TelNr</value>
+  </data>
+  <data name="Are you sure you wish to Export?" xml:space="preserve">
+    <value>Är du säker på att du vill Exportera?</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Skapa</value>
+  </data>
+  <data name="Create New" xml:space="preserve">
+    <value>Skapa Ny</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Radera</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Ändra</value>
+  </data>
+  <data name="Find model/date/owner..." xml:space="preserve">
+    <value>Sök model/datum/ägare...</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Importera</value>
+  </data>
 </root>
