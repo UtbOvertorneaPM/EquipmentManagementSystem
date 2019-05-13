@@ -4,8 +4,11 @@
 
 @using EquipmentManagementSystem.Models
 
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = Localizer["Edit"];
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
@@ -16,7 +19,7 @@
         $('#confirmButton').click(function (e) {
 
             var dialog = document.getElementById("confirmDialog");
-            dialog.title = "Edit Owner";
+            dialog.title = @Localizer["Edit"] + " " + @Localizer["Owner"];
 
             ConfirmClick(e, submitted);
         });
@@ -46,7 +49,7 @@
     </script>
 }
 
-<h2>Edit</h2>
+    <h2>@Localizer["Edit"]</h2>
 
 @using (Html.BeginForm("Create", "Owner", FormMethod.Post, new { id = "form" })) {
     @Html.AntiForgeryToken()
@@ -54,31 +57,31 @@
     <div>
         <table>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.FirstName):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["FirstName"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.FirstName)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.LastName):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["LastName"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.LastName)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Mail):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Mail"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.Mail)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Address):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Address"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.Address)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.TelNr):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["TelNr"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.TelNr)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.SSN):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["SSN"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.SSN)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Equipment): </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Equipment"]: </p></td>
                 <td>
                     <ul>
                         @foreach (Equipment eqp in Model.Equipment) {
@@ -94,7 +97,7 @@
     </div>
 
     <div class="SubmitDiv">
-        <input type="button" value="Edit" id="confirmButton" />
-        <input type="button" value="Back" onclick="history.go(-1); return false;" />
+        <input type="button" value="@Localizer["Edit"]" id="confirmButton" />
+        <input type="button" value="@Localizer["Back"]" onclick="history.go(-1); return false;" />
     </div>
 }

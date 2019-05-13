@@ -1,7 +1,11 @@
 ﻿@model EquipmentManagementSystem.Models.Owner
 
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
+
 @{
-    ViewData["Title"] = "CreateOwner";
+    ViewData["Title"] = Localizer["Create"] + " " + Localizer["Owner"];
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
@@ -37,7 +41,7 @@
 
 }
 
-<h2>CreateOwner</h2>
+<h2>@Localizer["Create"] @Localizer["Owner"]</h2>
 
 @using (Html.BeginForm("PostModal", "Owner", FormMethod.Post, new { id = "modalForm" })) {
     @Html.AntiForgeryToken()
@@ -46,7 +50,7 @@
         <table>
             <tr>
                 <td>
-                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.FirstName):  </p>
+                    <p class="CategoryText Bold">@Localizer["FirstName"]:  </p>
                 </td>
                 <td>
                     <p class="CategoryText">@Html.EditorFor(model => model.FirstName)</p>
@@ -54,7 +58,7 @@
             </tr>
             <tr>
                 <td>
-                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.LastName):  </p>
+                    <p class="CategoryText Bold">@Localizer["LastName"]:  </p>
                 </td>
                 <td>
                     <p class="CategoryText">@Html.EditorFor(model => model.LastName)</p>
@@ -62,7 +66,7 @@
             </tr>
             <tr>
                 <td>
-                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Mail):  </p>
+                    <p class="CategoryText Bold">@Localizer["Mail"]:  </p>
                 </td>
                 <td>
                     <p class="CategoryText">@Html.EditorFor(model => model.Mail)</p>
@@ -70,7 +74,7 @@
             </tr>
             <tr>
                 <td>
-                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Address):  </p>
+                    <p class="CategoryText Bold">@Localizer["Address"]:  </p>
                 </td>
                 <td>
                     <p class="CategoryText">@Html.EditorFor(model => model.Address)</p>
@@ -78,7 +82,7 @@
             </tr>
             <tr>
                 <td>
-                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.TelNr):  </p>
+                    <p class="CategoryText Bold">@Localizer["TelNr"]:  </p>
                 </td>
                 <td>
                     <p class="CategoryText">@Html.EditorFor(model => model.TelNr)</p>
@@ -86,7 +90,7 @@
             </tr>
             <tr>
                 <td>
-                    <p class="CategoryText Bold">@Html.DisplayNameFor(model => model.SSN):  </p>
+                    <p class="CategoryText Bold">@Localizer["SSN"]:  </p>
                 </td>
                 <td>
                     <p class="CategoryText">@Html.EditorFor(model => model.SSN)</p>
@@ -97,7 +101,7 @@
 
 
         <div class="SubmitDiv">
-            <input type="submit" value="Submit" id="modalSubmit"/>
+            <input type="submit" value="Submit" id="modalSubmit" />
         </div>
     </div>
 }

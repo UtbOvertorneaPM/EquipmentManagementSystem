@@ -89,7 +89,6 @@
         });
 
 
-
         $('#search').focusin(function () {
 
             $(this).attr('value', '');
@@ -120,7 +119,7 @@
     </script>
 }
 
-<h2>Användare</h2>
+    <h2>@Localizer["Owner"]</h2>
 
 @using (Html.BeginForm()) {
 
@@ -135,7 +134,7 @@
 }
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink(Localizer["Create New"], "Create", new { culture = ViewData["Language"] })
 </p>
 
 <table class="ownerTable table NoPaddingMargin" id="table">

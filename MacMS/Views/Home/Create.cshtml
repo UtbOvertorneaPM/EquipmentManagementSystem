@@ -133,7 +133,7 @@
 
                 var phElement = $('#modal-placeholder');
 
-                $.get("@Url.Action("CreateModal", "Owner")").done(function (data2) {
+                $.get("@Url.Action("CreateModal", "Owner", new { culture = ViewData["Language"] })").done(function (data2) {
 
                     phElement.html(data2);
                     phElement.find('.modal').modal('show');
@@ -194,8 +194,8 @@
     </div>
     <div id="additionalInformation"></div>
     <div class="SubmitDiv">
-        <input type="submit" id="test" />
-        <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Home")'" />
+        <input type="submit" value="@Localizer["Create"]" id="test" />
+        <input type="button" value="@Localizer["Back"]" onclick="location.href='@Url.Action("Index", new { culture = ViewData["Language"] })'" />
     </div>
 }
 

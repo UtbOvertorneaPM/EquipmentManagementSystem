@@ -64,13 +64,13 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Owner/Create
-        public IActionResult Create() {
+        public IActionResult Create(string culture) {
 
             return View();
         }
 
 
-        public IActionResult CreateModal() {
+        public IActionResult CreateModal(string culture) {
 
             var owner = new Owner();
             
@@ -120,7 +120,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Owner/Edit/5
-        public IActionResult Edit(int id) {
+        public IActionResult Edit(int id, string culture) {
 
             return View(repo.Get(id));
         }
@@ -150,7 +150,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Owner/Delete/5
-        public IActionResult Delete(int id) {
+        public IActionResult Delete(int id, string culture) {
 
             return View(repo.Get(id));
         }

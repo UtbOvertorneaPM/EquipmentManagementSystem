@@ -201,4 +201,10 @@
   <data name="Are you sure you wish to confirm?" xml:space="preserve">
     <value>Är du säker på att du vill verkställa?</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Tillbaka</value>
+  </data>
+  <data name="already exists" xml:space="preserve">
+    <value>finns redan</value>
+  </data>
 </root>

@@ -1,7 +1,10 @@
 ﻿@model EquipmentManagementSystem.Models.Owner
 
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
 @{
-    ViewData["Title"] = "CreateOwner";
+    ViewData["Title"] = Localizer["Create"] + " " + Localizer["Owner"];
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
@@ -23,7 +26,7 @@
     function callBackUser(data) {
 
         if (!data) {
-            alert("Owner already exists");
+            alert("@Localizer["Owner"] @Localizer["already exists"]");
             }
         else {
 
@@ -32,10 +35,10 @@
 
     };
     </script>
- 
+
 }
 
-<h2>CreateOwner</h2>
+    <h2>@Localizer["Create"] @Localizer["Owner"]</h2>
 
 @using (Html.BeginForm("Create", "Owner", FormMethod.Post, new { id = "form" })) {
     @Html.AntiForgeryToken()
@@ -43,34 +46,34 @@
     <div>
         <table>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.FirstName):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["FirstName"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.FirstName)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.LastName):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["LastName"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.LastName)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Mail):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Mail"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.Mail)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.Address):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["Address"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.Address)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.TelNr):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["TelNr"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.TelNr)</p></td>
             </tr>
             <tr>
-                <td><p class="CategoryText Bold">@Html.DisplayNameFor(model => model.SSN):  </p></td>
+                <td><p class="CategoryText Bold">@Localizer["SSN"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.SSN)</p></td>
             </tr>
         </table>
     </div>
 
     <div class="SubmitDiv">
-        <input type="submit" value="Create" />
-        <input type="button" value="Back" onclick="history.go(-1); return false;" />
+        <input type="submit" value="@Localizer["Create"]" />
+        <input type="button" value="@Localizer["Back"]" onclick="history.go(-1); return false;" />
     </div>
 }

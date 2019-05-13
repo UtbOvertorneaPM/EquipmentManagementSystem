@@ -107,7 +107,7 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Home/Create
         public IActionResult Create(string culture) {
 
-
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
             return View(new Equipment());
         }
 
@@ -146,7 +146,7 @@ namespace EquipmentManagementSystem.Controller {
         public IActionResult Edit(int id, string culture) {
 
             ViewData["IDCheck"] = false;
-
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
             var test = repo.Get(id);
             return View(test);
         }   
@@ -184,8 +184,8 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Home/Delete/5
         public IActionResult Delete(int id, string culture) {
 
+            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
-                        
             return View(repo.Get(id));
         }
 
