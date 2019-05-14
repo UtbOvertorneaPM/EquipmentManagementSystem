@@ -23,6 +23,11 @@ namespace EquipmentManagementSystem.Data {
         }
     }
 
+
+}
+
+namespace EquipmentManagementSystem {
+
     /// <summary>
     /// Dummy class to group shared resources
     /// </summary>

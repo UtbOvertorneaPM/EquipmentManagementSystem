@@ -81,7 +81,7 @@ namespace EquipmentManagementSystem.Data {
 
             try {
                 
-                var json = JsonConvert.SerializeObject(data);
+                var json = JsonConvert.SerializeObject(data, Formatting.Indented);
                 return Encoding.ASCII.GetBytes(json);
             }
             catch (Exception) {

@@ -38,7 +38,7 @@ namespace EquipmentManagementSystem {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
 
-            services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
+            
             services.Configure<CookiePolicyOptions>(options => {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
@@ -46,6 +46,27 @@ namespace EquipmentManagementSystem {
             });
 
             services.AddMemoryCache();
+            services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
+
+            services.Configure<RequestLocalizationOptions>(
+                options => {
+                    var supportedCultures = new List<CultureInfo> {
+                                    new CultureInfo("en-GB"),
+                                    new CultureInfo("sv-SE")
+                    };
+
+                    options.DefaultRequestCulture = new RequestCulture("en-GB");
+                    options.SupportedCultures = supportedCultures;
+                    options.SupportedUICultures = supportedCultures;
+                    options.RequestCultureProviders = new List<IRequestCultureProvider> {
+                        new QueryStringRequestCultureProvider(),
+                        new CookieRequestCultureProvider()
+                    };
+                    
+                }
+            );
+
+            services.AddSingleton<Localizer>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
@@ -56,22 +77,6 @@ namespace EquipmentManagementSystem {
                         return factory.Create("SharedResource", assemblyName.Name);
                     };
                 });                
-
-            services.Configure<RequestLocalizationOptions>( 
-                options => {
-                    var supportedCultures = new List<CultureInfo> {
-                        new CultureInfo("en-GB"),
-                        new CultureInfo("sv-SE")
-                    };
-
-                    options.DefaultRequestCulture = new RequestCulture("en-GB");
-                    options.SupportedCultures = supportedCultures;
-                    options.SupportedUICultures = supportedCultures;
-                    options.RequestCultureProviders.Insert(0, new AcceptLanguageHeaderRequestCultureProvider());
-                }
-            );
-
-            services.AddSingleton<Localizer>();
 
             var path = "";
 #if DEBUG
@@ -99,15 +104,11 @@ namespace EquipmentManagementSystem {
                 app.UseDeveloperExceptionPage();
             }
 
-            var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
-            app.UseRequestLocalization(locOptions.Value);
-
+            app.UseStaticFiles();
+            app.UseRequestLocalization();
             app.UseAuthentication();
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseCookiePolicy();
-
-            var test = Directory.GetCurrentDirectory();
 
             app.UseMvc(routes => {
                 routes.MapRoute(

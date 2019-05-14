@@ -40,13 +40,13 @@ namespace EquipmentManagementSystem.Controller {
             ViewData["SearchString"] = string.IsNullOrEmpty(searchString) ? ViewData["SearchString"] : searchString;
             ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
             ViewData["Page"] = page;
-              
+             /*
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(ViewData["Language"].ToString())),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
             );
-
+            */
             var data = Enumerable.Empty<Equipment>();
             var pageSize = repo.PageSize;
 
