@@ -43,13 +43,11 @@
 
             var element = document.getElementById('exportSelect');
             var exportTypeVal = element.options[element.selectedIndex].text;
-            //alert(exportTypeVal);
+
             var str = "@Url.Action("Export", new { exportType = "_exportType_", searchString = ViewData["SearchString"] })"
                 .replace("_exportType_", exportTypeVal);
             window.location = str;
 
-            //$.get("@Url.Action("Export")", { exportType: exportTypeVal });
-            //$.post("@Url.Action("Export")", { exportType: exportTypeVal });
         };
 
         var languageClick = function (event) {
@@ -66,8 +64,8 @@
     <header class="HeaderStyle">
         <nav>
             <li>
-                @Html.ActionLink(Localizer["Equipment"], "Index", "Home", new { culture = ViewData["Language"] })
-                @Html.ActionLink(Localizer["Owner"], "Index", "Owner", new { culture = ViewData["Language"] })
+                @Html.ActionLink(Localizer["Equipment"], "Index", "Home")
+                @Html.ActionLink(Localizer["Owner"], "Index", "Owner")
                 <a href="#" onclick="handler()" id="exportButton">@Localizer["Export"]</a>
 
             </li>

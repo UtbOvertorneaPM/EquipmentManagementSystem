@@ -42,11 +42,17 @@ namespace EquipmentManagementSystem.Controller {
             base.OnActionExecuting(context);
             var cookie = context.HttpContext.Request.Cookies;
 
-            if (!(cookie[".AspNetCore.Culture"] is null)) {
+            if (!context.ActionArguments.ContainsKey("culture") && !(cookie[".AspNetCore.Culture"] is null)) {
+
                 var culture = cookie[".AspNetCore.Culture"].Substring(2, 5);
                 SetLanguage(culture);
             }
+            else {
+
+                SetLanguage(context.ActionArguments["culture"].ToString());
+            }
         }
+
 
         private void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
@@ -56,14 +62,16 @@ namespace EquipmentManagementSystem.Controller {
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             ViewData["SearchString"] = string.IsNullOrEmpty(searchString) ? ViewData["SearchString"] : searchString;
-            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
 
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(ViewData["Language"].ToString())),
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
             );
+
+            SetLanguage(culture);
 
             var data = Enumerable.Empty<Equipment>();
             var pageSize = repo.PageSize;

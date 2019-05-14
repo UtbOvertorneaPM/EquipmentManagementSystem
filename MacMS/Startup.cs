@@ -59,11 +59,9 @@ namespace EquipmentManagementSystem {
                     options.SupportedCultures = supportedCultures;
                     options.SupportedUICultures = supportedCultures;
                     options.RequestCultureProviders = new List<IRequestCultureProvider> {
-                        new CookieRequestCultureProvider(),
-                        new QueryStringRequestCultureProvider()
-                        
-                    };
-                    
+                        new QueryStringRequestCultureProvider(),
+                        new CookieRequestCultureProvider()                     
+                    };                    
                 }
             );
 
