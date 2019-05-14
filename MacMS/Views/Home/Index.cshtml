@@ -4,9 +4,8 @@
 @inject Localizer Localizer
 
 @{
-
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = Localizer["Equipment"];
+                Layout = "~/Views/Shared/_Layout.cshtml";
+                ViewData["Title"] = Localizer["Equipment"];
 }
 
 
@@ -109,6 +108,15 @@
 
 <hr />
 
+@if (@Model.TotalPages > 1) {
+
+    <div style="float:left" id="pageList">
+        <div style="float:left" id="startList"></div>
+        <div style="float:left" id="curList"></div>
+        <div style="float:left" id="endList"></div>
+    </div>
+}
+
 <table class="table NoPaddingMargin" id="table">
     <thead>
         <tr>
@@ -149,7 +157,7 @@
                 @Html.DisplayFor(modelItem => item.EquipType)
             </td>
             <td class="Actions">
-                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"]}) |
+                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
                 @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
             </td>
         </tr>
@@ -160,14 +168,4 @@
     }
 </table>
 <hr />
-
-
-@if (@Model.TotalPages > 1) {
-
-    <div style="float:left" id="pageList">
-        <div style="float:left" id="startList"></div>
-        <div style="float:left" id="curList"></div>
-        <div style="float:left" id="endList"></div>
-    </div>
-}
 

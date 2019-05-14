@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Localization;
 using System.Net.Http;
 using System.IO;
 using Microsoft.Win32.SafeHandles;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Globalization;
+using System.Threading;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -25,12 +28,27 @@ namespace EquipmentManagementSystem.Controller {
         EquipmentHandler repo;
         private readonly Localizer Localizer;
 
+
         public HomeController(ManagementContext ctx, IStringLocalizerFactory factory) {
 
             ctx.Database.EnsureCreated();
             repo = new EquipmentHandler(ctx);
             Localizer = new Localizer(factory);
         }
+
+
+        public override void OnActionExecuting(ActionExecutingContext context) {
+
+            base.OnActionExecuting(context);
+            var cookie = context.HttpContext.Request.Cookies;
+
+            if (!(cookie[".AspNetCore.Culture"] is null)) {
+                var culture = cookie[".AspNetCore.Culture"].Substring(2, 5);
+                SetLanguage(culture);
+            }
+        }
+
+        private void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
 
         // GET: Home
@@ -40,13 +58,13 @@ namespace EquipmentManagementSystem.Controller {
             ViewData["SearchString"] = string.IsNullOrEmpty(searchString) ? ViewData["SearchString"] : searchString;
             ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
             ViewData["Page"] = page;
-             /*
+
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(ViewData["Language"].ToString())),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
             );
-            */
+
             var data = Enumerable.Empty<Equipment>();
             var pageSize = repo.PageSize;
 
@@ -103,9 +121,8 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Home/Create
-        public IActionResult Create(string culture) {
-
-            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+        public IActionResult Create() {
+            
             return View(new Equipment());
         }
 
@@ -141,12 +158,10 @@ namespace EquipmentManagementSystem.Controller {
 
         // GET: Home/Edit/5
         [HttpGet]
-        public IActionResult Edit(int id, string culture) {
+        public IActionResult Edit(int id) {
 
             ViewData["IDCheck"] = false;
-            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
-            var test = repo.Get(id);
-            return View(test);
+            return View(repo.Get(id));
         }   
 
 
@@ -180,9 +195,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Home/Delete/5
-        public IActionResult Delete(int id, string culture) {
-
-            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+        public IActionResult Delete(int id) {
 
             return View(repo.Get(id));
         }

@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -20,11 +21,27 @@ namespace EquipmentManagementSystem.Controller {
         OwnerHandler repo;
         private readonly Localizer Localizer;
 
+
         public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) {
 
             repo = new OwnerHandler(ctx);
             Localizer = new Localizer(factory);
         }
+
+
+        public override void OnActionExecuting(ActionExecutingContext context) {
+
+            base.OnActionExecuting(context);
+            var cookie = context.HttpContext.Request.Cookies;
+
+            if (!(cookie[".AspNetCore.Culture"] is null)) {
+                var culture = cookie[".AspNetCore.Culture"].Substring(2, 5);
+                SetLanguage(culture);
+            }
+        }
+
+
+        private void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
 
         // GET: Owner
@@ -66,19 +83,15 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Owner/Create
-        public IActionResult Create(string culture) {
-
-            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+        public IActionResult Create() {
 
             return View();
         }
 
 
-        public IActionResult CreateModal(string culture) {
+        public IActionResult CreateModal() {
 
             var owner = new Owner();
-            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
-
             return PartialView("_OwnerModalPartial", owner);
         }
 
@@ -126,9 +139,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Owner/Edit/5
-        public IActionResult Edit(int id, string culture) {
-
-            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+        public IActionResult Edit(int id) {
 
             return View(repo.Get(id));
         }
@@ -158,9 +169,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Owner/Delete/5
-        public IActionResult Delete(int id, string culture) {
-
-            ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+        public IActionResult Delete(int id) {
 
             return View(repo.Get(id));
         }
