@@ -76,6 +76,10 @@ li {
     margin: 0px 5px 0px 5px;
 }
 
+#pageList {
+    margin: 0px 0px 7px 0;
+}
+
 .PageLink {
     text-decoration: none;
     font-size: 20px;
