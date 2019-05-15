@@ -1,20 +1,8 @@
 [
   {
-    "outputFileName": "wwwroot/js/jquery.js",
-    "inputFiles": [
-      "node_modules/jquery/dist/jquery.js"
-    ]
-  },
-  {
     "outputFileName": "wwwroot/js/jquery.min.js",
     "inputFiles": [
       "node_modules/jquery/dist/jquery.min.js"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/js/jquery.unobtrusive-ajax.js",
-    "inputFiles": [
-      "node_modules/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"
     ]
   },
   {
@@ -24,21 +12,9 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/js/jquery-ui.js",
-    "inputFiles": [
-      "node_modules/jqueryui/jquery-ui.js"
-    ]
-  },
-  {
     "outputFileName": "wwwroot/js/jquery-ui.min.js",
     "inputFiles": [
       "node_modules/jqueryui/jquery-ui.min.js"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/js/jquery.validate.js",
-    "inputFiles": [
-      "node_modules/jquery-validation/dist/jquery.validate.js"
     ]
   },
   {
@@ -47,22 +23,11 @@
       "node_modules/jquery-validation/dist/jquery.validate.min.js"
     ]
   },
-  {
-    "outputFileName": "wwwroot/js/jquery.validate.unobtrusive.js",
-    "inputFiles": [
-      "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"
-    ]
-  },
+ 
   {
     "outputFileName": "wwwroot/js/jquery.validate.unobtrusive.min.js",
     "inputFiles": [
       "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/js/bootstrap.js",
-    "inputFiles": [
-      "node_modules/bootstrap/dist/js/bootstrap.js"
     ]
   },
   {
@@ -74,7 +39,7 @@
   {
     "outputFileName": "wwwroot/css/jquery-ui.css",
     "inputFiles": [
-      "node_modules/jqueryui/jquery-ui.css"
+      "node_modules/jqueryui/jquery-ui.min.css"
     ]
   },
   {
@@ -123,6 +88,18 @@
     "outputFileName": "wwwroot/css/Table.css",
     "inputFiles": [
       "Content/Table.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/jquery-ui.theme.css",
+    "inputFiles": [
+      "node_modules/jqueryui/jquery-ui.theme.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/jquery-ui.structure.css",
+    "inputFiles": [
+      "node_modules/jqueryui/jquery-ui.structure.min.css"
     ]
   }
 
