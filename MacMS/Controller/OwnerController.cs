@@ -39,7 +39,7 @@ namespace EquipmentManagementSystem.Controller {
                 var culture = cookie[".AspNetCore.Culture"].Substring(2, 5);
                 SetLanguage(culture);
             }
-            else {
+            else if(context.ActionArguments.ContainsKey("culture")) {
 
                 SetLanguage(context.ActionArguments["culture"].ToString());
             }
