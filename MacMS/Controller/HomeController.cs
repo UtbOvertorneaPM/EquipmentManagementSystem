@@ -51,6 +51,10 @@ namespace EquipmentManagementSystem.Controller {
 
                 SetLanguage(context.ActionArguments["culture"].ToString());
             }
+            else {
+
+                SetLanguage("en-GB");
+            }
         }
 
 
