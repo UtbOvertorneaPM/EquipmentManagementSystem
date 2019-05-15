@@ -89,6 +89,8 @@ namespace EquipmentManagementSystem.Models {
             Tablet,
             Mobile,
             Printer,
+            Router,
+            Switch,
             Misc
         }
 
