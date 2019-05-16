@@ -4,8 +4,8 @@
 @inject Localizer Localizer
 
 @{
-                Layout = "~/Views/Shared/_Layout.cshtml";
-                ViewData["Title"] = Localizer["Equipment"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Localizer["Equipment"];
 }
 
 
@@ -62,9 +62,12 @@
                         document.getElementById('curList').appendChild(a);
                     }
                 }
-
+                
             }
-
+                var original = document.getElementById('pageList');
+                var clone = original.cloneNode(true);
+                clone.id = "clone";
+                document.getElementById('pageListClone').appendChild(clone);
         });
 
 
@@ -167,5 +170,11 @@
         </tr>
     }
 </table>
+@if (@Model.TotalPages > 1) {
+
+    <div style="float:left" id="pageListClone">
+
+    </div>
+}
 <hr />
 
