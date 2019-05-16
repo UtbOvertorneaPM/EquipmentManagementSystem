@@ -49,6 +49,9 @@ namespace EquipmentManagementSystem.Models {
                 return FirstName + " " + LastName;
             }
         }
+
+        [Display(Name = "Added")]
+        public DateTime Added { get; set; }
  
 
         public new bool Equals(object x, object y) {

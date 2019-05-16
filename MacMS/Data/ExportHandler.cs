@@ -83,15 +83,9 @@ namespace EquipmentManagementSystem.Data {
 
         private byte[] JsonExport<T>(IQueryable<T> data) where T : Entity {
 
-            try {
-                
-                var json = JsonConvert.SerializeObject(data, Formatting.Indented);
-                return Encoding.ASCII.GetBytes(json);
-            }
-            catch (Exception) {
 
-                throw;
-            }
+            var json = JsonConvert.SerializeObject(data, Formatting.Indented);
+            return Encoding.ASCII.GetBytes(json);
         }
 
 
@@ -101,7 +95,41 @@ namespace EquipmentManagementSystem.Data {
         private byte[] ExcelExport(IQueryable<Owner> data) {
 
 
-            throw new NotImplementedException("Not implemented yet!");
+            var owners = data.ToList();
+
+            using (var package = new ExcelPackage()) {
+
+                var sheet = package.Workbook.Worksheets.Add("Owners");
+
+
+                var propertyNames = new List<string>() { "Name", "SSN", "Mail", "TelNr", "Added" };
+
+                for (int i = 0; i < propertyNames.Count; i++) {
+
+                    sheet.Cells[1, i + 1].Value = propertyNames[i];
+                }
+
+                for (int i = 0; i < owners.Count(); i++) {
+
+                    sheet.Cells[i + 3, 1].Value = owners[i].FullName;
+                    sheet.Cells[i + 3, 2].Value = owners[i].SSN;
+                    sheet.Cells[i + 3, 3].Value = owners[i].Mail;
+                    sheet.Cells[i + 3, 4].Value = owners[i].TelNr;
+                    sheet.Cells[i + 3, 5].Value = owners[i].Added;
+                }
+
+                using (var range = sheet.Cells[1, 5]) {
+
+                    range.Style.Font.Bold = true;
+                }
+
+                sheet.Cells.AutoFitColumns(0);
+
+                package.Workbook.Properties.Title = "Owners";
+                package.Workbook.Properties.Company = $"Övertorneå Kommun {DateTime.Now.ToString("dd/MM/YYYY")}";
+
+                return package.GetAsByteArray();
+            }
         }
 
 
@@ -120,9 +148,9 @@ namespace EquipmentManagementSystem.Data {
                     var propertyNames = GetEquipmentPropertyNames(equipType, equipment[equipType][0]);
 
                     // Sets property names as top column name
-                    for (int i = 1; i <= propertyNames.Count; i++) {
+                    for (int i = 0; i < propertyNames.Count; i++) {
 
-                        sheet.Cells[1, i].Value = propertyNames[i];
+                        sheet.Cells[1, i + 1].Value = propertyNames[i];
                     }
 
                     var propertyValues = GetEquipmentPropertyValue(equipType, equipment[equipType]);
