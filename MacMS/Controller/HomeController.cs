@@ -115,21 +115,14 @@ namespace EquipmentManagementSystem.Controller {
         [HttpGet]
         public IActionResult Export(string exportType, string searchString) {
 
-            var file = new ExportHandler().Export(repo, searchString, exportType);
+            var file = new ExportHandler().Export(repo.context, typeof(Equipment), searchString, exportType);
             var stream = new MemoryStream(file.Data);
             stream.Position = 0;
 
             return File(stream, file.ContentType, file.FileName);
         }
 
-        [HttpGet]
-        public FileStreamResult ExportFile(ExportFile file) {
 
-            var stream = new MemoryStream(file.Data);
-            stream.Position = 0;
-
-            return File(stream, file.ContentType, file.FileName);
-        }
 
 
         // GET: Home/Create

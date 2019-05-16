@@ -112,6 +112,7 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
 
+                owner.Added = DateTime.Now;
                 if (ModelState.IsValid && await repo.Insert<Owner>(owner)) {
 
                     return Json(true);
@@ -134,6 +135,7 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
                 owner.LastEdited = DateTime.Now;
+                owner.Added = DateTime.Now;
 
                 if (ModelState.IsValid && await repo.Insert<Owner>(owner)) {
 
@@ -167,6 +169,7 @@ namespace EquipmentManagementSystem.Controller {
 
                     await repo.Update(owner);
                     owner.LastEdited = DateTime.Now;
+
                     return Json(true);
                 }
 
