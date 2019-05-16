@@ -28,7 +28,7 @@
             var count = @Model.TotalPages;
             var lastPos = @Model.TotalPages - 1;
 
-            
+
             var posList = [0, lastPos];
 
             for (var i = (curPage - 2); i < (curPage + 3); i++) {
@@ -71,6 +71,10 @@
                 }
 
             }
+            var original = document.getElementById('pageList');
+            var clone = original.cloneNode(true);
+            clone.id = "clone";
+            document.getElementById('pageListClone').appendChild(clone);
 
         });
 
@@ -119,7 +123,7 @@
     </script>
 }
 
-    <h2>@Localizer["Owner"]</h2>
+<h2>@Localizer["Owner"]</h2>
 
 @using (Html.BeginForm()) {
 
@@ -136,6 +140,15 @@
 <p>
     @Html.ActionLink(Localizer["Create New"], "Create", new { culture = ViewData["Language"] })
 </p>
+
+<hr />
+
+@if (@Model.TotalPages > 1) {
+
+    <div style="float:left" id="pageListClone">
+
+    </div>
+}
 
 <table class="ownerTable table NoPaddingMargin" id="table">
     <thead>
