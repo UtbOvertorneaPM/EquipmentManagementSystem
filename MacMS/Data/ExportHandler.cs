@@ -55,68 +55,6 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public ExportFile Export(EquipmentHandler repo, string searchString, string exportType) {
-
-            var data = Enumerable.Empty<Equipment>().AsQueryable();
-            data = string.IsNullOrEmpty(searchString) ? repo.GetAll() : repo.Search(searchString);
-
-            var file = new ExportFile();
-            file.FileName = $"\\EquipmentExport-{DateTime.Now.ToString("dd/MM/YYYY")}";
-
-            switch (exportType.ToLower()) {
-                case "excel":
-
-                    file.ContentType = "application/excel";
-                    file.FileName += ".xlsx";
-                    file.Data = ExcelExport(data);
-                    break;
-
-                case "json":
-
-                    file.ContentType = "text/json";
-                    file.FileName += ".json";
-                    file.Data = JsonExport<Equipment>(data);
-                    break;
-
-                default:
-
-                    throw new Exception();
-            }
-
-            return file;
-        }
-
-
-        public ExportFile Export(OwnerHandler repo, string searchString, string exportType) {
-
-            var data = Enumerable.Empty<Owner>().AsQueryable();
-            data = string.IsNullOrEmpty(searchString) ? repo.GetAll() : repo.Search(searchString);
-
-            var file = new ExportFile();
-            file.FileName = $"\\OwnerExport-{DateTime.Now.ToString("dd/MM/YYYY")}";
-
-            switch (exportType) {
-                case "excel":
-
-                    throw new NotImplementedException();
-                    file.ContentType = "application/excel";
-                    break;
-
-                case "json":
-
-                    file.ContentType = "text/json";
-                    file.Data = JsonExport<Owner>(data);
-                    break;
-
-                default:
-
-                    throw new Exception();
-            }
-
-            return file;
-        }
-
-
         private byte[] JsonExport<T>(IQueryable<T> data) where T : Entity {
 
 
@@ -131,9 +69,7 @@ namespace EquipmentManagementSystem.Data {
 
             using (var package = new ExcelPackage()) {
 
-                //var sheets = new List<ExcelWorksheet>();
                 var typeString = type.ToString().Split(".");
-
 
                 switch (typeString[typeString.Count() - 1]) {
                     case "Equipment":
@@ -158,8 +94,6 @@ namespace EquipmentManagementSystem.Data {
                             }
 
                             eqpsheet.Cells.AutoFitColumns(0);
-
-                            //sheets.Add(sheet);
                         }
                         break;
 
@@ -182,9 +116,6 @@ namespace EquipmentManagementSystem.Data {
                 }
 
                 package.Workbook.Properties.Company = $"Övertorneå Kommun {DateTime.Now.ToString("dd/MM/YYYY")}";
-
-
-
 
                 return package.GetAsByteArray();
             }
@@ -232,104 +163,6 @@ namespace EquipmentManagementSystem.Data {
             }
 
             return sheet;
-        }
-
-
-
-
-
-        private byte[] ExcelExport(IQueryable<Owner> data) {
-
-
-            var owners = data.ToList();
-
-            using (var package = new ExcelPackage()) {
-
-                var sheet = package.Workbook.Worksheets.Add("Owners");
-
-
-                var propertyNames = new List<string>() { "Name", "SSN", "Mail", "TelNr", "Added" };
-
-                for (int i = 0; i < propertyNames.Count; i++) {
-
-                    sheet.Cells[1, i + 1].Value = propertyNames[i];
-                }
-
-                for (int i = 0; i < owners.Count(); i++) {
-
-                    sheet.Cells[i + 3, 1].Value = owners[i].FullName;
-                    sheet.Cells[i + 3, 2].Value = owners[i].SSN;
-                    sheet.Cells[i + 3, 3].Value = owners[i].Mail;
-                    sheet.Cells[i + 3, 4].Value = owners[i].TelNr;
-                    sheet.Cells[i + 3, 5].Value = owners[i].Added;
-                }
-
-                using (var range = sheet.Cells[1, 5]) {
-
-                    range.Style.Font.Bold = true;
-                }
-
-                sheet.Cells.AutoFitColumns(0);
-
-                package.Workbook.Properties.Title = "Owners";
-                package.Workbook.Properties.Company = $"Övertorneå Kommun {DateTime.Now.ToString("dd/MM/YYYY")}";
-
-                return package.GetAsByteArray();
-            }
-        }
-
-
-
-
-
-
-
-        private byte[] ExcelExport(IQueryable<Equipment> data) {
-
-            var equipment = SortEquipmentByCategory(data);
-
-            using (var package = new ExcelPackage()) {
-
-                // Each type of Equipment, create a new sheet
-                foreach (var equipType in equipment.Keys) {
-
-                    var sheet = package.Workbook.Worksheets.Add(equipType.ToString());
-
-                    // Get Property names
-                    var propertyNames = GetEquipmentPropertyNames(equipType, equipment[equipType][0]);
-
-                    // Sets property names as top column name
-                    for (int i = 0; i < propertyNames.Count; i++) {
-
-                        sheet.Cells[1, i + 1].Value = propertyNames[i];
-                    }
-
-                    var propertyValues = GetEquipmentPropertyValue(equipType, equipment[equipType]);
-
-                    for (int i = 0; i < propertyValues.Count; i++) {
-
-                        for (int j = 0; j < propertyValues[i].Count; j++) {
-
-                            sheet.Cells[(i + 3), (j + 1)].Value = propertyValues[i][j];
-                        }
-                    }
-
-                    using (var range = sheet.Cells[1, equipment[equipType].Count]) {
-
-                        range.Style.Font.Bold = true;
-
-                    }
-
-                    sheet.Cells.AutoFitColumns(0);
-
-
-                }
-
-                package.Workbook.Properties.Title = "Equipment";
-                package.Workbook.Properties.Company = $"Övertorneå Kommun {DateTime.Now.ToString("dd/MM/YYYY")}";
-
-                return package.GetAsByteArray();
-            }
         }
 
 
@@ -403,69 +236,6 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-
-
-        private List<List<string>> GetEquipmentPropertyValue(Equipment.EquipmentType type, List<Equipment> data) {
-
-            var prop = new List<List<string>>();
-
-            for (int i = 0; i < data.Count; i++) {
-
-                var values = new List<string>();
-
-                values.Add(data[i].LastEdited.ToString());
-                values.Add(data[i].Model);
-                values.Add(data[i].Serial);
-
-                values.Add(data[i].Owner.FullName);
-                values.Add(data[i].Location);
-
-                switch (type) {
-                    case Equipment.EquipmentType.Laptop:
-                    case Equipment.EquipmentType.Chromebook:
-                    case Equipment.EquipmentType.Mac:
-                    case Equipment.EquipmentType.Desktop:
-                    case Equipment.EquipmentType.Tablet:
-
-                        break;
-                    case Equipment.EquipmentType.Projector:
-                        values.Add(data[i].Resolution);
-                        break;
-
-                    case Equipment.EquipmentType.Mobile:
-                        values.Add(data[i].MobileNumber);
-                        break;
-                    case Equipment.EquipmentType.Printer:
-                        values.Add(data[i].IP);
-                        break;
-                    case Equipment.EquipmentType.Router:
-                    case Equipment.EquipmentType.Switch:
-                        values.Add(data[i].IP);
-                        values.Add(data[i].Ports.ToString());
-                        break;
-                    case Equipment.EquipmentType.Misc:
-                        break;
-                    default:
-                        break;
-                }
-
-                values.Add(data[i].Notes);
-
-                prop.Add(values);
-            }
-
-            return prop;
-        }
-
-
-    }
-
-    public class Property {
-
-        public string Name { get; set; }
-        public string Value { get; set; }
-
-        public Property(string name, string val) { Name = name; Value = val; }
     }
 
     public class ExportFile {
