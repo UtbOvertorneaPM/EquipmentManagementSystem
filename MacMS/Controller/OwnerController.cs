@@ -232,7 +232,7 @@ namespace EquipmentManagementSystem.Controller {
         [HttpPost]
         public IActionResult Export(string exportType, string searchString) {
 
-            var file = new ExportHandler().Export(repo, searchString, exportType);
+            var file = new ExportHandler().Export(repo.context, typeof(Owner), searchString, exportType);
             var stream = new MemoryStream(file.Data);
             stream.Position = 0;
 

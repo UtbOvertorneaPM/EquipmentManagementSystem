@@ -82,14 +82,15 @@ namespace EquipmentManagementSystem.Data {
                             propertyNames = GetEquipmentPropertyNames(equipType, equipment[equipType][0]);
 
                             propertyInfo = GetPropertyInfo(type, propertyNames);
+
                             var eqpsheet = package.Workbook.Worksheets.Add(equipType.ToString());
-                            
+                            eqpsheet.InsertRow(3, equipment[equipType].Count);
                             eqpsheet = AddPropertyHeader(eqpsheet, propertyNames);
 
                             for (int i = 0; i < equipment[equipType].Count; i++) {
 
                                 var values = GetPropertyValue(equipment[equipType][i], propertyInfo);
-                                eqpsheet.InsertRow(3, 3);
+                                
                                 eqpsheet = AddPropertyValues(eqpsheet, i + 3, values);
                             }
 
@@ -149,7 +150,7 @@ namespace EquipmentManagementSystem.Data {
             // Sets property names as top column name
             for (int i = 0; i < propertyNames.Count; i++) {
 
-                sheet.Cells[1, i + 1].Value = propertyNames[i];
+                sheet.Cells[1, i + 3].Value = propertyNames[i];
             }
 
             return sheet;
