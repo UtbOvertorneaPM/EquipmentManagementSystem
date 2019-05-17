@@ -125,7 +125,8 @@
 
 <h2>@Localizer["Owner"]</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
 
     <div style="display:flex">
         @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
@@ -143,10 +144,13 @@
 
 <hr />
 
-@if (@Model.TotalPages > 1) {
+@if (@Model.TotalPages > 1)
+{
 
-    <div style="float:left" id="pageListClone">
-
+    <div style="float:left" id="pageList">
+        <div style="float:left" id="startList"></div>
+        <div style="float:left" id="curList"></div>
+        <div style="float:left" id="endList"></div>
     </div>
 }
 
@@ -178,7 +182,8 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
             <tr class="ParentRow">
                 <td>
                     @Html.DisplayFor(modelItem => item.LastEdited)
@@ -209,13 +214,15 @@
         }
     </tbody>
 </table>
-<hr />
 
-@if (@Model.TotalPages > 1) {
+@if (@Model.TotalPages > 1)
+{
 
-    <div style="float:left" id="pageList">
-        <div style="float:left" id="startList"></div>
-        <div style="float:left" id="curList"></div>
-        <div style="float:left" id="endList"></div>
+    <div style="float:left" id="pageListClone">
+
     </div>
 }
+
+<hr />
+
+
