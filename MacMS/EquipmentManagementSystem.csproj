@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Content Remove="Production\web.config" />
-    <Content Remove="web.config" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +43,6 @@
 
   <ItemGroup>
     <None Include="Production\web.config" />
-    <None Include="web.config" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +51,9 @@
     </Content>
     <Content Update="prodSettings.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

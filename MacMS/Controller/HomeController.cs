@@ -25,8 +25,6 @@ namespace EquipmentManagementSystem.Controller {
     [Authorize("Administrators")]
     public class HomeController : Microsoft.AspNetCore.Mvc.Controller, IDisposable {
 
-        // TODO: Add [Authorized] attributes, switch project to windows authentication
-        // TODO: Remove comment tags in Properties\launchSettings.json and web.config
         EquipmentHandler repo;
         private readonly Localizer Localizer;
 
