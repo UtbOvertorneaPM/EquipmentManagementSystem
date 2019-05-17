@@ -50,7 +50,7 @@ namespace EquipmentManagementSystem {
             var roles = "";
 
 #if DEBUG
-            roles = "Administrator Lokal";
+            roles = "Administrator Lokal Local";
 #elif RELEASE
             roles = @"SKOLA\Administrator SKOLA\Administratör";
 #endif
