@@ -81,9 +81,17 @@ li {
 }
 
 #pageListClone {
-
     margin: 7px 0px 7px 0px;
 }
+
+    #pageListClone > div > div > a {
+        margin: 0px 5px 0px 5px;
+    }
+
+hr {
+    margin-top: 40px;
+}
+
 
 .PageLink {
     text-decoration: none;
