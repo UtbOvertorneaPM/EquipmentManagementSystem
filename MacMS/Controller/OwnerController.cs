@@ -14,8 +14,8 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Authorization;
 
-namespace EquipmentManagementSystem.Controller {
 
+namespace EquipmentManagementSystem.Controller {
 
 
     [Authorize("Administrators")]
