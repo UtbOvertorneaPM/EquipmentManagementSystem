@@ -12,12 +12,15 @@ using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EquipmentManagementSystem.Controller {
 
 
-    public class OwnerController : Microsoft.AspNetCore.Mvc.Controller {
 
+    [Authorize("Administrators")]
+    public class OwnerController : Microsoft.AspNetCore.Mvc.Controller {
+            
         OwnerHandler repo;
         private readonly Localizer Localizer;
 

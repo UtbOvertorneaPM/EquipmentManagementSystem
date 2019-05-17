@@ -19,6 +19,8 @@ using System.Reflection;
 using Microsoft.Extensions.Options;
 using EquipmentManagementSystem.Data;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Server.IISIntegration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EquipmentManagementSystem {
 
@@ -44,6 +46,25 @@ namespace EquipmentManagementSystem {
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.Strict;
             });
+
+            var roles = "";
+
+#if DEBUG
+            roles = "Administrator Lokal";
+#elif RELEASE
+            roles = @"SKOLA\Administrator SKOLA\Administratör";
+#endif
+
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrators", policy =>
+                {
+                    policy.Requirements.Add(new RoleRequirement(roles.Split(" ")));
+                    policy.AddAuthenticationSchemes("Windows");
+                });
+            });
+            services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
 
             services.AddMemoryCache();
             services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
@@ -80,7 +101,9 @@ namespace EquipmentManagementSystem {
             var path = "";
 #if DEBUG
             path = @"C:\Users\peter\source\repos\prodSettings.json";
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
 #else
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
             path = @"C:\EMS\prodSettings.json";
 #endif
 
@@ -102,6 +125,7 @@ namespace EquipmentManagementSystem {
 
                 app.UseDeveloperExceptionPage();
             }
+
 
             app.UseStaticFiles();
             app.UseRequestLocalization();

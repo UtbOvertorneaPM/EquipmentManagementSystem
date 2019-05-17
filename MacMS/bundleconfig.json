@@ -37,7 +37,7 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/css/jquery-ui.css",
+    "outputFileName": "wwwroot/css/jquery-ui.min.css",
     "inputFiles": [
       "node_modules/jqueryui/jquery-ui.min.css"
     ]

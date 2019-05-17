@@ -17,10 +17,12 @@ using Microsoft.Win32.SafeHandles;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Globalization;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EquipmentManagementSystem.Controller {
 
 
+    [Authorize("Administrators")]
     public class HomeController : Microsoft.AspNetCore.Mvc.Controller, IDisposable {
 
         // TODO: Add [Authorized] attributes, switch project to windows authentication

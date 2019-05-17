@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Production\web.config" />
+    <Content Remove="web.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Content\CRUD.css" />
     <None Remove="Content\site.css" />
     <None Remove="Scripts\Index-Table.js" />
@@ -38,6 +43,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Production\web.config" />
+    <None Include="web.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -51,5 +61,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-
+  
+  <Target Name="CustomScript" AfterTargets="GeneratePublishRuntimeConfigurationFile">
+    <Copy SourceFiles="Production\web.config" DestinationFolder="$(PublishDir)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="false" />
+  </Target>
+  
 </Project>
