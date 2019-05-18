@@ -113,6 +113,9 @@
 
             var bool = document.getElementById('IDCheck');
             bool.value = false;
+
+            var ownerID = document.getElementById("Owner_ID");
+            ownerID.value = event.target.id;
         };
 
 
@@ -159,6 +162,7 @@
     <h3></h3>
     <div>
         @Html.HiddenFor(model => model.IDCheck)
+        @Html.HiddenFor(model => model.Owner.ID)
         <table>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Model"]:  </p></td>

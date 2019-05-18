@@ -144,8 +144,7 @@ namespace EquipmentManagementSystem.Controller {
                     return Json(false);
                 }
 
-                if (equipment.Owner.ID != -1)
-                {
+                if (equipment.Owner.ID != -1) {
 
                     equipment.Owner = repo.GetOwner(equipment.Owner.ID);
                 }

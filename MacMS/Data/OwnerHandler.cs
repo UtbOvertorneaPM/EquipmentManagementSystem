@@ -65,59 +65,43 @@ namespace EquipmentManagementSystem.Data {
         public IQueryable<Owner> Search(string searchString) {
 
             var queryableData = GetAll();
-            return GetData(ParseSearchString(searchString), queryableData);
+            return GetData(searchString, queryableData);
         }
 
 
-        public string[] ParseSearchString(string searchString) {
+        public IQueryable<Owner> GetData(string searchString, IQueryable<Owner> queryableData) {
 
-            var strArray = searchString.Split('+');
+            var queries = new List<Expression<Func<Owner, bool>>>();
 
-            for (int i = 0; i < strArray.Count(); i++) {
+            var parameter = Expression.Parameter(typeof(Owner), "type");
+            var constant = Expression.Constant(searchString, typeof(string));
 
-                strArray[i] = strArray[i].Replace(" ", "");
+            switch (searchString)
+            {
+
+                // Checks if searchString matches standard datetime conventions i.e / and - separators
+                case var someVal when Regex.IsMatch(searchString, @"^\d[\d-\/\\]*"):
+
+                    queries.AddRange(SearchDate(searchString, parameter));
+                    break;
+
+                // Checks if searchString matches phone number pattern
+                case var someVal when Regex.IsMatch(searchString, @"^(\d{3,4})?\-?\ ?\d{5,7}$"):
+
+                    queries.Add(SearchTelNr(searchString, parameter, constant));
+                    break;
+                // Checks if Matces name
+                case var someVal when Regex.IsMatch(searchString, @"^\w+ ?\w+$"):
+
+                    queries.AddRange(SearchName(searchString, parameter, constant));
+                    break;
+
+                default:
+
+                    throw new Exception("Invalid search criteria");
             }
 
-            return strArray;
-        }
-
-
-        public IQueryable<Owner> GetData(string[] searchString, IQueryable<Owner> queryableData) {
-
-            var queries = new List<List<Expression<Func<Owner, bool>>>>();
-
-            for (int i = 0; i < searchString.Count(); i++) {
-
-                queries.Add(new List<Expression<Func<Owner, bool>>>());
-                var parameter = Expression.Parameter(typeof(Owner), "type");
-                var constant = Expression.Constant(searchString[i], typeof(string));
-
-                switch (searchString) {
-
-                    // Checks if searchString matches standard datetime conventions i.e / and - separators
-                    case var someVal when Regex.IsMatch(searchString[i], @"^\d[\d-\/\\]*"):
-
-                        queries[i].AddRange(SearchDate(searchString[i], parameter));
-                        break;
-
-                    // Checks if searchString matches phone number pattern
-                    case var someVal when Regex.IsMatch(searchString[i], @"^(\d{3,4})?\-?\ ?\d{5,7}$"):
-
-                        queries[i].Add(SearchTelNr(searchString[i], parameter, constant));
-                        break;
-                    // Checks if Matces name
-                    case var someVal when Regex.IsMatch(searchString[i], @"^\w+ ?\w+$"):
-
-                        queries[i].AddRange(SearchName(searchString[i], parameter, constant));
-                        break;
-
-                    default:
-
-                        throw new Exception("Invalid search criteria");
-                }
-            }
-
-            return Search(queries, queryableData);
+            return base.Search(queries, queryableData);
         }
 
 

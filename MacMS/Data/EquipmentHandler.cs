@@ -51,56 +51,40 @@ namespace EquipmentManagementSystem.Data {
         public IQueryable<Equipment> Search(string searchString) {
 
             var queryableData = GetAll();
-            return GetData(ParseSearchString(searchString), queryableData);
+            return GetData(searchString, queryableData);
         }
 
 
-        public string[] ParseSearchString(string searchString) {
 
-            var strArray = searchString.Split('+');
+        private IQueryable<Equipment> GetData(string searchString, IQueryable<Equipment> queryableData) {
 
-            for (int i = 0; i < strArray.Count(); i++) {
+            var queries = new List<Expression<Func<Equipment, bool>>>();
 
-                strArray[i] = strArray[i].Replace(" ", "");
+            var parameter = Expression.Parameter(typeof(Equipment), "type");
+            var constant = Expression.Constant(searchString, typeof(string));
+
+            switch (searchString) {
+
+                // Checks if searchString matches standard datetime conventions i.e / and - separators
+                case var someVal when Regex.IsMatch(searchString, @"^\d[\d-\/\\]*"):
+                    //case var someVal when DateTime.TryParse(searchString[i], out var date):
+
+                    queries.AddRange(SearchDate(searchString, parameter));
+                    break;
+
+                // Checks if searchString matches any EquipmentType
+                case var someVal when Enum.TryParse(searchString, true, out Equipment.EquipmentType eqp):
+
+                    queries.Add(SearchEquipmentType(searchString, eqp, parameter, constant));
+                    break;
+
+                default:
+
+                    queries.AddRange(SearchWide(searchString, queryableData, parameter, constant));
+                    break;
             }
 
-            return strArray;
-        }
-
-
-        private IQueryable<Equipment> GetData(string[] searchString, IQueryable<Equipment> queryableData) {
-
-            var queries = new List<List<Expression<Func<Equipment, bool>>>>();
-
-            for (int i = 0; i < searchString.Count(); i++) {
-
-                queries.Add(new List<Expression<Func<Equipment, bool>>>());
-                var parameter = Expression.Parameter(typeof(Equipment), "type");
-                var constant = Expression.Constant(searchString[i], typeof(string));
-
-                switch (searchString) {
-
-                    // Checks if searchString matches standard datetime conventions i.e / and - separators
-                    case var someVal when Regex.IsMatch(searchString[i], @"^\d[\d-\/\\]*"):
-                        //case var someVal when DateTime.TryParse(searchString[i], out var date):
-
-                        queries[i].AddRange(SearchDate(searchString[i], parameter));
-                        break;
-
-                    // Checks if searchString matches any EquipmentType
-                    case var someVal when Enum.TryParse(searchString[i], true, out Equipment.EquipmentType eqp):
-
-                        queries[i].Add(SearchEquipmentType(searchString[i], eqp, parameter, constant));
-                        break;
-
-                    default:
-                        
-                        queries[i].AddRange(SearchWide(searchString[i], queryableData, parameter, constant));      
-                        break;
-                }
-            }
-
-            return Search(queries, queryableData);
+            return base.Search(queries, queryableData);
         }
 
 

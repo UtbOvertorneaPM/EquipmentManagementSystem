@@ -76,27 +76,20 @@ namespace EquipmentManagementSystem.Data {
         /// <param name="search"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public IQueryable<X> Search<X>(List<List<Expression<Func<X, bool>>>> searchList, IQueryable<X> data) where X : Entity {
+        public IQueryable<X> Search<X>(List<Expression<Func<X, bool>>> searchList, IQueryable<X> data) where X : Entity {
 
             var queryList = new List<IQueryable<X>>();
 
             for (int i = 0; i < searchList.Count; i++) {
 
-                // initial searches(i = 0)(j) narrowed down by follow up searches(i > 0)(j)
-                for (int j = 0; j < searchList[i].Count(); j++) {
+                if (i == 0) { queryList.Add(Search(searchList[i], data)); }
+                else {
 
-                    if (i == 0) { queryList.Add(Search(searchList[i][j], data)); }
-                    else {
-                        // Narrows initial search [i][j] with [i > 0][k]
-                        for (int k = 0; k < searchList[i].Count(); k++) {
+                    var temp = Search(searchList[i], queryList[i]);
 
-                            var temp = Search(searchList[i][k], queryList[j]);
+                    if (temp.Count() > 0) {
 
-                            if (temp.Count() > 0) {
-                                queryList[j] = (temp);
-                            }
-
-                        }
+                        queryList[i] = (temp);
                     }
                 }
             }
