@@ -217,8 +217,8 @@
         <div class="ModalForm" id="modal-placeholder"></div>
     </div>
     <div class="SubmitDiv">
-        <input type="button" id="confirmButton" />
-        <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Home")'" />
+        <input type="button" value="@Localizer["Edit"]" id="confirmButton" />
+        <input type="button" value="@Localizer["Back"]" onclick="location.href='@Url.Action("Index", "Home")'" />
     </div>
 }
 

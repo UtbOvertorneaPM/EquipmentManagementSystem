@@ -22,7 +22,7 @@
     "inputFiles": [
       "node_modules/jquery-validation/dist/jquery.validate.min.js"
     ]
-  }, 
+  },
   {
     "outputFileName": "wwwroot/js/jquery.validate.unobtrusive.min.js",
     "inputFiles": [
@@ -87,18 +87,6 @@
     "outputFileName": "wwwroot/css/Table.css",
     "inputFiles": [
       "Content/Table.css"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/css/jquery-ui.theme.css",
-    "inputFiles": [
-      "node_modules/jquery-ui-dist/jquery-ui.theme.min.css"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/css/jquery-ui.structure.css",
-    "inputFiles": [
-      "node_modules/jquery-ui-dist/jquery-ui.structure.min.css"
     ]
   }
 
