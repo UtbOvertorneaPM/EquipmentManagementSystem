@@ -135,20 +135,26 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Home/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Equipment formModel) {
+        public async Task<IActionResult> Create(Equipment equipment) {
 
             try {
                 // Owner does not exist
-                if (formModel.IDCheck) {
+                if (equipment.IDCheck) {
 
                     return Json(false);
                 }
 
+                if (equipment.Owner.ID != -1)
+                {
+
+                    equipment.Owner = repo.GetOwner(equipment.Owner.ID);
+                }
+
                 if (ModelState.IsValid) {
 
-                    await repo.Insert(formModel);
-                    formModel.LastEdited = DateTime.Now;
-
+                    equipment.LastEdited = DateTime.Now;
+                    await repo.Insert(equipment);
+                    
                     return Json(true);
                 }
 

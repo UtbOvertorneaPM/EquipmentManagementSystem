@@ -1,4 +1,4 @@
-function Search(s, test) {
+﻿function Search(s, test) {
 
     var filter = s.value.toLowerCase();
     var ul = document.getElementById(test.id);

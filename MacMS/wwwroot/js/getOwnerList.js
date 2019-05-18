@@ -52,7 +52,7 @@ function GetDropDownId(action, clickAction, document) {
             a.id = key;
             a.href = '#';
             a.className = "clickable";
-            a.onclick = function () { window.location = "https://localhost:44307/Owner/Edit/idValue".replace("idValue", key) };
+            a.onclick = function () { window.location = "https://localhost:44307/Owner/Edit/idValue".replace("idValue", key); };
             item.appendChild(a);
             list.appendChild(item);
         }

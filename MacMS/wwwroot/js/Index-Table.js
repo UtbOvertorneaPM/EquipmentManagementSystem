@@ -1,4 +1,4 @@
-$('#ParentRow > td').hover(function () {
+﻿$('#ParentRow > td').hover(function () {
     if ($(this).find("th").length > 0) return;
     $(this).addClass("gridRowHover");
 },

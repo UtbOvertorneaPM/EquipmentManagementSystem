@@ -10,22 +10,10 @@
 
   <ItemGroup>
     <Content Remove="Production\web.config" />
+    <Content Remove="wwwroot\js\ajaxPost.js" />
+    <Content Remove="wwwroot\js\ConfirmationDialogue.js" />
     <Content Remove="wwwroot\js\getOwnerList.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Content\CRUD.css" />
-    <None Remove="Content\site.css" />
-    <None Remove="Scripts\Index-Table.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Content\CRUD.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\site.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Remove="wwwroot\js\Search.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,14 +24,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Scripts\Index-Table.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Production\web.config" />
+    <None Include="wwwroot\css\CRUD.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\js\ajaxPost.js" />
+    <None Include="wwwroot\js\ConfirmationDialogue.js" />
     <None Include="wwwroot\js\getOwnerList.js" />
+    <None Include="wwwroot\css\site.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\css\Table.css" />
+    <None Include="wwwroot\js\Search.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +48,9 @@
     <Content Update="web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\js\Index-Table.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -63,9 +58,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  
-  <Target Name="CustomScript" AfterTargets="GeneratePublishRuntimeConfigurationFile">
-    <Copy SourceFiles="Production\web.config" DestinationFolder="$(PublishDir)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="false" />
-  </Target>
   
 </Project>
