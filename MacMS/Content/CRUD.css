@@ -56,7 +56,8 @@ li {
 }
 
 .NotesField {
-    background: url(something) no-repeat;
+    background: url() no-repeat;
+    background-color: white;
     min-width: 600px;
     min-height: 250px;
     margin-left: 0px;

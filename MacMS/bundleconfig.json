@@ -14,7 +14,7 @@
   {
     "outputFileName": "wwwroot/js/jquery-ui.min.js",
     "inputFiles": [
-      "node_modules/jqueryui/jquery-ui.min.js"
+      "node_modules/jquery-ui-dist/jquery-ui.min.js"
     ]
   },
   {
@@ -38,7 +38,7 @@
   {
     "outputFileName": "wwwroot/css/jquery-ui.min.css",
     "inputFiles": [
-      "node_modules/jqueryui/jquery-ui.min.css"
+      "node_modules/jquery-ui-dist/jquery-ui.min.css"
     ]
   },
   {
@@ -92,13 +92,13 @@
   {
     "outputFileName": "wwwroot/css/jquery-ui.theme.css",
     "inputFiles": [
-      "node_modules/jqueryui/jquery-ui.theme.min.css"
+      "node_modules/jquery-ui-dist/jquery-ui.theme.min.css"
     ]
   },
   {
     "outputFileName": "wwwroot/css/jquery-ui.structure.css",
     "inputFiles": [
-      "node_modules/jqueryui/jquery-ui.structure.min.css"
+      "node_modules/jquery-ui-dist/jquery-ui.structure.min.css"
     ]
   }
 
