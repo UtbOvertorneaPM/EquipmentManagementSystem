@@ -182,14 +182,15 @@ namespace EquipmentManagementSystem.Controller {
                     return Json(false);
                 }
 
-                if (equipment.Owner.ID != -1) {
+                if (equipment.Owner.ID != -1)
+                {
 
                     equipment.Owner = repo.GetOwner(equipment.Owner.ID);
                 }
 
                 equipment.LastEdited = DateTime.Now;
                 await repo.Update<Equipment>(equipment);
-
+                
                 return Json(true);
             }
             catch(Exception e) {
@@ -214,7 +215,7 @@ namespace EquipmentManagementSystem.Controller {
             try {
 
                 await repo.Delete<Equipment>(id);
-
+                
                 return Json(true);
             }
             catch {

@@ -25,22 +25,9 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Notes")]
         public string Notes { get; set; }
 
-        private Owner _owner;
-
         [Display(Name = "Owner")]
-        public Owner Owner {
+        public Owner Owner { get; set; }
 
-            get {
-
-                return _owner;
-            }
-
-            set {
-
-                //OwnerId = value.ID;
-                _owner = value;
-            }
-        }
         [Display(Name = "Location")]
         public string Location { get; set; }
 

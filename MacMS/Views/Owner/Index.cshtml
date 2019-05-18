@@ -21,7 +21,7 @@
 
         $('document').ready(function () {
 
-            GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
+            GetDropDownId("@Url.Action("GetOwnerList", "Owner")", "@Url.Action("Edit", "Owner", new { id = "idValue" })", document);
 
             var curPage = @Model.Page == -1 ? 0 : @Model.Page;
 
@@ -102,23 +102,14 @@
         });
 
 
-        $('#search').focusout(function () {
 
-            var input = document.getElementById('search');
-            if (input.value.length < 1) {
-                $(this).attr('value', '@Localizer["Find model/date/owner..."]');
-            }
-
-            var list = document.getElementById("ownerList");
-            list.style.display = "none";
-        });
 
         function ClickName(event) {
 
-            event.preventDefault();
-            window.location.href = "@Url.Action("Edit", "Owner", new { id = "urlLink" })"
-                .replace("urlLink", encodeURIComponent(event.textContent));
+            arguments[0].preventDefault();
+            alert(arguments[1]);
         }
+    
 
     </script>
 }

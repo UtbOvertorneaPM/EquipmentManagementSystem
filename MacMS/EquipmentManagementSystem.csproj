@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Content Remove="Production\web.config" />
+    <Content Remove="wwwroot\js\getOwnerList.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +43,7 @@
 
   <ItemGroup>
     <None Include="Production\web.config" />
+    <None Include="wwwroot\js\getOwnerList.js" />
   </ItemGroup>
 
   <ItemGroup>

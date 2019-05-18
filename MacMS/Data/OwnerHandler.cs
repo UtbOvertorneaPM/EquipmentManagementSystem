@@ -29,12 +29,7 @@ namespace EquipmentManagementSystem.Data {
 
         public Owner Get(int id, bool include = true) {
 
-            if (include) {
-                return context.Set<Owner>().Where(o => o.ID == id).Include(o => o.Equipment).FirstOrDefault();
-            }
-            else {
-                return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
-            }
+            return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
         }
 
 
@@ -198,6 +193,12 @@ namespace EquipmentManagementSystem.Data {
             }
 
             return Expression.Lambda<Func<Owner, bool>>((MethodCallExpression)exp, parameter);
+        }
+
+
+        public List<Equipment> GetEquipment(int id) {
+            var test = context.Set<Equipment>().Where(e => e.Owner.ID == id).ToList();
+            return test;
         }
 
 

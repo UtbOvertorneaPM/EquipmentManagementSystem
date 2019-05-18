@@ -9,14 +9,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EquipmentManagementSystem.Migrations
 {
     [DbContext(typeof(ManagementContext))]
-    [Migration("20190507132751_initial")]
+    [Migration("20190518145714_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("EquipmentManagementSystem.Models.Equipment", b =>
                 {
@@ -58,6 +59,8 @@ namespace EquipmentManagementSystem.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Added");
 
                     b.Property<string>("Address");
 
