@@ -42,9 +42,9 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IEnumerable<Equipment> Sort(IQueryable<Equipment> equipment, string sortVariable, int page) {
+        public IEnumerable<Equipment> Sort(IQueryable<Equipment> equipment, string sortVariable) {
 
-            return GetSorting(sortVariable, equipment, page);
+            return GetSorting(sortVariable, equipment);
         }
 
 
@@ -140,6 +140,7 @@ namespace EquipmentManagementSystem.Data {
 
                 Contains("FirstName", queryableData, constant, true),
                 Contains("LastName", queryableData, constant, true),
+                Contains("Model", queryableData, constant),
                 Contains("Serial", queryableData, constant),
                 Contains("Notes", queryableData, constant),
                 Contains("Location", queryableData, constant)
@@ -174,7 +175,7 @@ namespace EquipmentManagementSystem.Data {
 
 
 
-        private IEnumerable<Equipment> GetSorting(string sortOrder, IQueryable<Equipment> data, int page) {
+        private IEnumerable<Equipment> GetSorting(string sortOrder, IQueryable<Equipment> data) {
 
             var parameter = Expression.Parameter(typeof(Equipment), "type");
 
@@ -183,12 +184,12 @@ namespace EquipmentManagementSystem.Data {
                 case "Owner":
                 case "Owner_desc":
 
-                    return sortOrder == "Owner" ? GetSorted<Equipment, string>(data, new List<string>() { "Owner", "FirstName" }, page) : GetSorted<Equipment, string>(data, new List<string>() { "Owner", "FirstName" }, page, true);
+                    return sortOrder == "Owner" ? GetSorted<Equipment, string>(data, new List<string>() { "Owner", "FirstName" }) : GetSorted<Equipment, string>(data, new List<string>() { "Owner", "FirstName" }, true);
                     
                 case "Date":
                 case "Date_desc":
 
-                    return sortOrder == "Date" ? GetSorted<Equipment, DateTime>(data, new List<string>() { "LastEdited" }, page) : GetSorted<Equipment, DateTime>(data, new List<string>() { "LastEdited" }, page, true);
+                    return sortOrder == "Date" ? GetSorted<Equipment, DateTime>(data, new List<string>() { "LastEdited" }) : GetSorted<Equipment, DateTime>(data, new List<string>() { "LastEdited" }, true);
 
                 default:
                     break;

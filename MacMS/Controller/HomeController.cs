@@ -65,9 +65,24 @@ namespace EquipmentManagementSystem.Controller {
         public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
-            ViewData["SearchString"] = string.IsNullOrEmpty(searchString) ? ViewData["SearchString"] : searchString;
+
+            // Searchstring priority
+            if (!(string.IsNullOrEmpty(searchString)) && ViewData.ContainsKey("SearchString")) {
+
+                ViewData["SearchString"] = searchString;
+            }
+            else if (string.IsNullOrEmpty(searchString) && ViewData.ContainsKey("SearchString")) {
+
+                searchString = ViewData["SearchString"].ToString();
+            }
+            else {
+
+                ViewData["SearchString"] = searchString;
+            }
+
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
+            var count = 0;
 
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
@@ -82,24 +97,31 @@ namespace EquipmentManagementSystem.Controller {
 
             if (string.IsNullOrEmpty(sortVariable) && string.IsNullOrEmpty(searchString)) {
 
-                data = repo.Sort(repo.GetAll(), "Date_desc", page);
+                data = repo.Sort(repo.GetAll(), "Date_desc");
 
-                return View(new PagedList<Equipment>(data, repo.Count<Equipment>(), page, pageSize));
+                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize));
             }
             else if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
 
-                data = repo.Sort(repo.Search(searchString), sortVariable, page);
-                return View(new PagedList<Equipment>(data, data.Count(), page, pageSize));
+                var search = repo.Search(searchString);
+                count = search.Count();
+                data = repo.Sort(search, sortVariable);
 
+                //return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), count, page, pageSize));
+                return View(new PagedList<Equipment>(data, count, page, pageSize));
             }
             else if (!string.IsNullOrEmpty(sortVariable)) { 
 
-                data = repo.Sort(repo.GetAll(), sortVariable, page);
-                return View(new PagedList<Equipment>(data, repo.Count<Equipment>(), page, pageSize));
+                data = repo.Sort(repo.GetAll(), sortVariable);
+
+                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize));
             }
 
-            data = repo.Search(searchString).Skip(page * pageSize).Take(pageSize);
-            return View(new PagedList<Equipment>(data, data.Count(), page, pageSize));
+            data = repo.Search(searchString);
+            count = data.Count();
+
+            //return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), count, page, pageSize));
+            return View(new PagedList<Equipment>(data, count, page, pageSize));
         }
 
 
@@ -219,8 +241,7 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
 
-                await repo.Delete<Equipment>(id);
-                
+                await repo.Delete<Equipment>(id);                
                 return Json(true);
             }
             catch {

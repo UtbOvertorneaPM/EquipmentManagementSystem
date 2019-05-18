@@ -47,7 +47,6 @@ namespace EquipmentManagementSystem.Data {
         public IQueryable<X> GetAll<X>(int page = 0) where X : Entity {
 
             return context.Set<X>();
-            //return context.Set<X>().Skip(PAGESIZE * page).Take(PAGESIZE);
         }
 
 
@@ -82,23 +81,14 @@ namespace EquipmentManagementSystem.Data {
 
             for (int i = 0; i < searchList.Count; i++) {
 
-                if (i == 0) { queryList.Add(Search(searchList[i], data)); }
-                else {
-
-                    var temp = Search(searchList[i], queryList[i]);
-
-                    if (temp.Count() > 0) {
-
-                        queryList[i] = (temp);
-                    }
-                }
+                queryList.Add(Search(searchList[i], data));
             }
 
             return queryList.SelectMany(q => q).Distinct().AsQueryable();
         }
 
 
-        public IEnumerable<X> GetSorted<X, U>(IEnumerable<X> query, List<string> propertyName, int page, bool descending = false) where X : Entity {
+        public IEnumerable<X> GetSorted<X, U>(IEnumerable<X> query, List<string> propertyName, bool descending = false) where X : Entity {
 
             var type = typeof(X);
 
@@ -106,7 +96,7 @@ namespace EquipmentManagementSystem.Data {
             var property = GetNestedProperty(propertyName, parameter);
             var exp = Expression.Lambda<Func<X, U>>(property, parameter);
 
-            return descending ? Queryable.OrderByDescending(query.AsQueryable(), exp).Skip(PAGESIZE * page).Take(PAGESIZE) : Queryable.OrderBy(query.AsQueryable(), exp).Skip(PAGESIZE * page).Take(PAGESIZE);
+            return descending ? Queryable.OrderByDescending(query.AsQueryable(), exp) : Queryable.OrderBy(query.AsQueryable(), exp);
         }
 
         

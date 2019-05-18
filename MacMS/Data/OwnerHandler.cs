@@ -23,7 +23,7 @@ namespace EquipmentManagementSystem.Data {
 
         public IQueryable<Owner> GetAll(int page) {
 
-            return context.Set<Owner>().Skip(page * PAGESIZE).Take(PAGESIZE);
+            return context.Set<Owner>();
         }
 
 
@@ -42,17 +42,17 @@ namespace EquipmentManagementSystem.Data {
                 case "FirstName":
                 case "FirstName_desc":
 
-                    return sortOrder == "FirstName" ? GetSorted<Owner, string>(data, new List<string>() { "FirstName" }, page) : GetSorted<Owner, string>(data, new List<string>() { "FirstName" }, page, true);
+                    return sortOrder == "FirstName" ? GetSorted<Owner, string>(data, new List<string>() { "FirstName" }) : GetSorted<Owner, string>(data, new List<string>() { "FirstName" }, true);
 
                 case "LastName":
                 case "LastName_desc":
 
-                    return sortOrder == "LastName" ? GetSorted<Owner, string>(data, new List<string>() { "LastName" }, page) : GetSorted<Owner, string>(data, new List<string>() {"LastName" }, page, true);
+                    return sortOrder == "LastName" ? GetSorted<Owner, string>(data, new List<string>() { "LastName" }) : GetSorted<Owner, string>(data, new List<string>() {"LastName" }, true);
 
                 case "Date":
                 case "Date_desc":
 
-                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }, page) : GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }, page, true);
+                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }, true);
 
                 default:
                     break;
