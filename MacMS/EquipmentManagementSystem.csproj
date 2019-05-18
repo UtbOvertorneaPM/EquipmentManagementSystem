@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Content Remove="Production\web.config" />
-    <Content Remove="wwwroot\js\ajaxPost.js" />
     <Content Remove="wwwroot\js\ConfirmationDialogue.js" />
     <Content Remove="wwwroot\js\getOwnerList.js" />
     <Content Remove="wwwroot\js\Search.js" />
@@ -28,7 +27,6 @@
     <None Include="wwwroot\css\CRUD.css">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Include="wwwroot\js\ajaxPost.js" />
     <None Include="wwwroot\js\ConfirmationDialogue.js" />
     <None Include="wwwroot\js\getOwnerList.js" />
     <None Include="wwwroot\css\site.css">
@@ -46,6 +44,21 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Update="web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\css\CRUD.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\css\jquery-ui.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\css\site.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\css\Table.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\js\ajaxPost.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\js\Index-Table.js">

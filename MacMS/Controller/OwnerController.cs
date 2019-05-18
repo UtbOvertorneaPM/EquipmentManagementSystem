@@ -158,7 +158,7 @@ namespace EquipmentManagementSystem.Controller {
         public IActionResult Edit(int id) {
 
             var owner = repo.Get(id);
-            owner.Equipment = repo.GetEquipment(id);
+            owner.Equipment = repo.GetEquipment(owner);
 
             return View(owner);
         }

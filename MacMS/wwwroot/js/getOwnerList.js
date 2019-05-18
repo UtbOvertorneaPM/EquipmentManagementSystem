@@ -50,9 +50,10 @@ function GetDropDownId(action, clickAction, document) {
 
             a.appendChild(document.createTextNode(cachedResponse[key]));
             a.id = key;
-            a.href = '#';
+            a.href = "https://localhost:44307/Owner/Edit/idValue".replace("idValue", key);
             a.className = "clickable";
-            a.onclick = function () { window.location = "https://localhost:44307/Owner/Edit/idValue".replace("idValue", key); };
+
+
             item.appendChild(a);
             list.appendChild(item);
         }

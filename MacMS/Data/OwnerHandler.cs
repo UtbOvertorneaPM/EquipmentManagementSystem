@@ -196,9 +196,9 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public List<Equipment> GetEquipment(int id) {
-            
-            return context.Set<Equipment>().Where(e => e.Owner.ID == id).ToList();
+        public List<Equipment> GetEquipment(Owner owner) {
+            var test = context.Set<Equipment>().Where(e => e.Owner == owner).ToList();
+            return test;
         }
 
 

@@ -84,10 +84,10 @@
                 <td><p class="CategoryText Bold">@Localizer["Equipment"]: </p></td>
                 <td>
                     <ul>
-                        @foreach (Equipment eqp in Model.Equipment) {
+                        @foreach (var item in Model.Equipment) {
                             <li>
-                                <p class="CategoryText">@eqp.Serial</p>
-                                <p class="CategoryText">@eqp.Model</p>
+                                <p class="CategoryText">@item.Serial</p>
+                                <p class="CategoryText">@item.Model)</p>
                             </li>
                         }
                     </ul>

@@ -15,11 +15,13 @@
         if (displayCount < dropDownMaxDisplay && val.toLowerCase().indexOf(filter) > -1) {
 
             li[i].style.display = "";
+            li[i].hidden = false;
             displayCount++;
         }
         else {
 
             li[i].style.display = "none";
+            li[i].hidden = true;
         }
         if (displayCount == 9) {
 
