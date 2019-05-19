@@ -48,9 +48,11 @@
                 a.appendChild(document.createTextNode(posList[i]));
 
                 a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
-                var link = "@Url.Action("Index", "Home", new { page = "linkUri", searchString = "searchValue" })"
-                    .replace("linkUri", encodeURIComponent(posList[i]));
-                a.href = link.replace("searchValue", encodeURIComponent(@ViewData["SearchString"]));
+                var link = "@Html.Raw(Url.Action("Index", "Home", new { page = "_linkUri_", searchString = "_searchValue_" }))"
+                    .replace("_linkUri_", encodeURIComponent(posList[i]))
+                    .replace("_searchValue_", encodeURIComponent(test));
+
+                a.href = link;
 
                 if (i == 0 && posList[i] != curPage) {
 
