@@ -64,9 +64,7 @@ namespace EquipmentManagementSystem {
                     policy.AddAuthenticationSchemes("Windows");
                 });
             });
-            services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
 
-            services.AddMemoryCache();
             services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
 
             services.Configure<RequestLocalizationOptions>(
@@ -81,11 +79,12 @@ namespace EquipmentManagementSystem {
                     options.SupportedUICultures = supportedCultures;
                     options.RequestCultureProviders = new List<IRequestCultureProvider> {
                         new QueryStringRequestCultureProvider(),
-                        new CookieRequestCultureProvider()                     
-                    };                    
+                        new CookieRequestCultureProvider()
+                    };
                 }
             );
 
+            services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
             services.AddSingleton<Localizer>();
 
             services.AddMvc()
@@ -102,7 +101,7 @@ namespace EquipmentManagementSystem {
 #if DEBUG
             path = @"C:\Users\peter\source\repos\prodSettings.json";
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
-#else
+#elif RELEASE
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
             path = @"C:\EMS\prodSettings.json";
 #endif
