@@ -60,8 +60,7 @@ namespace EquipmentManagementSystem.Controller {
 
         private void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
-
-        // GET: Home
+        // GET: Home    
         public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
@@ -120,8 +119,8 @@ namespace EquipmentManagementSystem.Controller {
             data = repo.Search(searchString);
             count = data.Count();
 
-            //return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), count, page, pageSize));
-            return View(new PagedList<Equipment>(data, count, page, pageSize));
+            return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), count, page, pageSize));
+            //return View(new PagedList<Equipment>(data, count, page, pageSize));
         }
 
 
