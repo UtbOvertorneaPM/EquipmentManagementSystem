@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Models {
 
@@ -10,7 +9,15 @@ namespace EquipmentManagementSystem.Models {
         public int Page { get; private set; }
         public int TotalPages { get; private set; }
 
-        public PagedList(IEnumerable<T> list, int count, int page, int pageSize) {
+        /// <summary>
+        /// Handles paging of data
+        /// </summary>
+        public PagedList() {
+
+
+        }
+
+        public void Initialize(IEnumerable<T> list, int count, int page, int pageSize) {
 
             Page = page;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);

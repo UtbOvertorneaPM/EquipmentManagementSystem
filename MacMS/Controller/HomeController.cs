@@ -128,34 +128,35 @@ namespace EquipmentManagementSystem.Controller {
             var data = Enumerable.Empty<Equipment>();
             var pageSize = repo.PageSize;
 
+            var pagedList = new PagedList<Equipment>();
+
             // Search then sort
             if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
 
                 data = repo.Sort(repo.Search(searchString), sortVariable);
-
-                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize));
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
             }            
             // Search
             else if (!string.IsNullOrEmpty(searchString)) {
 
                 data = repo.Search(searchString);
-
-                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize));
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
             }
             // Sort
             else if (!string.IsNullOrEmpty(sortVariable)) {
 
                 data = repo.Sort(repo.GetAll(), sortVariable);
-
-                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize));
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
+                
             }
-            // Index request without any modifiers
+            // Index request without modifiers
             else {
 
                 data = repo.Sort(repo.GetAll(), "Date_desc");
-
-                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize));
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
             }
+
+            return View(pagedList);
         }
 
 
