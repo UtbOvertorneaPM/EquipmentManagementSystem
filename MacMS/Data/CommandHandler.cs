@@ -146,7 +146,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public async Task<int> Update<X>(X obj) where X : Entity {
+        public int Update<X>(X obj) where X : Entity {
 
             context.Set<X>().Update(obj);
 
@@ -154,6 +154,9 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
+        /// <summary>
+        /// Saves changes to Db
+        /// </summary>
         public void Save() {
 
             context.SaveChanges();

@@ -97,11 +97,6 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
-        /// <summary>
-        /// Sets culture cookie
-        /// </summary>
-        /// <param name="culture"></param>
-        /// <param name="Response"></param>
         private void SetCultureCookie(string culture, HttpResponse Response) {
 
             Response.Cookies.Append(

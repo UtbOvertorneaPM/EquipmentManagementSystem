@@ -21,12 +21,6 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IQueryable<Owner> GetAll(int page) {
-
-            return context.Set<Owner>();
-        }
-
-
         public Owner Get(int id, bool include = true) {
 
             return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
@@ -117,9 +111,6 @@ namespace EquipmentManagementSystem.Data {
             // Gets the string.Contains method
             var method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
 
-            // e.LastEdited.Date.ToString()
-            //var tostringValue = Expression.Call(property, tostring);
-
             date = date.Replace("/", " ");
             var dates = date.Split(' ');
             var queries = new List<Expression<Func<Owner, bool>>>();
@@ -160,11 +151,21 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
+        /// <summary>
+        /// Generates an expression tree for calling string.Contains()
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <param name="parameter"></param>
+        /// <param name="constant"></param>
+        /// <param name="property"></param>
+        /// <param name="toString"></param>
+        /// <returns></returns>
         private Expression<Func<Owner, bool>> Contains(string searchString, ParameterExpression parameter, ConstantExpression constant, MemberExpression property, bool toString = false) {
 
             var method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
             Expression exp;
 
+            // If the property requires calling ToString() method on it first
             if (toString) {
 
                 var toStringMethod = typeof(object).GetMethod("ToString");
@@ -180,6 +181,7 @@ namespace EquipmentManagementSystem.Data {
 
 
         public List<Equipment> GetEquipment(Owner owner) {
+
             var test = context.Set<Equipment>().Where(e => e.Owner == owner).ToList();
             return test;
         }

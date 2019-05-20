@@ -18,79 +18,16 @@ using Microsoft.AspNetCore.Authorization;
 namespace EquipmentManagementSystem.Controller {
 
 
-    //[Authorize("Administrators")]
-    //public class OwnerController : Microsoft.AspNetCore.Mvc.Controller {
     public class OwnerController : BaseController { 
             
         OwnerHandler repo;
-        //private readonly Localizer Localizer;
 
 
         public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             repo = new OwnerHandler(ctx);
-            //Localizer = new Localizer(factory);
         }
 
-        /*
-        public override void OnActionExecuting(ActionExecutingContext context) {
-
-            base.OnActionExecuting(context);
-            var cookie = context.HttpContext.Request.Cookies;
-
-            if (!context.ActionArguments.ContainsKey("culture") && !(cookie[".AspNetCore.Culture"] is null)) {
-
-                var culture = cookie[".AspNetCore.Culture"].Substring(2, 5);
-                SetLanguage(culture);
-            }
-            else if (context.ActionArguments.ContainsKey("culture")) {
-
-                SetLanguage(context.ActionArguments["culture"].ToString());
-            }
-            else {
-
-                SetLanguage("en-GB");
-            }
-        }
-
-
-        private void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
-
-
-        // GET: Owner
-        public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
-
-            var count = 0;
-            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
-
-            // Searchstring priority
-            if (!(string.IsNullOrEmpty(searchString)) && ViewData.ContainsKey("SearchString")) {
-
-                ViewData["SearchString"] = searchString;
-            }
-            else if (string.IsNullOrEmpty(searchString) && ViewData.ContainsKey("SearchString")) {
-
-                searchString = ViewData["SearchString"].ToString();
-            }
-            else {
-
-                ViewData["SearchString"] = searchString;
-            }
-
-            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
-            ViewData["Page"] = page;
-
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
-
-            SetLanguage(culture);
-
-            return HandleIndexRequest(sortVariable, searchString, culture, page);
-        }
-        */
 
         /// <summary>
         /// Handles request to Index action
@@ -144,13 +81,21 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
+        /// <summary>
+        /// Creates AJAX modal for Owner Create
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateModal() {
 
             var owner = new Owner();
             return PartialView("_OwnerModalPartial", owner);
         }
 
-
+        /// <summary>
+        /// Post Owner Create Modal
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostModal(Owner owner) {
 
@@ -214,7 +159,7 @@ namespace EquipmentManagementSystem.Controller {
                 
                 if (ModelState.IsValid) {
 
-                    await repo.Update(owner);
+                    repo.Update(owner);
                     owner.LastEdited = DateTime.Now;
 
                     return Json(true);
@@ -254,6 +199,10 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
+        /// <summary>
+        /// AJAX get list of owners
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult GetOwnerList() {
 
