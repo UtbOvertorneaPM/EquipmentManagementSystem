@@ -136,7 +136,6 @@ namespace EquipmentManagementSystem {
                 app.UseDeveloperExceptionPage();
             }
 
-
             app.UseStaticFiles();
             app.UseRequestLocalization();
             app.UseAuthentication();

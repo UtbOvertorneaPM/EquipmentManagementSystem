@@ -1,14 +1,4 @@
 ﻿{
-  /* TODO: Replace current with this
-  "iisSettings": {
-    "windowsAuthentication": true,
-    "anonymousAuthentication": false,
-    "iisExpress": {
-        "applicationUrl": "http://localhost:52093/",
-        "sslPort": 44307
-      }
-  }
-  */
   "iisSettings": {
     "windowsAuthentication": true,
     "anonymousAuthentication": false,
