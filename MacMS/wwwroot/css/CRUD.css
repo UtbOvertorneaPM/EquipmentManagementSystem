@@ -63,10 +63,7 @@ li {
     margin-left: 0px;
     text-wrap: normal;
     text-align: left;
-    padding-left: 0;
-    padding-top: 0;
-    padding-bottom: 0.4em;
-    padding-right: 0.4em;
+    padding: 0, 0.4em, 0.4em, 0;
 }
 
 .ModalForm {

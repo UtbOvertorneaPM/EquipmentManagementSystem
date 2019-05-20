@@ -36,7 +36,10 @@ namespace EquipmentManagementSystem.Controller {
             Localizer = new Localizer(factory);
         }
 
-
+        /// <summary>
+        /// Handles language persistence between controllers/actions
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context) {
 
             base.OnActionExecuting(context);
@@ -57,31 +60,22 @@ namespace EquipmentManagementSystem.Controller {
             }
         }
 
-
+        /// <summary>
+        /// Sets the language in ViewData
+        /// </summary>
+        /// <param name="culture"></param>
         private void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+
+
 
         // GET: Home    
         public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
-
-            // Searchstring priority
-            if (!(string.IsNullOrEmpty(searchString)) && ViewData.ContainsKey("SearchString")) {
-
-                ViewData["SearchString"] = searchString;
-            }
-            else if (string.IsNullOrEmpty(searchString) && ViewData.ContainsKey("SearchString")) {
-
-                searchString = ViewData["SearchString"].ToString();
-            }
-            else {
-
-                ViewData["SearchString"] = searchString;
-            }
-
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
-            var count = 0;
+
+            SetSearchString(ref searchString);
 
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
@@ -91,47 +85,91 @@ namespace EquipmentManagementSystem.Controller {
 
             SetLanguage(culture);
 
+            return HandleIndexRequest(sortVariable, searchString, culture, page);
+        }
+
+
+        private void SetSearchString(ref string searchString) {
+
+            // Searchstring priority, if both searchString and ViewData is present, use searchString
+            if (!(string.IsNullOrEmpty(searchString)) && ViewData.ContainsKey("SearchString")) {
+
+                ViewData["SearchString"] = searchString;
+            }
+            // If ViewData search string is present and searchString is null/empty
+            else if (string.IsNullOrEmpty(searchString) && ViewData.ContainsKey("SearchString")) {
+
+                searchString = ViewData["SearchString"].ToString();
+            }
+            else {
+
+                ViewData["SearchString"] = searchString;
+            }
+        }
+
+
+        /// <summary>
+        /// Handles request to Index action
+        /// </summary>
+        /// <param name="sortVariable"></param>
+        /// <param name="searchString"></param>
+        /// <param name="culture"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        private IActionResult HandleIndexRequest(string sortVariable, string searchString, string culture, int page) {
+
             var data = Enumerable.Empty<Equipment>();
             var pageSize = repo.PageSize;
 
-            if (string.IsNullOrEmpty(sortVariable) && string.IsNullOrEmpty(searchString)) {
+            // Search then sort
+            if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
 
-                data = repo.Sort(repo.GetAll(), "Date_desc");
+                data = repo.Sort(repo.Search(searchString), sortVariable);
 
-                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize));
+                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize));
+            }            
+            // Search
+            else if (!string.IsNullOrEmpty(searchString)) {
+
+                data = repo.Search(searchString);
+
+                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize));
             }
-            else if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
-
-                var search = repo.Search(searchString);
-                count = search.Count();
-                data = repo.Sort(search, sortVariable);
-
-                //return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), count, page, pageSize));
-                return View(new PagedList<Equipment>(data, count, page, pageSize));
-            }
-            else if (!string.IsNullOrEmpty(sortVariable)) { 
+            // Sort
+            else if (!string.IsNullOrEmpty(sortVariable)) {
 
                 data = repo.Sort(repo.GetAll(), sortVariable);
 
                 return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize));
             }
+            // Index request without any modifiers
+            else {
 
-            data = repo.Search(searchString);
-            count = data.Count();
+                data = repo.Sort(repo.GetAll(), "Date_desc");
 
-            return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), count, page, pageSize));
-            //return View(new PagedList<Equipment>(data, count, page, pageSize));
+                return View(new PagedList<Equipment>(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize));
+            }
         }
 
 
         public IActionResult Import() {
 
+            // Used to import Macservice scrape
             //OneTimeMigration.GetJson(repo, new OwnerHandler(repo.context));
+
+            // Generates 500 Equipment/Owners for testing purposes
             RandomMigration.GetRandomTest(repo, new OwnerHandler(repo.context));
+
 
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Exports current table data
+        /// </summary>
+        /// <param name="exportType">Excel or JSON</param>
+        /// <param name="searchString">String used to narrow data</param>
+        /// <returns></returns>
         [HttpPost]
         [HttpGet]
         public IActionResult Export(string exportType, string searchString) {
@@ -165,6 +203,7 @@ namespace EquipmentManagementSystem.Controller {
                     return Json(false);
                 }
 
+                // If Owner was chosen in dropdown
                 if (equipment.Owner.ID != -1) {
 
                     equipment.Owner = repo.GetOwner(equipment.Owner.ID);
@@ -203,13 +242,14 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
 
+                // If Owner exists
                 if (equipment.IDCheck) {
 
                     return Json(false);
                 }
 
-                if (equipment.Owner.ID != -1)
-                {
+                // If Owner was chosen in dropdown
+                if (equipment.Owner.ID != -1) {
 
                     equipment.Owner = repo.GetOwner(equipment.Owner.ID);
                 }
