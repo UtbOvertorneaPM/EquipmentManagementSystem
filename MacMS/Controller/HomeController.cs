@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
 
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
-using System.Text;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Localization;
-using System.Net.Http;
-using System.IO;
-using Microsoft.Win32.SafeHandles;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System.Globalization;
-using System.Threading;
-using Microsoft.AspNetCore.Authorization;
+
 
 namespace EquipmentManagementSystem.Controller {
 

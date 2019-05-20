@@ -1,26 +1,28 @@
 ﻿using System;
+using System.IO;
+using System.Globalization;
+using System.Collections.Generic;
+using System.Reflection;
+
+using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc.Razor;
-
-using EquipmentManagementSystem.Models;
-using Microsoft.EntityFrameworkCore;
-using System.IO;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using System.Globalization;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Localization;
-using System.Reflection;
-using Microsoft.Extensions.Options;
-using EquipmentManagementSystem.Data;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.AspNetCore.Authorization;
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+
+using Newtonsoft.Json;
+using EquipmentManagementSystem.Models;
+using EquipmentManagementSystem.Data;
+
 
 namespace EquipmentManagementSystem {
 
