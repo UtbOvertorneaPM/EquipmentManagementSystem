@@ -33,7 +33,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IEnumerable<Owner> Sort(IQueryable<Owner> data, string sortOrder, int page) {
+        public IEnumerable<Owner> Sort(IQueryable<Owner> data, string sortOrder) {
 
             var parameter = Expression.Parameter(typeof(Owner), "type");
 
@@ -64,12 +64,11 @@ namespace EquipmentManagementSystem.Data {
 
         public IQueryable<Owner> Search(string searchString) {
 
-            var queryableData = GetAll();
-            return GetData(searchString, queryableData);
+            return GetData(searchString);
         }
 
 
-        public IQueryable<Owner> GetData(string searchString, IQueryable<Owner> queryableData) {
+        public IQueryable<Owner> GetData(string searchString) {
 
             var queries = new List<Expression<Func<Owner, bool>>>();
 
@@ -101,7 +100,7 @@ namespace EquipmentManagementSystem.Data {
                     throw new Exception("Invalid search criteria");
             }
 
-            return base.Search(queries, queryableData);
+            return base.Search(queries);
         }
 
 

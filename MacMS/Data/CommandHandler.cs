@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Reflection;
+using System.Collections.Concurrent;
 
 namespace EquipmentManagementSystem.Data {
 
@@ -50,7 +51,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public int Count<X>() where X : Entity{
+        public int Count<X>() where X : Entity {
 
             return context.Set<X>().Count();
         }
@@ -60,7 +61,6 @@ namespace EquipmentManagementSystem.Data {
                 
             return GetAll<X>().Where(search);
         }
-            
 
         public IQueryable<X> Search<X>(Expression<Func<X, bool>> search, IQueryable<X> data) where X : Entity {
 
@@ -69,7 +69,7 @@ namespace EquipmentManagementSystem.Data {
 
 
         /// <summary>
-        /// Handles multiple chained searches
+        /// Handles include searches
         /// </summary>
         /// <typeparam name="X"></typeparam>
         /// <param name="search"></param>
@@ -78,7 +78,7 @@ namespace EquipmentManagementSystem.Data {
         public IQueryable<X> Search<X>(List<Expression<Func<X, bool>>> searchList, IQueryable<X> data) where X : Entity {
 
             var queryList = new List<IQueryable<X>>();
-
+            
             for (int i = 0; i < searchList.Count; i++) {
 
                 queryList.Add(Search(searchList[i], data));
@@ -88,7 +88,27 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IEnumerable<X> GetSorted<X, U>(IEnumerable<X> query, List<string> propertyName, bool descending = false) where X : Entity {
+        /// <summary>
+        /// Handles searches
+        /// </summary>
+        /// <typeparam name="X"></typeparam>
+        /// <param name="search"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public IQueryable<X> Search<X>(List<Expression<Func<X, bool>>> searchList) where X : Entity {
+
+            var queryList = new List<IQueryable<X>>();
+
+            for (int i = 0; i < searchList.Count; i++) {
+
+                queryList.Add(Search(searchList[i]));
+            }
+
+            return queryList.SelectMany(q => q).Distinct().AsQueryable();
+        }
+
+
+        public IQueryable<X> GetSorted<X, U>(IEnumerable<X> query, List<string> propertyName, bool descending = false) where X : Entity {
 
             var type = typeof(X);
 
@@ -96,11 +116,11 @@ namespace EquipmentManagementSystem.Data {
             var property = GetNestedProperty(propertyName, parameter);
             var exp = Expression.Lambda<Func<X, U>>(property, parameter);
 
-            return descending ? Queryable.OrderByDescending(query.AsQueryable(), exp) : Queryable.OrderBy(query.AsQueryable(), exp);
+            return descending ? Queryable.OrderByDescending(query.AsQueryable<X>(), exp) : Queryable.OrderBy(query.AsQueryable<X>(), exp);
         }
 
         
-        private MemberExpression GetNestedProperty(List<string> propertyName, ParameterExpression parameter) {
+        protected MemberExpression GetNestedProperty(List<string> propertyName, ParameterExpression parameter) {
 
             var property = Expression.Property(parameter, propertyName[0]);
 

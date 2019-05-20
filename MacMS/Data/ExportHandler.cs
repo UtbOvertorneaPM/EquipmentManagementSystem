@@ -55,7 +55,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        private byte[] JsonExport<T>(IQueryable<T> data) where T : Entity {
+        private byte[] JsonExport<T>(IEnumerable<T> data) where T : Entity {
 
 
             var json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -63,7 +63,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        private byte[] ExcelExportReflection<T>(IQueryable<T> data, Type type, List<string> propertyNames) where T : Entity {
+        private byte[] ExcelExportReflection<T>(IEnumerable<T> data, Type type, List<string> propertyNames) where T : Entity {
 
             var propertyInfo = GetPropertyInfo(type, propertyNames);
 

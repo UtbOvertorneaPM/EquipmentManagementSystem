@@ -17,21 +17,22 @@ using Microsoft.Extensions.Localization;
 namespace EquipmentManagementSystem.Controller {
 
 
-    [Authorize("Administrators")]
-    public class HomeController : Microsoft.AspNetCore.Mvc.Controller, IDisposable {
+    //[Authorize("Administrators")]
+    //public class HomeController : Microsoft.AspNetCore.Mvc.Controller, IDisposable {
+    public class HomeController : BaseController { 
 
         EquipmentHandler repo;
-        private readonly Localizer Localizer;
+        //private readonly Localizer Localizer;
 
 
-        public HomeController(ManagementContext ctx, IStringLocalizerFactory factory) {
+        public HomeController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
             repo = new EquipmentHandler(ctx);
-            Localizer = new Localizer(factory);
+            //Localizer = new Localizer(factory);
         }
 
-
+        /*
         /// <summary>
         /// Handles language persistence between controllers/actions
         /// </summary>
@@ -113,7 +114,7 @@ namespace EquipmentManagementSystem.Controller {
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
             );
         }
-
+        */
 
         /// <summary>
         /// Handles request to Index action
@@ -123,7 +124,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="culture"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        private IActionResult HandleIndexRequest(string sortVariable, string searchString, string culture, int page) {
+        protected override IActionResult HandleIndexRequest(string sortVariable, string searchString, string culture, int page) {
 
             var data = Enumerable.Empty<Equipment>();
             var pageSize = repo.PageSize;
@@ -132,8 +133,8 @@ namespace EquipmentManagementSystem.Controller {
 
             // Search then sort
             if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
-
-                data = repo.Sort(repo.Search(searchString), sortVariable);
+                //var test = repo.Search(searchString);
+                data = repo.SearchSort(searchString, sortVariable);
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
             }            
             // Search

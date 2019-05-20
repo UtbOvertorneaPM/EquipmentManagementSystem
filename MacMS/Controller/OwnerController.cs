@@ -18,20 +18,21 @@ using Microsoft.AspNetCore.Authorization;
 namespace EquipmentManagementSystem.Controller {
 
 
-    [Authorize("Administrators")]
-    public class OwnerController : Microsoft.AspNetCore.Mvc.Controller {
+    //[Authorize("Administrators")]
+    //public class OwnerController : Microsoft.AspNetCore.Mvc.Controller {
+    public class OwnerController : BaseController { 
             
         OwnerHandler repo;
-        private readonly Localizer Localizer;
+        //private readonly Localizer Localizer;
 
 
-        public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) {
+        public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             repo = new OwnerHandler(ctx);
-            Localizer = new Localizer(factory);
+            //Localizer = new Localizer(factory);
         }
 
-
+        /*
         public override void OnActionExecuting(ActionExecutingContext context) {
 
             base.OnActionExecuting(context);
@@ -87,33 +88,52 @@ namespace EquipmentManagementSystem.Controller {
 
             SetLanguage(culture);
 
+            return HandleIndexRequest(sortVariable, searchString, culture, page);
+        }
+        */
+
+        /// <summary>
+        /// Handles request to Index action
+        /// </summary>
+        /// <param name="sortVariable"></param>
+        /// <param name="searchString"></param>
+        /// <param name="culture"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        protected override IActionResult HandleIndexRequest(string sortVariable, string searchString, string culture, int page) {
+
             var data = Enumerable.Empty<Owner>();
             var pageSize = repo.PageSize;
 
-            if (string.IsNullOrEmpty(sortVariable) && string.IsNullOrEmpty(searchString)) {
+            var pagedList = new PagedList<Owner>();
 
-                data = repo.Sort(repo.GetAll(), "Date_desc", page);
+            // Search then sort
+            if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
 
-                return View(new PagedList<Owner>(data.Skip(page * pageSize).Take(pageSize), repo.Count<Owner>(), page, pageSize));
+                data = repo.Sort(repo.Search(searchString), sortVariable);
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
             }
-            else if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
+            // Search
+            else if (!string.IsNullOrEmpty(searchString)) {
 
-                var search = repo.Search(searchString);
-                count = search.Count();
-                data = repo.Sort(search, sortVariable, page);
-
-                return View(new PagedList<Owner>(data.Skip(page * pageSize).Take(pageSize), count, page, pageSize));
+                data = repo.Search(searchString);
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
             }
+            // Sort
             else if (!string.IsNullOrEmpty(sortVariable)) {
 
-                data = repo.Sort(repo.GetAll(), sortVariable, page);
+                data = repo.Sort(repo.GetAll(), sortVariable);
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
 
-                return View(new PagedList<Owner>(data, repo.Count<Owner>(), page, pageSize));
+            }
+            // Index request without modifiers
+            else {
+
+                data = repo.Sort(repo.GetAll(), "Date_desc");
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
             }
 
-            data = repo.Search(searchString);
-
-            return View(new PagedList<Owner>(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize));
+            return View(pagedList);
         }
 
 

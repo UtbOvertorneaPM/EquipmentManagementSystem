@@ -154,13 +154,13 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc" })
+                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc", searchString = ViewData["SearchString"], page = ViewData["Page"] })
             </th>
             <th>
-                @Html.ActionLink(Localizer["FirstName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "FirstName" ? "FirstName_desc" : "FirstName" })
+                @Html.ActionLink(Localizer["FirstName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "FirstName" ? "FirstName_desc" : "FirstName", searchString = ViewData["SearchString"], page = ViewData["Page"] })
             </th>
             <th>
-                @Html.ActionLink(Localizer["LastName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "LastName" ? "LastName_desc" : "LastName" })
+                @Html.ActionLink(Localizer["LastName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "LastName" ? "LastName_desc" : "LastName", searchString = ViewData["SearchString"], page = ViewData["Page"] })
             </th>
             <th>
                 @Localizer["SSN"]

@@ -20,43 +20,46 @@ namespace EquipmentManagementSystem.Data {
 
         public EquipmentHandler(ManagementContext ctx) : base(ctx) { }
 
-        public IQueryable<Equipment> GetAll() {
 
-            return context.Set<Equipment>().Include(o => o.Owner);
+        public IQueryable<Equipment> GetAll() { return context.Set<Equipment>().Include(o => o.Owner); }
+
+        public Equipment Get(int id, bool owner = true) { return context.Set<Equipment>().Where(e => e.ID == id).Include(o => o.Owner).FirstOrDefault(); }
+
+
+        public Owner GetOwner(int id) { return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault(); }
+
+
+        public IEnumerable<Equipment> Sort(IEnumerable<Equipment> equipment, string sortVariable) { return GetSorting(sortVariable, equipment); }
+
+
+        public IEnumerable<Equipment> Search(string searchString) { return GetData(searchString, GetAll()); }
+        
+
+        /// <summary>
+        /// Searches and sorts
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <param name="sortVariable"></param>
+        /// <returns></returns>
+        public IEnumerable<Equipment> SearchSort(string searchString, string sortVariable) {
+
+            var data = GetData(searchString, GetAll()).ToList();
+
+            for (int i = 0; i < data.Count; i++) {
+
+                if (data[i].Owner is null) {
+
+                    var owner = new Owner();
+                    owner.FirstName = "";
+                    data[i].Owner = owner;
+                }
+            }
+
+            return GetSorting(sortVariable, data);
         }
+        
 
-        public IQueryable<Equipment> GetAll(int page) {
-
-            return context.Set<Equipment>().Include(o => o.Owner).Skip(PAGESIZE * page).Take(PAGESIZE);
-        }
-
-
-        public Equipment Get(int id, bool owner = true) {
-
-            return context.Set<Equipment>().Where(e => e.ID == id).Include(o => o.Owner).FirstOrDefault();
-        }
-
-        public Owner GetOwner(int id) {
-
-            return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
-        }
-
-
-        public IEnumerable<Equipment> Sort(IQueryable<Equipment> equipment, string sortVariable) {
-
-            return GetSorting(sortVariable, equipment);
-        }
-
-
-        public IQueryable<Equipment> Search(string searchString) {
-
-            var queryableData = GetAll();
-            return GetData(searchString, queryableData);
-        }
-
-
-
-        private IQueryable<Equipment> GetData(string searchString, IQueryable<Equipment> queryableData) {
+        private IQueryable<Equipment> GetData(string searchString, IQueryable<Equipment> data) {
 
             var queries = new List<Expression<Func<Equipment, bool>>>();
 
@@ -67,7 +70,6 @@ namespace EquipmentManagementSystem.Data {
 
                 // Checks if searchString matches standard datetime conventions i.e / and - separators
                 case var someVal when Regex.IsMatch(searchString, @"^\d[\d-\/\\]*"):
-                    //case var someVal when DateTime.TryParse(searchString[i], out var date):
 
                     queries.AddRange(SearchDate(searchString, parameter));
                     break;
@@ -80,11 +82,11 @@ namespace EquipmentManagementSystem.Data {
 
                 default:
 
-                    queries.AddRange(SearchWide(searchString, queryableData, parameter, constant));
+                    queries.AddRange(SearchWide(searchString, parameter, constant));
                     break;
             }
 
-            return base.Search(queries, queryableData);
+            return base.Search(queries, data);
         }
 
 
@@ -134,21 +136,21 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        private List<Expression<Func<Equipment, bool>>> SearchWide(string searchString, IQueryable<Equipment> queryableData, ParameterExpression parameter, ConstantExpression constant) {
+        private List<Expression<Func<Equipment, bool>>> SearchWide(string searchString, ParameterExpression parameter, ConstantExpression constant) {
 
             return new List<Expression<Func<Equipment, bool>>>() {
 
-                Contains("FirstName", queryableData, constant, true),
-                Contains("LastName", queryableData, constant, true),
-                Contains("Model", queryableData, constant),
-                Contains("Serial", queryableData, constant),
-                Contains("Notes", queryableData, constant),
-                Contains("Location", queryableData, constant)
+                Contains("FirstName", constant, true),
+                Contains("LastName", constant, true),
+                Contains("Model",  constant),
+                Contains("Serial", constant),
+                Contains("Notes", constant),
+                Contains("Location", constant)
             };
         }
 
 
-        private Expression<Func<Equipment, bool>> Contains(string prop, IQueryable<Equipment> queryableData, ConstantExpression constant, bool owner = false) {
+        private Expression<Func<Equipment, bool>> Contains(string prop, ConstantExpression constant, bool owner = false) {
 
             Expression exp = null;
 
@@ -174,8 +176,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-
-        private IEnumerable<Equipment> GetSorting(string sortOrder, IQueryable<Equipment> data) {
+        private IEnumerable<Equipment> GetSorting(string sortOrder, IEnumerable<Equipment> data) {
 
             var parameter = Expression.Parameter(typeof(Equipment), "type");
 

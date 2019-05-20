@@ -129,7 +129,7 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc" })
+                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc", searchString = ViewData["SearchString"], page = ViewData["Page"] })
             </th>
             <th>
                 @Localizer["Model"]
@@ -138,7 +138,7 @@
                 @Localizer["Serial"]
             </th>
             <th>
-                @Html.ActionLink(Localizer["Owner"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Owner" ? "Owner_desc" : "Owner" })
+                @Html.ActionLink(Localizer["Owner"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Owner" ? "Owner_desc" : "Owner", searchString = ViewData["SearchString"], page = ViewData["Page"] })
             </th>
             <th>
                 @Localizer["EquipType"]
