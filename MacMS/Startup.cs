@@ -49,12 +49,14 @@ namespace EquipmentManagementSystem {
 
             var roles = "";
 
+            // Sets up roles that have access using policy
 #if DEBUG
             roles = "Administrator Lokal Local";
 #elif RELEASE
             roles = @"SKOLA\Administrator SKOLA\Administratör";
 #endif
 
+            // Sets authentication type to windows/AD
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
             services.AddAuthorization(options =>
             {
@@ -65,8 +67,10 @@ namespace EquipmentManagementSystem {
                 });
             });
 
+            // Sets Localization to use SharedResource.sv-SE.resx
             services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
 
+            // Adds in Localization services
             services.Configure<RequestLocalizationOptions>(
                 options => {
                     var supportedCultures = new List<CultureInfo> {
@@ -87,6 +91,7 @@ namespace EquipmentManagementSystem {
             services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
             services.AddSingleton<Localizer>();
 
+            // Inserts Localization into MVC framework
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddViewLocalization()
@@ -97,6 +102,8 @@ namespace EquipmentManagementSystem {
                     };
                 });                
 
+
+            // Gets connectionstring and crendentials
             var path = "";
 #if DEBUG
             path = @"C:\Users\peter\source\repos\prodSettings.json";
@@ -109,6 +116,7 @@ namespace EquipmentManagementSystem {
             var credentials = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText(path)).Credentials;
             var connection = $"Server=localhost;port=3306;Database=EquipmentManagementSystem;user={credentials.User};password={credentials.Password}";
 
+            // Sets database to MySQL, and connects it to database using ManagementContext
             services.AddDbContextPool<ManagementContext>(
                 options => options.UseMySql(connection,
                 mySqlOptionsAction => {

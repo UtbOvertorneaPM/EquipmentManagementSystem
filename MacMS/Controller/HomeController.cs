@@ -36,6 +36,7 @@ namespace EquipmentManagementSystem.Controller {
             Localizer = new Localizer(factory);
         }
 
+
         /// <summary>
         /// Handles language persistence between controllers/actions
         /// </summary>
@@ -60,12 +61,12 @@ namespace EquipmentManagementSystem.Controller {
             }
         }
 
+
         /// <summary>
         /// Sets the language in ViewData
         /// </summary>
         /// <param name="culture"></param>
         private void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
-
 
 
         // GET: Home    
@@ -77,11 +78,7 @@ namespace EquipmentManagementSystem.Controller {
 
             SetSearchString(ref searchString);
 
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
+            SetCultureCookie(culture, Response);
 
             SetLanguage(culture);
 
@@ -105,6 +102,21 @@ namespace EquipmentManagementSystem.Controller {
 
                 ViewData["SearchString"] = searchString;
             }
+        }
+
+
+        /// <summary>
+        /// Sets culture cookie
+        /// </summary>
+        /// <param name="culture"></param>
+        /// <param name="Response"></param>
+        private void SetCultureCookie(string culture, HttpResponse Response) {
+
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
         }
 
 
@@ -154,7 +166,7 @@ namespace EquipmentManagementSystem.Controller {
 
         public IActionResult Import() {
 
-            // Used to import Macservice scrape
+            // Used to import Macservice data
             //OneTimeMigration.GetJson(repo, new OwnerHandler(repo.context));
 
             // Generates 500 Equipment/Owners for testing purposes
@@ -180,8 +192,6 @@ namespace EquipmentManagementSystem.Controller {
 
             return File(stream, file.ContentType, file.FileName);
         }
-
-
 
 
         // GET: Home/Create
