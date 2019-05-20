@@ -49,13 +49,26 @@ namespace EquipmentManagementSystem {
                 options.MinimumSameSitePolicy = SameSiteMode.Strict;
             });
 
+            // Gets connectionstring and crendentials
+            var path = "";
+#if DEBUG
+            path = @"C:\Users\peter\source\repos\prodSettings.json";
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
+#elif RELEASE
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
+            path = @"C:\EMS\prodSettings.json";
+#endif
+
+            var credentials = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText(path)).Credentials;
+            var connection = $"Server={credentials.Server};port=3306;Database={credentials.DbName};user={credentials.User};password={credentials.Password}";
+
             var roles = "";
 
             // Sets up roles that have access using policy
 #if DEBUG
-            roles = "Administrator Lokal Local";
+            roles = credentials.DebugDomain;
 #elif RELEASE
-            roles = @"SKOLA\Administrator SKOLA\Administratör";
+            roles = credentials.Domain;
 #endif
 
             // Sets authentication type to windows/AD
@@ -105,18 +118,6 @@ namespace EquipmentManagementSystem {
                 });                
 
 
-            // Gets connectionstring and crendentials
-            var path = "";
-#if DEBUG
-            path = @"C:\Users\peter\source\repos\prodSettings.json";
-            services.AddAuthentication(IISDefaults.AuthenticationScheme);
-#elif RELEASE
-            services.AddAuthentication(IISDefaults.AuthenticationScheme);
-            path = @"C:\EMS\prodSettings.json";
-#endif
-
-            var credentials = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText(path)).Credentials;
-            var connection = $"Server=localhost;port=3306;Database=EquipmentManagementSystem;user={credentials.User};password={credentials.Password}";
 
             // Sets database to MySQL, and connects it to database using ManagementContext
             services.AddDbContextPool<ManagementContext>(
