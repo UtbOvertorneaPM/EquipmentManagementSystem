@@ -28,7 +28,7 @@ namespace EquipmentManagementSystem
                 for (int i = 0; i < requirement.GroupName.Count(); i++) {
 
                     hasRole = windowsUser?.IsInRole(requirement.GroupName[i]) ?? false;
-                    if (hasRole) { break;  }
+                    if (hasRole) { break; }
                 }
                 
                 if (hasRole) { 

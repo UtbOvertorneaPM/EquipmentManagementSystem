@@ -69,6 +69,8 @@ namespace EquipmentManagementSystem {
             roles = credentials.Domain;
 #endif
 
+            roles = roles.Replace("\\", @"\");
+
             services.AddAuthorization(options => {
                 options.AddPolicy("Administrators", policy => {
                     policy.Requirements.Add(new RoleRequirement(roles.Split(" ")));
