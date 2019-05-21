@@ -72,5 +72,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+
+  <Target Name="ReplaceConfig" AfterTargets="Publish">
+    <Copy SourceFiles="$(SolutionDir)MacMS\Production\web.config" DestinationFiles="$(PublishDir)web.config" OverwriteReadOnlyFiles="true"/>
+  </Target>
   
 </Project>

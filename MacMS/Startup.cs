@@ -53,9 +53,7 @@ namespace EquipmentManagementSystem {
             var path = "";
 #if DEBUG
             path = @"C:\Users\peter\source\repos\prodSettings.json";
-            services.AddAuthentication(IISDefaults.AuthenticationScheme);
 #elif RELEASE
-            services.AddAuthentication(IISDefaults.AuthenticationScheme);
             path = @"C:\EMS\prodSettings.json";
 #endif
 
@@ -71,16 +69,14 @@ namespace EquipmentManagementSystem {
             roles = credentials.Domain;
 #endif
 
-            // Sets authentication type to windows/AD
-            services.AddAuthentication(IISDefaults.AuthenticationScheme);
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Administrators", policy =>
-                {
+            services.AddAuthorization(options => {
+                options.AddPolicy("Administrators", policy => {
                     policy.Requirements.Add(new RoleRequirement(roles.Split(" ")));
                     policy.AddAuthenticationSchemes("Windows");
                 });
             });
+
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
 
             // Sets Localization to use SharedResource.sv-SE.resx
             services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
@@ -103,8 +99,7 @@ namespace EquipmentManagementSystem {
                 }
             );
 
-            services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
-            services.AddSingleton<Localizer>();
+
 
             // Inserts Localization into MVC framework
             services.AddMvc()
@@ -115,9 +110,10 @@ namespace EquipmentManagementSystem {
                         var assemblyName = new AssemblyName(typeof(SharedResource).GetTypeInfo().Assembly.FullName);
                         return factory.Create("SharedResource", assemblyName.Name);
                     };
-                });                
+                });
 
-
+            services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
+            services.AddSingleton<Localizer>();
 
             // Sets database to MySQL, and connects it to database using ManagementContext
             services.AddDbContextPool<ManagementContext>(
