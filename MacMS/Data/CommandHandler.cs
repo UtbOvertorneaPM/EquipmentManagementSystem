@@ -149,7 +149,6 @@ namespace EquipmentManagementSystem.Data {
         public int Update<X>(X obj) where X : Entity {
 
             context.Set<X>().Update(obj);
-
             return context.SaveChanges();
         }
 

@@ -175,8 +175,16 @@ namespace EquipmentManagementSystem.Controller {
 
                     equipment.Owner = repo.GetOwner(equipment.Owner.ID);
                 }
+                else if (equipment.Owner.ID == -1) {
+
+                    equipment.Owner.ID = 0;
+                    //equipment.Owner = null;
+                }
 
                 equipment.LastEdited = DateTime.Now;
+
+
+
                 repo.Update<Equipment>(equipment);
                 
                 return Json(true);
