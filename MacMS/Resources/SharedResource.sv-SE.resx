@@ -210,4 +210,10 @@
   <data name="Created Date" xml:space="preserve">
     <value>Datum skapad</value>
   </data>
+  <data name="Creation date" xml:space="preserve">
+    <value>Datum skapad</value>
+  </data>
+  <data name="Last edited" xml:space="preserve">
+    <value>Senast ändrad</value>
+  </data>
 </root>

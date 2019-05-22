@@ -19,8 +19,9 @@
 
         $('#confirmButton').click(function (e) {
 
+            alert("test");
             var dialog = document.getElementById("confirmDialog");
-            dialog.title = @Localizer["Edit"] + " " + @Localizer["Owner"];
+            dialog.title = "@Localizer["Edit"]" + " " + "@Localizer["Owner"]";
 
             ConfirmClick(e, submitted);
         });
@@ -56,6 +57,14 @@
 
     <div>
         <table>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Last Edited"]:  </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.LastEdited)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Creation date"]:  </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Added)</p></td>
+            </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["FirstName"]:  </p></td>
                 <td><p class="CategoryText">@Html.EditorFor(model => model.FirstName)</p></td>

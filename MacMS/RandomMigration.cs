@@ -25,6 +25,7 @@
                 var owners = new List<Owner>();
                 var equipment = new List<Equipment>();
 
+
                 for (int i = 0; i < usersToAdd; i++) {
 
                     var owner = new Owner();
