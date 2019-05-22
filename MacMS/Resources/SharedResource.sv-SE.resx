@@ -207,4 +207,7 @@
   <data name="already exists" xml:space="preserve">
     <value>finns redan</value>
   </data>
+  <data name="Created Date" xml:space="preserve">
+    <value>Datum skapad</value>
+  </data>
 </root>

@@ -148,7 +148,7 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc", searchString = ViewData["SearchString"], page = ViewData["Page"] })
+                @Html.ActionLink(Localizer["Created Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc", searchString = ViewData["SearchString"], page = ViewData["Page"] })
             </th>
             <th>
                 @Html.ActionLink(Localizer["FirstName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "FirstName" ? "FirstName_desc" : "FirstName", searchString = ViewData["SearchString"], page = ViewData["Page"] })
@@ -176,7 +176,7 @@
         {
             <tr class="ParentRow">
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastEdited)
+                    @Html.DisplayFor(modelItem => item.Added)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)

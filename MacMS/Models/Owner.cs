@@ -62,6 +62,7 @@ namespace EquipmentManagementSystem.Models {
         }
 
         [Display(Name = "Added")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Added { get; set; }
  
 

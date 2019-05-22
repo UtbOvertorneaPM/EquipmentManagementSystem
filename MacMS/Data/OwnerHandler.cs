@@ -46,7 +46,7 @@ namespace EquipmentManagementSystem.Data {
                 case "Date":
                 case "Date_desc":
 
-                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }, true);
+                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }, true);
 
                 default:
                     break;
