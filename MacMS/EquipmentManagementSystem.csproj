@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <Content Remove="Production\web.config" />
-    <Content Remove="wwwroot\js\ConfirmationDialogue.js" />
-    <Content Remove="wwwroot\js\getOwnerList.js" />
     <Content Remove="wwwroot\js\Search.js" />
   </ItemGroup>
 
@@ -28,8 +26,6 @@
     <None Include="wwwroot\css\CRUD.css">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Include="wwwroot\js\ConfirmationDialogue.js" />
-    <None Include="wwwroot\js\getOwnerList.js" />
     <None Include="wwwroot\css\site.css">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -62,6 +58,12 @@
     <Content Update="wwwroot\js\ajaxPost.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\js\ConfirmationDialogue.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\js\getOwnerList.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\js\Index-Table.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -74,7 +76,7 @@
   </ItemGroup>
 
   <Target Name="ReplaceConfig" AfterTargets="Publish">
-    <Copy SourceFiles="$(SolutionDir)MacMS\Production\web.config" DestinationFiles="$(PublishDir)web.config" OverwriteReadOnlyFiles="true"/>
+    <Copy SourceFiles="$(SolutionDir)MacMS\Production\web.config" DestinationFiles="$(PublishDir)web.config" OverwriteReadOnlyFiles="true" />
   </Target>
   
 </Project>
