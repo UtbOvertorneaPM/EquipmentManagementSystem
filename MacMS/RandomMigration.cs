@@ -12,7 +12,7 @@
         public static class RandomMigration {
 
 
-            public async static void GetRandomTest(EquipmentHandler equipRepo, OwnerHandler ownerRepo) {
+            public static void GetRandomTest(EquipmentHandler equipRepo, OwnerHandler ownerRepo) {
 
                 var usersToAdd = 500;
                 var equipmentToAdd = 500;
@@ -63,13 +63,13 @@
 
                 for (int i = 0; i < equipment.Count; i++) {
 
-                    await equipRepo.Insert(equipment[i], false);
+                    equipRepo.Insert(equipment[i], false);
                     if (i % 20 == 0) { equipRepo.Save(); }
                 }
 
                 for (int i = 0; i < owners.Count; i++) {
 
-                    await ownerRepo.Insert(owners[i], false);
+                    ownerRepo.Insert(owners[i], false);
 
                     if (i % 20 == 0) { ownerRepo.Save(); }
                 }

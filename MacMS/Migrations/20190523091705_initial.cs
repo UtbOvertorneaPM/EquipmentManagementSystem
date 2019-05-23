@@ -44,7 +44,7 @@ namespace EquipmentManagementSystem.Migrations
                     EquipType = table.Column<int>(nullable: false),
                     MobileNumber = table.Column<string>(nullable: true),
                     IP = table.Column<string>(nullable: true),
-                    Ports = table.Column<int>(nullable: false),
+                    Ports = table.Column<int>(nullable: true),
                     Resolution = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EquipmentManagementSystem.Migrations
 {
     [DbContext(typeof(ManagementContext))]
-    [Migration("20190518145714_initial")]
+    [Migration("20190523091705_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,7 @@ namespace EquipmentManagementSystem.Migrations
 
                     b.Property<int?>("OwnerID");
 
-                    b.Property<int>("Ports");
+                    b.Property<int?>("Ports");
 
                     b.Property<string>("Resolution");
 

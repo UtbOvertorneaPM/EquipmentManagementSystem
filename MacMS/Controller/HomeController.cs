@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Localization;
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
 using Microsoft.Extensions.Localization;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -116,10 +116,11 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Home/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Equipment equipment) {
+        public IActionResult Create(Equipment equipment) {
 
             try {
-                // Owner does not exist
+
+                // If Owner doesn't exists
                 if (equipment.IDCheck) {
 
                     return Json(false);
@@ -128,13 +129,18 @@ namespace EquipmentManagementSystem.Controller {
                 // If Owner was chosen in dropdown
                 if (equipment.Owner.ID != -1) {
 
-                    equipment.Owner = repo.GetOwner(equipment.Owner.ID);
+                    equipment.OwnerID = equipment.Owner.ID;
+                    equipment.Owner = null;
+                }
+                else if (equipment.Owner.ID == -1) {
+
+                    equipment.Owner = null;
                 }
 
                 if (ModelState.IsValid) {
 
                     equipment.LastEdited = DateTime.Now;
-                    await repo.Insert(equipment);
+                    repo.Insert(equipment);
                     
                     return Json(true);
                 }
@@ -160,11 +166,12 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Home/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Equipment equipment) {
+        //public IActionResult Edit(Equipment equipment) {
+        public async Task<IActionResult> Edit(Equipment equipment) {
 
             try {
 
-                // If Owner exists
+                // If Owner doesn't exists
                 if (equipment.IDCheck) {
 
                     return Json(false);
@@ -173,25 +180,23 @@ namespace EquipmentManagementSystem.Controller {
                 // If Owner was chosen in dropdown
                 if (equipment.Owner.ID != -1) {
 
-                    equipment.Owner = repo.GetOwner(equipment.Owner.ID);
-                }
+                    equipment.OwnerID = equipment.Owner.ID;
+                }                
                 else if (equipment.Owner.ID == -1) {
-
-                    equipment.Owner.ID = 0;
-                    //equipment.Owner = null;
+                    
+                    equipment.Owner = null;
                 }
-
-                equipment.LastEdited = DateTime.Now;
-
-
-
-                repo.Update<Equipment>(equipment);
                 
+                equipment.LastEdited = DateTime.Now;
+                repo.Update(equipment);
+                //var context = repo.context;
+
+
                 return Json(true);
             }
-            catch(Exception e) {
+            catch(Exception) {
 
-                throw e;
+                throw;
             }
         }
 
@@ -206,11 +211,11 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Home/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, IFormCollection collection) {
+        public IActionResult Delete(int id, IFormCollection collection) {
 
             try {
 
-                await repo.Delete<Equipment>(id);                
+                repo.Delete<Equipment>(id);                
                 return Json(true);
             }
             catch {

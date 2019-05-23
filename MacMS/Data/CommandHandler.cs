@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Reflection;
 using System.Collections.Concurrent;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Pomelo.EntityFrameworkCore.MySql;
 
 namespace EquipmentManagementSystem.Data {
 
@@ -30,18 +32,17 @@ namespace EquipmentManagementSystem.Data {
         }
 
        
-        public Task Delete<X>(int id) where X : Entity {
+        public void Delete<X>(int id) where X : Entity {
 
             IQueryable<X> obj = context.Set<X>().Where(e => e.ID == id);
             context.Set<X>().RemoveRange(obj);
-
-            return context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
 
-        public Task<X> Get<X>(int id) where X : Entity {
+        public X Get<X>(int id) where X : Entity {
 
-            return context.Set<X>().FirstOrDefaultAsync(e => e.ID == id);
+            return context.Set<X>().FirstOrDefault(e => e.ID == id);
         }
 
 
@@ -133,31 +134,36 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public async Task<bool> Insert<X>(X obj, bool save = true) where X : Entity {
+        public bool Insert<X>(X obj, bool save = true) where X : Entity {
 
             if (context.Set<X>().Where(o => o == obj).Count() == 0) {
 
-                await context.Set<X>().AddAsync(obj);
+                context.Set<X>().Add(obj);
 
-                if (save) { context.SaveChanges(); }
+                if (save) { Save(); }
                 return true;
             }
             else { return false; }
         }
 
 
-        public int Update<X>(X obj) where X : Entity {
+        public void Update<X>(X obj) where X : Entity {
 
-            context.Set<X>().Update(obj);
-            return context.SaveChanges();
+            Save(obj);
         }
 
 
         /// <summary>
         /// Saves changes to Db
         /// </summary>
-        public void Save() {
+        public void Save<X>(X obj) where X : Entity {
 
+            context.Entry(obj).State = EntityState.Modified;
+            context.SaveChanges();
+        }
+
+
+        public void Save() {
             context.SaveChanges();
         }
     }

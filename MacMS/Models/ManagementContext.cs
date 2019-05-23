@@ -23,12 +23,12 @@ namespace EquipmentManagementSystem.Models {
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
             modelBuilder.Entity<Owner>()
-                .HasMany(e => e.Equipment)
-                .WithOne(o => o.Owner);
+                .HasMany(o => o.Equipment);
 
             modelBuilder.Entity<Equipment>()
-                .HasOne(o => o.Owner);
-    
+                .HasOne(e => e.Owner);
+
+
         }
 
 

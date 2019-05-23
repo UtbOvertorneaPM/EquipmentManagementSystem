@@ -16,7 +16,7 @@ namespace EquipmentManagementSystem {
     public static class OneTimeMigration {
 
 
-        public async static void GetJson(EquipmentHandler equipRepo, OwnerHandler ownerRepo) {
+        public static void GetJson(EquipmentHandler equipRepo, OwnerHandler ownerRepo) {
 
             List<Mac> Macs = new List<Mac>();
             List<Owner> Owners = new List<Owner>();
@@ -40,13 +40,13 @@ namespace EquipmentManagementSystem {
 
             for (int i = 0; i < Equip.Count; i++) {
 
-             await equipRepo.Insert(Equip[i], false);
+             equipRepo.Insert(Equip[i], false);
                 if (i % 20 == 0) { equipRepo.Save(); }
             }
 
             for (int i = 0; i < owner.Count; i++) {
 
-                await ownerRepo.Insert(owner[i], false);
+                ownerRepo.Insert(owner[i], false);
 
                 if (i % 20 == 0) { ownerRepo.Save(); }
             }

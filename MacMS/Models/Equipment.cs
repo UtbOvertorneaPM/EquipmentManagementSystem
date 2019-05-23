@@ -25,7 +25,10 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Notes")]
         public string Notes { get; set; }
 
+        public int? OwnerID;
+
         [Display(Name = "Owner")]
+        [ForeignKey("OwnerID")]
         public Owner Owner { get; set; }
 
         [Display(Name = "Location")]
@@ -61,7 +64,7 @@ namespace EquipmentManagementSystem.Models {
 
         public string IP { get; set; }
 
-        public int Ports { get; set; }
+        public int? Ports { get; set; }
 
         public string Resolution { get; set; }
 

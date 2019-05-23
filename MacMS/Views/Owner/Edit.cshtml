@@ -19,7 +19,6 @@
 
         $('#confirmButton').click(function (e) {
 
-            alert("test");
             var dialog = document.getElementById("confirmDialog");
             dialog.title = "@Localizer["Edit"]" + " " + "@Localizer["Owner"]";
 
@@ -52,7 +51,7 @@
 
     <h2>@Localizer["Edit"]</h2>
 
-@using (Html.BeginForm("Create", "Owner", FormMethod.Post, new { id = "form" })) {
+@using (Html.BeginForm("Edit", "Owner", FormMethod.Post, new { id = "form" })) {
     @Html.AntiForgeryToken()
 
     <div>

@@ -97,12 +97,12 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="owner"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostModal(Owner owner) {
+        public IActionResult PostModal(Owner owner) {
 
             try {
 
                 owner.Added = DateTime.Now;
-                if (ModelState.IsValid && await repo.Insert<Owner>(owner)) {
+                if (ModelState.IsValid && repo.Insert<Owner>(owner)) {
 
                     return Json(true);
                 }
@@ -120,13 +120,13 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Owner/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Owner owner) {
+        public IActionResult Create(Owner owner) {
 
             try {
                 owner.LastEdited = DateTime.Now;
                 owner.Added = DateTime.Now;
 
-                if (ModelState.IsValid && await repo.Insert<Owner>(owner)) {
+                if (ModelState.IsValid && repo.Insert<Owner>(owner)) {
 
                     return Json(true);
                 }
@@ -153,7 +153,7 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Owner/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Owner owner) {
+        public IActionResult Edit(Owner owner) {
 
             try {
                 

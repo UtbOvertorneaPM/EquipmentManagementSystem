@@ -38,7 +38,7 @@ namespace EquipmentManagementSystem
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
 
             return Task.CompletedTask;

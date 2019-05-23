@@ -40,7 +40,7 @@ namespace EquipmentManagementSystem.Migrations
 
                     b.Property<int?>("OwnerID");
 
-                    b.Property<int>("Ports");
+                    b.Property<int?>("Ports");
 
                     b.Property<string>("Resolution");
 
