@@ -73,6 +73,28 @@ namespace EquipmentManagementSystem.Controller {
             return View(pagedList);
         }
 
+        // GET: Home    
+        public IActionResult PartialIndex(string sortVariable, string searchString, string culture, int page = 0) {
+
+            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
+            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
+            ViewData["Page"] = page;
+
+            SetSearchString(ref searchString);
+
+            SetCultureCookie(culture, Response);
+
+            SetLanguage(culture);
+
+            return HandleIndexRequest(sortVariable, searchString, culture, page);
+        }
+
+
+        public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
+
+            return PartialView(HandleIndexRequest(sortVariable, searchString, culture, page));
+        }
+
 
         public IActionResult Import() {
 

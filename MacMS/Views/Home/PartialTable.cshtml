@@ -1,0 +1,149 @@
+﻿@using EquipmentManagementSystem.Models
+@model PagedList<Equipment>
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Localizer["Equipment"];
+}
+
+
+@section Scripts {
+
+    <script src="~/js/Index-Table.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        $('document').ready(function () {
+
+            var curPage = @Model.Page == -1 ? 0 : @Model.Page;
+
+            var count = @Model.TotalPages;
+            var lastPos = @Model.TotalPages - 1;
+
+            var posList = [0, lastPos];
+
+            for (var i = (curPage - 2); i < (curPage + 3); i++) {
+
+                if (i < 1) {
+                    i++;
+                }
+                if (i > 0 && i < lastPos) {
+                    posList.push(i);
+                }
+            }
+
+            for (var i = 0; i < posList.length; i++) {
+
+                var a = document.createElement('a');
+                a.appendChild(document.createTextNode(posList[i]));
+
+                a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
+
+                //var link = "@Html.Raw(Url.Action("PartialIndex", "Home", new { page = "_linkUri_", searchString = "_searchValue_" , sortVariable = "_sortValue_"}))"
+                //    .replace("_linkUri_", encodeURIComponent(posList[i]))
+                //    .replace("_searchValue_", encodeURIComponent("@ViewData["SearchString"]"))
+                //    .replace("_sortValue_", encodeURIComponent("@ViewData["CurrentSort"]"));
+
+                //a.href = link;
+
+                a.href = "javascript:PartialIndex(;
+                };
+
+                if (i == 0 && posList[i] != curPage) {
+
+                    document.getElementById('startList').appendChild(a);
+                }
+                else if (i == 1) {
+
+                    document.getElementById('endList').appendChild(a);
+                }
+                else {
+
+                    if (posList[i] == curPage) {
+                        var text = document.createTextNode(posList[i]);
+                        document.getElementById('curList').appendChild(text);
+                    }
+                    else {
+                        document.getElementById('curList').appendChild(a);
+                    }
+                }
+
+            }
+                var original = document.getElementById('pageList');
+                var clone = original.cloneNode(true);
+                clone.id = "clone";
+                document.getElementById('pageListClone').appendChild(clone);
+        });
+
+    </script>
+}
+
+@if (@Model.TotalPages > 1) {
+
+    <div style="float:left" id="pageList">
+        <div style="float:left" id="startList"></div>
+        <div style="float:left" id="curList"></div>
+        <div style="float:left" id="endList"></div>
+    </div>
+}
+
+<table class="table NoPaddingMargin" id="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc", searchString = ViewData["SearchString"], page = ViewData["Page"] })
+            </th>
+            <th>
+                @Localizer["Model"]
+            </th>
+            <th>
+                @Localizer["Serial"]
+            </th>
+            <th>
+                @Html.ActionLink(Localizer["Owner"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Owner" ? "Owner_desc" : "Owner", searchString = ViewData["SearchString"], page = ViewData["Page"] })
+            </th>
+            <th>
+                @Localizer["EquipType"]
+            </th>
+            <th class="Actions">
+            </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model) {
+        <tr id="toprow" class="ParentRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.LastEdited)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Serial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EquipType)
+            </td>
+            <td class="Actions">
+                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
+                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
+            </td>
+        </tr>
+
+        <tr class="ChildRow">
+            <td colspan="5">@Html.DisplayFor(modelItem => item.Notes)</td>
+        </tr>
+    }
+</table>
+@if (@Model.TotalPages > 1) {
+
+    <div style="float:left" id="pageListClone">
+
+    </div>
+}
+<hr />
+

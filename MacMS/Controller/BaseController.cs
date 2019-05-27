@@ -58,7 +58,7 @@ namespace EquipmentManagementSystem.Controller {
         /// Sets the language in ViewData
         /// </summary>
         /// <param name="culture"></param>
-        private void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
+        public void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
 
         // GET: Home    
@@ -78,7 +78,7 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
-        private void SetSearchString(ref string searchString) {
+        public void SetSearchString(ref string searchString) {
 
             // Searchstring priority, if both searchString and ViewData is present, use searchString
             if (!(string.IsNullOrEmpty(searchString)) && ViewData.ContainsKey("SearchString")) {
@@ -97,7 +97,7 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
-        private void SetCultureCookie(string culture, HttpResponse Response) {
+        public void SetCultureCookie(string culture, HttpResponse Response) {
 
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
