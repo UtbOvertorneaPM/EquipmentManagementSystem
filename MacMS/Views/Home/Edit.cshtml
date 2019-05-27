@@ -168,6 +168,8 @@
 
         };
 
+        $("#Serial").keydown(function (e) { if (e.which == 13) e.preventDefault(); });
+
 
     </script>
 }
@@ -191,7 +193,7 @@
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Serial"] </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial)</p></td>
+                <td><p class="CategoryText">@Html.TextAreaFor(model => model.Serial)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Equip Type"] </p></td>

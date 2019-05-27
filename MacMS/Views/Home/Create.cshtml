@@ -124,13 +124,14 @@
 
         $('#form').on("submit", function (event) {
 
-            event.preventDefault();
-            var form = $('#form');
+            if (event.keyCode!=13) {
+                event.preventDefault();
+                var form = $('#form');
 
-            $.getScript("/js/ajaxPost.js", function(data) {
-                PostForm(form, callBackUser);
-            });
-
+                $.getScript("/js/ajaxPost.js", function (data) {
+                    PostForm(form, callBackUser);
+                });
+            }
         });
 
         function callBackUser(data) {
@@ -154,6 +155,9 @@
             }
 
         };
+
+        $("#Serial").keydown(function (e) { if (e.which == 13) e.preventDefault(); });
+
     </script>
 }
 

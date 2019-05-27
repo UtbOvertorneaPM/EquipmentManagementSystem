@@ -17,8 +17,6 @@ using Microsoft.EntityFrameworkCore;
 namespace EquipmentManagementSystem.Controller {
 
 
-    //[Authorize("Administrators")]
-    //public class HomeController : Microsoft.AspNetCore.Mvc.Controller, IDisposable {
     public class HomeController : BaseController { 
 
         EquipmentHandler repo;
@@ -189,8 +187,6 @@ namespace EquipmentManagementSystem.Controller {
                 
                 equipment.LastEdited = DateTime.Now;
                 repo.Update(equipment);
-                //var context = repo.context;
-
 
                 return Json(true);
             }
