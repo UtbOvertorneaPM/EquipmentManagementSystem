@@ -5,14 +5,10 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Localization;
 
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
 using Microsoft.Extensions.Localization;
-using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentManagementSystem.Controller {
 
