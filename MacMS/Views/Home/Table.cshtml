@@ -49,10 +49,9 @@
 
                 a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
 
-                a.href = "javascript:PostTable(_linkUri_, _searchValue_, _sortValue_)"
-                    .replace("_linkUri_", posList[i])
-                    .replace("_searchValue_", "@ViewData["SearchString"]")
-                    .replace("_sortValue_", "@ViewData["CurrentSort"]");
+                a.href = "javascript:PageClick(_Obj_)"
+                    .replace("_Obj_", a.textContent);
+
 
                 if (i == 0 && posList[i] != curPage) {
 
@@ -96,6 +95,11 @@
             e.preventDefault();
             Sort(e.target.id.toString());
         });
+
+        function PageClick(page) {
+
+            PostTable(page, "@ViewData["SearchString"]", "@ViewData["CurrentSort"]");           
+        };
 
         function Sort(value) {
 
