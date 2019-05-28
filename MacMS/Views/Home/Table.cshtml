@@ -4,8 +4,8 @@
 @inject Localizer Localizer
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = Localizer["Equipment"];
+    //Layout = null;
+    Layout = "~/Views/Shared/_partialTableLayout.cshtml";
 }
 
 
@@ -14,7 +14,8 @@
     <script src="~/js/Index-Table.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-
+        
+        
         $('document').ready(function () {
 
             var curPage = @Model.Page == -1 ? 0 : @Model.Page;
@@ -41,16 +42,11 @@
 
                 a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
 
-                //var link = "@Html.Raw(Url.Action("PartialIndex", "Home", new { page = "_linkUri_", searchString = "_searchValue_" , sortVariable = "_sortValue_"}))"
-                //    .replace("_linkUri_", encodeURIComponent(posList[i]))
-                //    .replace("_searchValue_", encodeURIComponent("@ViewData["SearchString"]"))
-                //    .replace("_sortValue_", encodeURIComponent("@ViewData["CurrentSort"]"));
-
-                //a.href = link;
-
-                a.href = "javascript:PartialIndex(;
-                };
-
+                a.href = "javascript:PostTable(_linkUri_, _searchValue_, _sortValue_)"
+                    .replace("_linkUri_", posList[i])
+                    .replace("_searchValue_", "@ViewData["SearchString"]")
+                    .replace("_sortValue_", "@ViewData["CurrentSort"]");
+                
                 if (i == 0 && posList[i] != curPage) {
 
                     document.getElementById('startList').appendChild(a);
@@ -77,6 +73,51 @@
                 document.getElementById('pageListClone').appendChild(clone);
         });
 
+        function PostTable(uri, searchString, currentSort) {
+            
+            var tableView = "@Html.Raw(Url.Action("Table", "Home", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent(currentSort))
+                .replace("_Search_", encodeURIComponent(searchString))
+                .replace("_Page_", encodeURIComponent(uri));
+
+            $.get(tableView,
+                function (data) {
+                    $('table').replaceWith(data);
+                }
+            )
+        };
+
+        $('a.sortLink').click(function (e) {
+
+            e.preventDefault();
+            Sort(e.target.id.toString());
+        });
+
+        function Sort(value) {
+
+            alert("wth");
+            switch (value) {
+
+                case "Date":
+
+                    sortVariable = "@ViewData["CurrentSort"]" == "Date_desc" ? "Date_desc" : "Date";
+                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    break;
+
+                case "Owner":
+                    alert("wots dis then");
+                    sortVariable = "@ViewData["CurrentSort"]" == "Owner" ? "Owner_desc" : "Owner"
+                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    break;
+
+                default:
+
+                    PostTable("0", "", "Date_desc");
+                    break;
+            }
+            
+        };
+
     </script>
 }
 
@@ -93,7 +134,9 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink(Localizer["Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc", searchString = ViewData["SearchString"], page = ViewData["Page"] })
+                <a href="#" class="sortLink" id="Date">
+                    @Localizer["Date"]
+                </a>
             </th>
             <th>
                 @Localizer["Model"]
@@ -102,7 +145,9 @@
                 @Localizer["Serial"]
             </th>
             <th>
-                @Html.ActionLink(Localizer["Owner"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Owner" ? "Owner_desc" : "Owner", searchString = ViewData["SearchString"], page = ViewData["Page"] })
+                <a href="#" class="sortLink" id="Owner">
+                    @Localizer["Owner"]
+                </a>
             </th>
             <th>
                 @Localizer["EquipType"]

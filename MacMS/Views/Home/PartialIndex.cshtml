@@ -15,6 +15,21 @@
 
     <script type="text/javascript">
 
+        $('document').ready(function () {
+
+            var tableView = "@Html.Raw(Url.Action("Table", "Home", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent("@ViewData["CurrentSort"]"))
+                .replace("_Search_", encodeURIComponent("@ViewData["SearchString"]"))
+                .replace("_Page_", encodeURIComponent("@ViewData["Page"]"))
+
+            $.get(tableView,
+                function (data) {
+                    var partial = $('#partialTable');
+                    partial.replaceWith(data);
+                }
+            )
+        });
+
         $('#search').focusin(function () {
 
             $(this).attr('value', '');
@@ -50,7 +65,7 @@
     @Html.ActionLink(Localizer["Create New"], "Create", new { culture = ViewData["Language"] })
 </p>
 
-@{
-    await Html.RenderPartialAsync("PartialTable.cshtml");
-}
+<div id="partialTable"></div>
+
+
 

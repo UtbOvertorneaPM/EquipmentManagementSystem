@@ -86,13 +86,57 @@ namespace EquipmentManagementSystem.Controller {
 
             SetLanguage(culture);
 
-            return HandleIndexRequest(sortVariable, searchString, culture, page);
+            return View();
         }
 
 
         public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-            return PartialView(HandleIndexRequest(sortVariable, searchString, culture, page));
+            //return PartialView(HandleIndexRequest(sortVariable, searchString, culture, page));
+
+
+            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
+            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
+            ViewData["Page"] = page;
+
+            SetSearchString(ref searchString);
+
+            SetCultureCookie(culture, Response);
+
+            SetLanguage(culture);
+
+            var data = Enumerable.Empty<Equipment>();
+            var pageSize = repo.PageSize;
+
+            var pagedList = new PagedList<Equipment>();
+
+            // Search then sort
+            if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
+                //var test = repo.Search(searchString);
+                data = repo.SearchSort(searchString, sortVariable);
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
+            }
+            // Search
+            else if (!string.IsNullOrEmpty(searchString)) {
+
+                data = repo.Search(searchString);
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
+            }
+            // Sort
+            else if (!string.IsNullOrEmpty(sortVariable)) {
+
+                data = repo.Sort(repo.GetAll(), sortVariable);
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
+
+            }
+            // Index request without modifiers
+            else {
+
+                data = repo.Sort(repo.GetAll(), "Date_desc");
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
+            }
+
+            return PartialView(pagedList);
         }
 
 
