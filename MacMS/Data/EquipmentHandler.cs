@@ -64,26 +64,53 @@ namespace EquipmentManagementSystem.Data {
             var queries = new List<Expression<Func<Equipment, bool>>>();
 
             var parameter = Expression.Parameter(typeof(Equipment), "type");
-            var constant = Expression.Constant(searchString, typeof(string));
+            
 
-            switch (searchString) {
+            var queryValues = searchString.Split(", ");
 
-                // Checks if searchString matches standard datetime conventions i.e / and - separators
-                case var someVal when Regex.IsMatch(searchString, @"^\d[\d-\/\\]*"):
+            for (int i = 0; i < queryValues.Length; i++) {
 
-                    queries.AddRange(SearchDate(searchString, parameter));
-                    break;
+                var query = queryValues[i].Split(":");
+                ConstantExpression constant;
 
-                // Checks if searchString matches any EquipmentType
-                case var someVal when Enum.TryParse(searchString, true, out Equipment.EquipmentType eqp):
+                if (query.Length > 1) {
 
-                    queries.Add(SearchEquipmentType(searchString, eqp, parameter, constant));
-                    break;
+                    constant = Expression.Constant(query[1], typeof(string));
 
-                default:
+                    switch (query[0]) {
 
-                    queries.AddRange(SearchWide(searchString, parameter, constant));
-                    break;
+                        case "LastEdited":
+
+                            queries.AddRange(SearchDate(query[1], parameter));
+                            break;
+
+                        case "Model":
+                        case "Serial":
+
+                            queries.Add(Contains(query[0], constant));
+                            break;
+
+
+                        case "Owner":
+
+                            queries.Add(Contains("FullName", constant, true));
+                            break;
+
+                        case "EquipType":
+
+                            Enum.TryParse<Equipment.EquipmentType>(query[1], out var eqpVal);
+                            queries.Add(SearchEquipmentType(eqpVal, parameter));
+                            break;
+                        
+                        default:
+                            break;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(query[0])) {
+
+                    constant = Expression.Constant(query[0]);
+                    queries.AddRange(SearchWide(parameter, constant));
+                }
             }
 
             return base.Search(queries, data);
@@ -124,10 +151,10 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        private Expression<Func<Equipment, bool>> SearchEquipmentType(string searchString, Equipment.EquipmentType eqp, ParameterExpression parameter, ConstantExpression constant) {
+        private Expression<Func<Equipment, bool>> SearchEquipmentType(Equipment.EquipmentType eqp, ParameterExpression parameter) {
 
             var property = Expression.Property(parameter, "EquipType");
-            constant = Expression.Constant(eqp, typeof(Equipment.EquipmentType));
+            var constant = Expression.Constant(eqp, typeof(Equipment.EquipmentType));
 
             // (e => eqp == e.EquipType)
             var exp = Expression.Equal(property, constant);
@@ -136,7 +163,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        private List<Expression<Func<Equipment, bool>>> SearchWide(string searchString, ParameterExpression parameter, ConstantExpression constant) {
+        private List<Expression<Func<Equipment, bool>>> SearchWide(ParameterExpression parameter, ConstantExpression constant) {
 
             return new List<Expression<Func<Equipment, bool>>>() {
 
