@@ -77,11 +77,14 @@
 
         $('#submitSearch').click(function (e) {
 
-            var searchVal = $('#search').value;
+            var search = document.getElementById("search");
+            var searchVal = search.value;
+
             PostTable("@ViewData["Page"]", searchVal, "@ViewData["CurrentSort"]");
         });
 
 
+        // replaces search value with category clicked
         $('.CategoryButton').on("click", function (e) {
 
             var searchBox = document.getElementById("search");
@@ -99,10 +102,12 @@
                 searchBox.value = e.target.value + ", " + oldVal;
             }
             else {
+
                 searchBox.value = e.target.value + ", ";
             }
 
         });
+
 
         function PostTable(uri, searchString, currentSort) {
 
