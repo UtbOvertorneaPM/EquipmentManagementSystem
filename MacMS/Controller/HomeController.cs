@@ -70,6 +70,14 @@ namespace EquipmentManagementSystem.Controller {
         }
 
         // GET: Home    
+        /// <summary>
+        /// Used for JQuery Updating table index page
+        /// </summary>
+        /// <param name="sortVariable"></param>
+        /// <param name="searchString"></param>
+        /// <param name="culture"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public IActionResult PartialIndex(string sortVariable, string searchString, string culture, int page = 0) {
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
@@ -86,6 +94,14 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
+        /// <summary>
+        /// JQuery Table update route
+        /// </summary>
+        /// <param name="sortVariable"></param>
+        /// <param name="searchString"></param>
+        /// <param name="culture"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
 
             //return PartialView(HandleIndexRequest(sortVariable, searchString, culture, page));
