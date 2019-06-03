@@ -180,7 +180,7 @@ namespace EquipmentManagementSystem.Data {
         private Expression<Func<Owner, bool>> Contains(string prop, ConstantExpression constant, bool toString = false) {
 
             var method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-            var parameter = Expression.Parameter(typeof(Equipment), "type");
+            var parameter = Expression.Parameter(typeof(Owner), "type");
             var property = Expression.Property(parameter, prop);
             
             Expression exp;
