@@ -62,6 +62,14 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Home    
+        /// <summary>
+        /// Used for JQuery Updating table index page
+        /// </summary>
+        /// <param name="sortVariable"></param>
+        /// <param name="searchString"></param>
+        /// <param name="culture"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
@@ -74,7 +82,7 @@ namespace EquipmentManagementSystem.Controller {
 
             SetLanguage(culture);
 
-            return HandleIndexRequest(sortVariable, searchString, culture, page);
+            return View();
         }
 
 
@@ -106,6 +114,5 @@ namespace EquipmentManagementSystem.Controller {
             );
         }
 
-        protected abstract IActionResult HandleIndexRequest(string sortVariable, string searchString, string culture, int page);
     }
 }

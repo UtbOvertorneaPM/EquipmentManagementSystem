@@ -4,13 +4,12 @@
 @inject Localizer Localizer
 
 @{
-    Layout = "~/Views/Shared/_partialTableLayout.cshtml";
+    Layout = "~/Views/Shared/_OwnerTableLayout.cshtml";
 }
 
 
 @section Scripts {
 
-    <script src="~/js/Index-Table.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
@@ -74,9 +73,14 @@
             }
         });
 
+        $('tr').click(function (e) {
+
+            e.preventDefault();
+        });
+
         function PostTable(uri, searchString, currentSort) {
 
-            var tableView = "@Html.Raw(Url.Action("Table", "Home", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+            var tableView = "@Html.Raw(Url.Action("Table", "Owner", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
                 .replace("_Sort_", encodeURIComponent(currentSort))
                 .replace("_Search_", encodeURIComponent(searchString))
                 .replace("_Page_", encodeURIComponent(uri));

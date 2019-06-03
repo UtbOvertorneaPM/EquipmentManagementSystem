@@ -27,7 +27,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IEnumerable<Owner> Sort(IQueryable<Owner> data, string sortOrder) {
+        public IEnumerable<Owner> Sort(string sortOrder, IEnumerable<Owner> data) {
 
             var parameter = Expression.Parameter(typeof(Owner), "type");
 
@@ -46,8 +46,12 @@ namespace EquipmentManagementSystem.Data {
                 case "Date":
                 case "Date_desc":
 
-                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }, true);
+                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }, true);
 
+                case "Created":
+                case "Created_desc":
+
+                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }, true);
                 default:
                     break;
             }
@@ -56,13 +60,24 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IQueryable<Owner> Search(string searchString) {
+        public IEnumerable<Owner> Search(string searchString) { return GetData(searchString, GetAll()); }
 
-            return GetData(searchString);
+
+        /// <summary>
+        /// Searches and sorts
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <param name="sortVariable"></param>
+        /// <returns></returns>
+        public IEnumerable<Owner> SearchSort(string searchString, string sortVariable) {
+
+            var data = GetData(searchString, GetAll()).ToList();
+
+            return Sort(sortVariable, data);
         }
 
 
-        public IQueryable<Owner> GetData(string searchString) {
+        public IQueryable<Owner> GetData(string searchString, IQueryable<Owner> data) {
 
             var queries = new List<Expression<Func<Owner, bool>>>();
 
@@ -94,7 +109,7 @@ namespace EquipmentManagementSystem.Data {
                     throw new Exception("Invalid search criteria");
             }
 
-            return base.Search(queries);
+            return base.Search(queries, data);
         }
 
 

@@ -30,14 +30,24 @@ namespace EquipmentManagementSystem.Controller {
 
 
         /// <summary>
-        /// Handles request to Index action
+        /// JQuery Table update route
         /// </summary>
         /// <param name="sortVariable"></param>
         /// <param name="searchString"></param>
         /// <param name="culture"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        protected override IActionResult HandleIndexRequest(string sortVariable, string searchString, string culture, int page) {
+        public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
+
+            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
+            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
+            ViewData["Page"] = page;
+
+            SetSearchString(ref searchString);
+
+            SetCultureCookie(culture, Response);
+
+            SetLanguage(culture);
 
             var data = Enumerable.Empty<Owner>();
             var pageSize = repo.PageSize;
@@ -47,7 +57,7 @@ namespace EquipmentManagementSystem.Controller {
             // Search then sort
             if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
 
-                data = repo.Sort(repo.Search(searchString), sortVariable);
+                data = repo.SearchSort(searchString, sortVariable);
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
             }
             // Search
@@ -59,18 +69,18 @@ namespace EquipmentManagementSystem.Controller {
             // Sort
             else if (!string.IsNullOrEmpty(sortVariable)) {
 
-                data = repo.Sort(repo.GetAll(), sortVariable);
+                data = repo.Sort(sortVariable, repo.GetAll());
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
 
             }
             // Index request without modifiers
             else {
 
-                data = repo.Sort(repo.GetAll(), "Date_desc");
+                data = repo.Sort("Date_desc", repo.GetAll());
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
             }
 
-            return View(pagedList);
+            return PartialView(pagedList);
         }
 
 
