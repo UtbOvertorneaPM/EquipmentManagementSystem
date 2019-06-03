@@ -72,20 +72,7 @@
             }
         });
 
-        function PostTable(uri, searchString, currentSort) {
 
-            var tableView = "@Html.Raw(Url.Action("Table", "Home", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
-                .replace("_Sort_", encodeURIComponent(currentSort))
-                .replace("_Search_", encodeURIComponent(searchString))
-                .replace("_Page_", encodeURIComponent(uri));
-
-            $.get(tableView,
-                function (data) {
-
-                    $('table').replaceWith(data);
-                }
-            )
-        };
 
         $('a.sortLink').click(function (e) {
 

@@ -43,18 +43,110 @@
             }
 
         });
+
+        
+        $('#search').keyup(function (e) {
+
+
+            if (e.keyCode == 13) {
+
+                var searchVal = e.target.value;
+                PostTable("@ViewData["Page"]", searchVal, "@ViewData["CurrentSort"]");
+            }
+            else if (e.target.value.length < 1) {
+
+                var list = document.getElementById("searchCategories");
+                list.style.display = "none";
+            }
+            else {
+
+                var searchVal = e.target.value;
+                var values = searchVal.split(", ");
+
+                document.getElementById("categoryDate").value = "Date:" + values[values.length - 1];
+                document.getElementById("categoryAdded").value = "Added:" + values[values.length - 1];
+                document.getElementById("categoryFirstName").value = "FirstName:" + values[values.length - 1];
+                document.getElementById("categoryLastName").value = "LastName:" + values[values.length - 1];
+                document.getElementById("categoryAddress").value = "Address:" + values[values.length - 1];
+
+                var list = document.getElementById("searchCategories");
+                list.style.display = "block";
+            }            
+        });
+
+
+        $('#submitSearch').click(function (e) {
+
+            var searchVal = $('#search').value;
+            PostTable("@ViewData["Page"]", searchVal, "@ViewData["CurrentSort"]");
+        });
+
+
+        $('.CategoryButton').on("click", function (e) {
+
+            var searchBox = document.getElementById("search");
+
+            if (searchBox.value.split(", ").length > 1) {
+
+                var values = searchBox.value.split(", ");
+                var oldVal = "";
+
+                for (var i = 0; i < values.length - 1; i++) {
+
+                    oldVal += values[i];
+                }
+
+                searchBox.value = e.target.value + ", " + oldVal;
+            }
+            else {
+                searchBox.value = e.target.value + ", ";
+            }
+
+        });
+
+        function PostTable(uri, searchString, currentSort) {
+
+            var tableView = "@Html.Raw(Url.Action("Table", "Owner", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent(currentSort))
+                .replace("_Search_", encodeURIComponent(searchString))
+                .replace("_Page_", encodeURIComponent(uri));
+
+            $.get(tableView,
+                function (data) {
+
+                    $('table').replaceWith(data);
+                }
+            )
+        };
     </script>
 }
 
 <h2>@Localizer["Owner"]</h2>
 
-@using (Html.BeginForm()) {
+<div>
+    @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
+    <input id="submitSearch" type="button" value="@Localizer["Search"]" />
 
-    <div>
-        @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
-        <input type="submit" value="@Localizer["Search"]" class="searchBox" />
+    <div id="searchCategories" hidden>
+        <ul class="CategoryList">
+            <li>
+                <input class="CategoryButton" type="button" id="categoryAdded" value="Added" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryDate" value="LastEdited" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryFirstName" value="FirstName" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryLastName" value="LastName" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryAddress" value="Address" />
+            </li>
+        </ul>
     </div>
-}
+</div>
 
 <p>
     @Html.ActionLink(Localizer["Import"], "Import")
