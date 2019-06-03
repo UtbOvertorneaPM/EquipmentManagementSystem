@@ -1,218 +1,167 @@
 ﻿@using EquipmentManagementSystem.Models
-@model PagedList<Owner>
-
 @using EquipmentManagementSystem.Data
 @inject Localizer Localizer
 
 @{
-    ViewData["Title"] = Localizer["Owner"];
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Placeholder";
 }
 
+
 @section Scripts {
+
+    <script src="~/js/Index-Table.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
         $('document').ready(function () {
 
-            GetDropDownId("@Url.Action("GetOwnerList", "Owner")", "@Url.Action("Edit", "Owner", new { id = "idValue" })", document);
+            var tableView = "@Html.Raw(Url.Action("Table", "Owner", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent("@ViewData["CurrentSort"]"))
+                .replace("_Search_", encodeURIComponent("@ViewData["SearchString"]"))
+                .replace("_Page_", encodeURIComponent("@ViewData["Page"]"))
 
-            var curPage = @Model.Page == -1 ? 0 : @Model.Page;
-
-            var count = @Model.TotalPages;
-            var lastPos = @Model.TotalPages - 1;
-
-
-            var posList = [0, lastPos];
-
-            for (var i = (curPage - 2); i < (curPage + 3); i++) {
-
-                if (i < 1) {
-                    i++;
+            $.get(tableView,
+                function (data) {
+                    var partial = $('#partialTable');
+                    partial.replaceWith(data);
                 }
-                if (i > 0 && i < lastPos) {
-                    posList.push(i);
-                }
-            }
+            )
+        });
 
+        $('#search').focusin(function () {
 
-            for (var i = 0; i < posList.length; i++) {
-
-                var a = document.createElement('a');
-                a.appendChild(document.createTextNode(posList[i]));
-
-                a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
-
-                var link = "@Html.Raw(Url.Action("Index", "Home", new { page = "_linkUri_", searchString = "_searchValue_" , sortVariable = "_sortValue_"}))"
-                    .replace("_linkUri_", encodeURIComponent(posList[i]))
-                    .replace("_searchValue_", encodeURIComponent("@ViewData["SearchString"]"))
-                    .replace("_sortValue_", encodeURIComponent("@ViewData["CurrentSort"]"));
-
-                a.href = link;
-
-                if (i == 0 && posList[i] != curPage) {
-
-                    document.getElementById('startList').appendChild(a);
-                }
-                else if (i == 1) {
-
-                    document.getElementById('endList').appendChild(a);
-                }
-                else {
-
-                    if (posList[i] == curPage) {
-                        var text = document.createTextNode(posList[i]);
-                        document.getElementById('curList').appendChild(text);
-                    }
-                    else {
-                        document.getElementById('curList').appendChild(a);
-                    }
-                }
-
-            }
-            var original = document.getElementById('pageList');
-            var clone = original.cloneNode(true);
-            clone.id = "clone";
-            document.getElementById('pageListClone').appendChild(clone);
-
+            $(this).attr('value', '');
         });
 
 
-        $('#search').keyup(function () {
+        $('#search').focusout(function () {
 
             var input = document.getElementById('search');
             if (input.value.length < 1) {
                 $(this).attr('value', '@Localizer["Find model/date/owner..."]');
             }
+
+        });
+
+        
+        $('#search').keyup(function (e) {
+
+
+            if (e.keyCode == 13) {
+
+                var searchVal = e.target.value;
+                PostTable("@ViewData["Page"]", searchVal, "@ViewData["CurrentSort"]");
+            }
+            else if (e.target.value.length < 1) {
+
+                var list = document.getElementById("searchCategories");
+                list.style.display = "none";
+            }
             else {
 
-                Search(input, document.getElementById('ownerList'));
+                var searchVal = e.target.value;
+                var values = searchVal.split(", ");
+
+                document.getElementById("categoryDate").value = "Date:" + values[values.length - 1];
+                document.getElementById("categoryAdded").value = "Added:" + values[values.length - 1];
+                document.getElementById("categoryFirstName").value = "FirstName:" + values[values.length - 1];
+                document.getElementById("categoryLastName").value = "LastName:" + values[values.length - 1];
+                document.getElementById("categoryAddress").value = "Address:" + values[values.length - 1];
+
+                var list = document.getElementById("searchCategories");
+                list.style.display = "block";
+            }            
+        });
+
+
+        $('#submitSearch').click(function (e) {
+
+            var search = document.getElementById("search");
+            var searchVal = search.value;
+
+            PostTable("@ViewData["Page"]", searchVal, "@ViewData["CurrentSort"]");
+        });
+
+
+        // replaces search value with category clicked
+        $('.CategoryButton').on("click", function (e) {
+
+            var searchBox = document.getElementById("search");
+
+            if (searchBox.value.split(", ").length > 1) {
+
+                var values = searchBox.value.split(", ");
+                var oldVal = "";
+
+                for (var i = 0; i < values.length - 1; i++) {
+
+                    oldVal += values[i];
+                }
+
+                searchBox.value = e.target.value + ", " + oldVal;
+            }
+            else {
+
+                searchBox.value = e.target.value + ", ";
             }
 
         });
 
 
-        $('#search').focusin(function () {
+        function PostTable(uri, searchString, currentSort) {
 
-            $(this).attr('value', '');
+            var tableView = "@Html.Raw(Url.Action("Table", "Owner", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent(currentSort))
+                .replace("_Search_", encodeURIComponent(searchString))
+                .replace("_Page_", encodeURIComponent(uri));
 
-            var list = document.getElementById("ownerList");
-            list.style.display = "";
-        });
+            $.get(tableView,
+                function (data) {
 
-
-
-
-        function ClickName(event) {
-
-            arguments[0].preventDefault();
-            alert(arguments[1]);
-        }
-    
-
+                    $('table').replaceWith(data);
+                }
+            )
+        };
     </script>
 }
 
 <h2>@Localizer["Owner"]</h2>
 
-@using (Html.BeginForm())
-{
+<div>
+    @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
+    <input id="submitSearch" type="button" value="@Localizer["Search"]" />
 
-    <div style="display:flex">
-        @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
-        <input type="submit" value="@Localizer["Search"]" class="searchBox" />
+    <div id="searchCategories" hidden>
+        <ul class="CategoryList">
+            <li>
+                <input class="CategoryButton" type="button" id="categoryAdded" value="Added" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryDate" value="LastEdited" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryFirstName" value="FirstName" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryLastName" value="LastName" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryAddress" value="Address" />
+            </li>
+        </ul>
     </div>
-    <div>
-        <ul class="DropDownContent" id="ownerList"></ul>
-    </div>
+</div>
 
-}
+<p>
+    @Html.ActionLink(Localizer["Import"], "Import")
+</p>
 
 <p>
     @Html.ActionLink(Localizer["Create New"], "Create", new { culture = ViewData["Language"] })
 </p>
 
-<hr />
+<div id="partialTable"></div>
 
-@if (@Model.TotalPages > 1)
-{
-
-    <div style="float:left" id="pageList">
-        <div style="float:left" id="startList"></div>
-        <div style="float:left" id="curList"></div>
-        <div style="float:left" id="endList"></div>
-    </div>
-}
-
-<table class="ownerTable table NoPaddingMargin" id="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.ActionLink(Localizer["Created Date"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "Date_desc" ? "Date" : "Date_desc", searchString = ViewData["SearchString"], page = ViewData["Page"] })
-            </th>
-            <th>
-                @Html.ActionLink(Localizer["FirstName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "FirstName" ? "FirstName_desc" : "FirstName", searchString = ViewData["SearchString"], page = ViewData["Page"] })
-            </th>
-            <th>
-                @Html.ActionLink(Localizer["LastName"], "Index", new { sortVariable = ViewData["CurrentSort"].ToString() == "LastName" ? "LastName_desc" : "LastName", searchString = ViewData["SearchString"], page = ViewData["Page"] })
-            </th>
-            <th>
-                @Localizer["SSN"]
-            </th>
-            <th>
-                @Localizer["Address"]
-            </th>
-            <th>
-                @Localizer["TelNr"]
-            </th>
-            <th>
-                @Localizer["Mail"]
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="ParentRow">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Added)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SSN)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TelNr)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Mail)
-                </td>
-                <td>
-                    @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
-                    @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@if (@Model.TotalPages > 1)
-{
-
-    <div style="float:left" id="pageListClone">
-
-    </div>
-}
-
-<hr />
 
 

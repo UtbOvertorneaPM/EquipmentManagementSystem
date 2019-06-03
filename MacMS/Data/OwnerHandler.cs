@@ -27,7 +27,7 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IEnumerable<Owner> Sort(IQueryable<Owner> data, string sortOrder) {
+        public IEnumerable<Owner> Sort(string sortOrder, IEnumerable<Owner> data) {
 
             var parameter = Expression.Parameter(typeof(Owner), "type");
 
@@ -46,8 +46,12 @@ namespace EquipmentManagementSystem.Data {
                 case "Date":
                 case "Date_desc":
 
-                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }, true);
+                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "LastEdited" }, true);
 
+                case "Created":
+                case "Created_desc":
+
+                    return sortOrder == "Date" ? GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }) : GetSorted<Owner, DateTime>(data, new List<string>() { "Added" }, true);
                 default:
                     break;
             }
@@ -56,52 +60,79 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        public IQueryable<Owner> Search(string searchString) {
+        public IEnumerable<Owner> Search(string searchString) { return GetData(searchString, GetAll()); }
 
-            return GetData(searchString);
+
+        /// <summary>
+        /// Searches and sorts
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <param name="sortVariable"></param>
+        /// <returns></returns>
+        public IEnumerable<Owner> SearchSort(string searchString, string sortVariable) {
+
+            var data = GetData(searchString, GetAll()).ToList();
+
+            return Sort(sortVariable, data);
         }
 
 
-        public IQueryable<Owner> GetData(string searchString) {
+        public IQueryable<Owner> GetData(string searchString, IQueryable<Owner> data) {
 
             var queries = new List<Expression<Func<Owner, bool>>>();
 
             var parameter = Expression.Parameter(typeof(Owner), "type");
-            var constant = Expression.Constant(searchString, typeof(string));
 
-            switch (searchString)
-            {
+            var queryValues = searchString.Split(", ");
 
-                // Checks if searchString matches standard datetime conventions i.e / and - separators
-                case var someVal when Regex.IsMatch(searchString, @"^\d[\d-\/\\]*"):
+            for (int i = 0; i < queryValues.Length; i++) {
 
-                    queries.AddRange(SearchDate(searchString, parameter));
-                    break;
+                var query = queryValues[i].Split(":");
+                ConstantExpression constant;
 
-                // Checks if searchString matches phone number pattern
-                case var someVal when Regex.IsMatch(searchString, @"^(\d{3,4})?\-?\ ?\d{5,7}$"):
+                if (query.Length > 1) {
 
-                    queries.Add(SearchTelNr(searchString, parameter, constant));
-                    break;
-                // Checks if Matces name
-                case var someVal when Regex.IsMatch(searchString, @"^\w+ ?\w+$"):
+                    constant = Expression.Constant(query[1], typeof(string));
 
-                    queries.AddRange(SearchName(searchString, parameter, constant));
-                    break;
+                    switch (query[0]) {
 
-                default:
+                        case "LastEdited":
+                        case "Added":
 
-                    throw new Exception("Invalid search criteria");
+                            queries.AddRange(SearchDate(query[1], query[0], parameter));
+                            break;
+
+                        case "FirstName":
+                        case "LastName":
+
+                            queries.Add(SearchName(query[0], parameter, constant));
+                            break;
+
+
+                        case "Address":
+
+                            queries.Add(Contains("Address", constant));
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(query[0])) {
+
+                    constant = Expression.Constant(query[0]);
+                    queries.AddRange(SearchWide(constant));
+                }
             }
 
-            return base.Search(queries);
+            return base.Search(queries, data);
         }
 
 
-        private List<Expression<Func<Owner, bool>>> SearchDate(string date, ParameterExpression parameter) {
+        private List<Expression<Func<Owner, bool>>> SearchDate(string date, string prop, ParameterExpression parameter) {
 
             // Gets the LastEdited property
-            var property = Expression.Property(parameter, "LastEdited");
+            var property = Expression.Property(parameter, prop);
 
             property = Expression.Property(property, "Date");
 
@@ -120,7 +151,7 @@ namespace EquipmentManagementSystem.Data {
                 var constant = Expression.Constant(dates[i], typeof(string));
 
                 // (e => e.LastEdited.Date.ToString().Contains(constant) == searchString
-                var exp = Contains(date, parameter, constant, property, true);
+                var exp = Contains(prop, constant, true);
 
                 queries.Add(Expression.Lambda<Func<Owner, bool>>(exp, parameter));
             }
@@ -129,25 +160,11 @@ namespace EquipmentManagementSystem.Data {
         }
 
 
-        private Expression<Func<Owner, bool>> SearchTelNr(string searchString, ParameterExpression parameter, ConstantExpression constant) {
 
-            var property = Expression.Property(parameter, "TelNr");
-            var exp = Contains(searchString, parameter, constant, property);
+        private Expression<Func<Owner, bool>> SearchName(string prop, ParameterExpression parameter, ConstantExpression constant) {
 
-            return Expression.Lambda<Func<Owner, bool>>(exp, parameter);
-        }
-
-
-        private List<Expression<Func<Owner, bool>>> SearchName(string searchString, ParameterExpression parameter, ConstantExpression constant) {
-
-            var queries = new List<Expression<Func<Owner, bool>>>();
-            var property = Expression.Property(parameter, "FirstName");
-            queries.Add(Contains(searchString, parameter, constant, property));
-
-            property = Expression.Property(parameter, "LastName");
-            queries.Add(Contains(searchString, parameter, constant, property));
-
-            return queries;
+            var property = Expression.Property(parameter, prop);
+            return Contains(prop, constant);
         }
 
 
@@ -160,9 +177,12 @@ namespace EquipmentManagementSystem.Data {
         /// <param name="property"></param>
         /// <param name="toString"></param>
         /// <returns></returns>
-        private Expression<Func<Owner, bool>> Contains(string searchString, ParameterExpression parameter, ConstantExpression constant, MemberExpression property, bool toString = false) {
+        private Expression<Func<Owner, bool>> Contains(string prop, ConstantExpression constant, bool toString = false) {
 
             var method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+            var parameter = Expression.Parameter(typeof(Owner), "type");
+            var property = Expression.Property(parameter, prop);
+            
             Expression exp;
 
             // If the property requires calling ToString() method on it first
@@ -177,6 +197,16 @@ namespace EquipmentManagementSystem.Data {
             }
 
             return Expression.Lambda<Func<Owner, bool>>((MethodCallExpression)exp, parameter);
+        }
+
+        public List<Expression<Func<Owner, bool>>> SearchWide(ConstantExpression constant) {
+
+            return new List<Expression<Func<Owner, bool>>>() {
+
+                Contains("FullName", constant),
+                Contains("SSN",  constant),
+                Contains("Address", constant)
+            };
         }
 
 

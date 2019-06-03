@@ -11,7 +11,7 @@
     <link href="~/css/Table.css" rel="stylesheet" type="text/css" />
     <link href="~/css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 
-    <script src="~/js/jquery.min.js" type="text/javascript"></script>'
+    <script src="~/js/jquery.min.js" type="text/javascript"></script>
     <script src="~/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/js/jquery.validate.min.js"></script>
@@ -26,16 +26,6 @@
     <script src="~/js/ConfirmationDialogue.min.js" type="text/javascript"></script>
 
     <script>
-        // Prevents doubleclicking from selecting text in table
-        $('document').ready(function () {
-
-            var table = document.getElementById('table');
-            table.addEventListener('mousedown', function (event) {
-                if (event.detail > 1) {
-                    event.preventDefault();
-                }
-            }, false);
-        });
 
         var handler = function () {
 

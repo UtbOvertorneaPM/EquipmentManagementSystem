@@ -5,14 +5,10 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Localization;
 
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
 using Microsoft.Extensions.Localization;
-using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -30,14 +26,24 @@ namespace EquipmentManagementSystem.Controller {
 
 
         /// <summary>
-        /// Handles request to Index action
+        /// JQuery Table update route
         /// </summary>
         /// <param name="sortVariable"></param>
         /// <param name="searchString"></param>
         /// <param name="culture"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        protected override IActionResult HandleIndexRequest(string sortVariable, string searchString, string culture, int page) {
+        public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
+
+            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
+            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
+            ViewData["Page"] = page;
+
+            SetSearchString(ref searchString);
+
+            SetCultureCookie(culture, Response);
+
+            SetLanguage(culture);
 
             var data = Enumerable.Empty<Equipment>();
             var pageSize = repo.PageSize;
@@ -46,10 +52,10 @@ namespace EquipmentManagementSystem.Controller {
 
             // Search then sort
             if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
-                //var test = repo.Search(searchString);
+
                 data = repo.SearchSort(searchString, sortVariable);
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
-            }            
+            }
             // Search
             else if (!string.IsNullOrEmpty(searchString)) {
 
@@ -61,7 +67,7 @@ namespace EquipmentManagementSystem.Controller {
 
                 data = repo.Sort(repo.GetAll(), sortVariable);
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
-                
+
             }
             // Index request without modifiers
             else {
@@ -70,7 +76,7 @@ namespace EquipmentManagementSystem.Controller {
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
             }
 
-            return View(pagedList);
+            return PartialView(pagedList);
         }
 
 

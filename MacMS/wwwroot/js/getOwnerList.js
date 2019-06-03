@@ -27,7 +27,7 @@
 
         endOfList.appendChild(document.createTextNode("..."));
         endOfList.id = "end";
-        endOfList.style.color = "grey";
+        endOfList.style.color = "grey"; 
 
         list.appendChild(endOfList);
     });

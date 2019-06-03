@@ -1,0 +1,187 @@
+﻿@using EquipmentManagementSystem.Models
+@model PagedList<Owner>
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
+@{
+    Layout = "~/Views/Shared/_OwnerTableLayout.cshtml";
+}
+
+
+@section Scripts {
+
+
+    <script type="text/javascript">
+
+
+        $('document').ready(function () {
+
+            var curPage = @Model.Page == -1 ? 0 : @Model.Page;
+
+            var count = @Model.TotalPages;
+            var lastPos = @Model.TotalPages - 1;
+
+            var posList = [0, lastPos];
+            var startList = document.getElementById('startList');
+            var endList = document.getElementById('endList');
+            var curList = document.getElementById('curList');
+
+            startList.innerHTML = '';
+            endList.innerHTML = '';
+            curList.innerHTML = '';
+
+            for (var i = (curPage - 2); i < (curPage + 3); i++) {
+
+                if (i < 1) {
+                    i++;
+                }
+                if (i > 0 && i < lastPos) {
+                    posList.push(i);
+                }
+            }
+
+            for (var i = 0; i < posList.length; i++) {
+
+                var a = document.createElement('a');
+                a.appendChild(document.createTextNode(posList[i]));
+
+                a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
+
+                a.href = "javascript:PageClick(_Obj_)"
+                    .replace("_Obj_", a.textContent);
+
+
+                if (i == 0 && posList[i] != curPage) {
+
+                    startList.appendChild(a);
+                }
+                else if (i == 1) {
+
+                    endList.appendChild(a);
+                }
+                else {
+
+                    if (posList[i] == curPage) {
+                        var text = document.createTextNode(posList[i]);
+                        curList.appendChild(text);
+                    }
+                    else {
+                        curList.appendChild(a);
+                    }
+                }
+
+            }
+        });
+
+        $('tr').click(function (e) {
+
+            e.preventDefault();
+        });
+
+
+
+        $('a.sortLink').click(function (e) {
+
+            e.preventDefault();
+            Sort(e.target.id.toString());
+        });
+
+        function PageClick(page) {
+
+            PostTable(page, "@ViewData["SearchString"]", "@ViewData["CurrentSort"]");
+        };
+
+        function Sort(value) {
+
+            switch (value) {
+
+                case "Created":
+
+                    sortVariable = "@ViewData["CurrentSort"]" == "Created_desc" ? "Created_desc" : "Created";
+                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    break;
+
+                case "Date":
+
+                    sortVariable = "@ViewData["CurrentSort"]" == "Date_desc" ? "Date_desc" : "Date";
+                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    break;
+
+                case "Owner":
+
+                    sortVariable = "@ViewData["CurrentSort"]" == "Owner" ? "Owner_desc" : "Owner"
+                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    break;
+
+                default:
+
+                    PostTable("0", "", "Date_desc");
+                    break;
+            }
+
+        };
+
+    </script>
+}
+
+<table class="table NoPaddingMargin" id="table">
+    <thead>
+        <tr>
+
+            @if (@Model.TotalPages > 1) {
+
+                <div style="float:left" id="pageList">
+                    <div style="float:left" id="startList"></div>
+                    <div style="float:left" id="curList"></div>
+                    <div style="float:left" id="endList"></div>
+                </div>
+            }
+        </tr>
+        <tr>
+            <th>
+                <a href="#" class="sortLink" id="Created">
+                    @Localizer["Created Date"]
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sortLink" id="Date">
+                    @Localizer["Date"]
+                </a>
+            </th>
+            <th>
+                @Localizer["FirstName"]
+            </th>
+            <th>
+                @Localizer["LastName"]
+            </th>
+            <th>
+                @Localizer["Address"]
+            </th>
+            <th class="Actions">
+            </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model) {
+    <tr id="toprow" class="ParentRow">
+        <td>
+            @Html.DisplayFor(modelItem => item.Added)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastEdited)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td class="Actions">
+            @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
+            @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
+        </td>
+    </tr>
+    }
+</table>
