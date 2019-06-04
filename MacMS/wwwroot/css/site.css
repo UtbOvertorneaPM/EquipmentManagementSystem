@@ -45,6 +45,33 @@ header > nav {
         text-decoration: none;
     }
 
+.CategoryList {
+    columns: 2;
+    display: grid;
+    grid-template-columns: 5em 5em;
+    grid-gap: 0 3em;
+    padding-left: 0.5em;
+    background-color: whitesmoke;
+    width: 15em;
+    padding-bottom: 0.5em;
+    margin-top: 0px;
+    margin-left: 0.5px;
+    border-radius: 0 0 0.5em 0.5em;
+}
+
+.CategoryButton {
+    margin-top: 5px;
+    border-style: solid;
+    border-radius: 7px;
+    border-color: #3333ff;
+    background-color: #1a53ff;
+}
+
+    .CategoryButton:hover {
+        background-color: #99ccff;
+        border-color: #99ccff;
+    }
+
 li {
     list-style: none;
 }
@@ -59,7 +86,7 @@ li {
 
 
 .Search {
-    width: 30%;
+    width: 18.4em;
 }
 
 .LeftMargin {
