@@ -124,6 +124,34 @@
             )
         };
 
+
+        var importHandler = function () {
+
+            $.getScript("/js/ConfirmationDialogue.js", function () {
+                ConfirmClickGeneric(Import, '#importDialog');
+            });
+        };
+
+        function Import() {
+
+            var element = document.getElementById('importSelect');
+            var importTypeVal = element.options[element.selectedIndex].text;
+            var file = document.getElementById('file');
+            var formData = new FormData();
+            var fileData = file.files[0];
+            formData.append('file', fileData);
+            formData.append('source', importTypeVal);
+
+            $.ajax({
+                url: "@Url.Action("Import")",
+                processData: false,
+                contentType: false,
+                data: formData,
+                type: "POST"
+            });
+
+        };
+
     </script>
 }
 
@@ -155,7 +183,7 @@
         </div>
     </div>
 <p>
-    @Html.ActionLink(Localizer["Import"], "Import")
+    <a href="#" onclick="importHandler()" id="importButton">@Localizer["Import"]</a>
 </p>
 
 

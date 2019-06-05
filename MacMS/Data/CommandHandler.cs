@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore.Internal;
 using System.Reflection;
 using System.Collections.Concurrent;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Pomelo.EntityFrameworkCore.MySql;
 
 namespace EquipmentManagementSystem.Data {
 

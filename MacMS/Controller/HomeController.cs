@@ -35,6 +35,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
 
+
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
@@ -80,17 +81,34 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
-        public IActionResult Import() {
+        public IActionResult Import(string source, IFormFile file, bool IsEquipment = true) {
 
-            // Used to import Macservice data
-            //OneTimeMigration.GetJson(repo, new OwnerHandler(repo.context));
+            if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
+                throw new Exception("No appropriate file selected!");
+            }
 
-            // Generates 500 Equipment/Owners for testing purposes
-            RandomMigration.GetRandomTest(repo, new OwnerHandler(repo.context));
+            var migration = new DataMigrations();
 
+            switch (source) {
 
+                case "MacService":
+
+                    // Used to import Macservice data
+                    migration.InsertMacServiceJson(repo, new OwnerHandler(repo.context), file);
+                    break;
+
+                case "Backup":
+
+                    migration.InsertBackupJson(file, IsEquipment, repo, new OwnerHandler(repo.context));
+                    break;
+
+                default:
+                    break;
+            }
+            
             return RedirectToAction(nameof(Index));
         }
+
 
         /// <summary>
         /// Exports current table data
@@ -125,7 +143,7 @@ namespace EquipmentManagementSystem.Controller {
             try {
 
                 // If Owner doesn't exists
-                if (equipment.IDCheck) {
+                if ((bool)equipment.IDCheck) {
 
                     return Json(false);
                 }
@@ -133,8 +151,6 @@ namespace EquipmentManagementSystem.Controller {
                 // If Owner was chosen in dropdown
                 if (equipment.Owner.ID != -1) {
 
-                    equipment.OwnerID = equipment.Owner.ID;
-                    equipment.Owner = null;
                 }
                 else if (equipment.Owner.ID == -1) {
 
@@ -176,7 +192,7 @@ namespace EquipmentManagementSystem.Controller {
             try {
 
                 // If Owner doesn't exists
-                if (equipment.IDCheck) {
+                if ((bool)equipment.IDCheck) {
 
                     return Json(false);
                 }
@@ -184,7 +200,7 @@ namespace EquipmentManagementSystem.Controller {
                 // If Owner was chosen in dropdown
                 if (equipment.Owner.ID != -1) {
 
-                    equipment.OwnerID = equipment.Owner.ID;
+
                 }                
                 else if (equipment.Owner.ID == -1) {
                     

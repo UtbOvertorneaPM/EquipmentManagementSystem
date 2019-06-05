@@ -14,8 +14,7 @@ namespace EquipmentManagementSystem.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity("EquipmentManagementSystem.Models.Equipment", b =>
                 {
@@ -24,7 +23,7 @@ namespace EquipmentManagementSystem.Migrations
 
                     b.Property<int>("EquipType");
 
-                    b.Property<bool>("IDCheck");
+                    b.Property<bool?>("IDCheck");
 
                     b.Property<string>("IP");
 

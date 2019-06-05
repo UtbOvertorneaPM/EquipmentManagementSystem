@@ -60,7 +60,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="culture"></param>
         public void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
-
+        
         // GET: Home    
         /// <summary>
         /// Used for JQuery Updating table index page
@@ -84,7 +84,7 @@ namespace EquipmentManagementSystem.Controller {
 
             return View();
         }
-
+        
 
         public void SetSearchString(ref string searchString) {
 

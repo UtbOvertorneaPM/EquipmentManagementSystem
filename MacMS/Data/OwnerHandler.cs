@@ -26,6 +26,11 @@ namespace EquipmentManagementSystem.Data {
             return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
         }
 
+        public Owner Get(string name) {
+
+            return context.Set<Owner>().Where(o => o.FullName == name).FirstOrDefault();
+        }
+
 
         public IEnumerable<Owner> Sort(string sortOrder, IEnumerable<Owner> data) {
 

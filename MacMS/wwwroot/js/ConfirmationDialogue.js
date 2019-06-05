@@ -22,7 +22,7 @@ function ConfirmClick(e, callBack) {
 
 function ConfirmClickGeneric(callBack, dialogId) {
 
-    $('#exportDialog').dialog({
+    $(dialogId).dialog({
         autoOpen: false,
         modal: true,
         resizable: false,
@@ -36,6 +36,6 @@ function ConfirmClickGeneric(callBack, dialogId) {
         },
     });
 
-    $('#exportDialog').dialog("open");
+    $(dialogId).dialog("open");
 }
 

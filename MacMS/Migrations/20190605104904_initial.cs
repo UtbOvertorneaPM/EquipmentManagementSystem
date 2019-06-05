@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EquipmentManagementSystem.Migrations
@@ -13,7 +12,7 @@ namespace EquipmentManagementSystem.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySQL:AutoIncrement", true),
                     LastEdited = table.Column<DateTime>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
@@ -33,9 +32,9 @@ namespace EquipmentManagementSystem.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySQL:AutoIncrement", true),
                     LastEdited = table.Column<DateTime>(nullable: false),
-                    IDCheck = table.Column<bool>(nullable: false),
+                    IDCheck = table.Column<short>(nullable: true),
                     Model = table.Column<string>(nullable: true),
                     Serial = table.Column<string>(nullable: true),
                     Notes = table.Column<string>(nullable: true),

@@ -17,8 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
@@ -119,10 +118,7 @@ namespace EquipmentManagementSystem {
 
             // Sets database to MySQL, and connects it to database using ManagementContext
             services.AddDbContextPool<ManagementContext>(
-                options => options.UseMySql(connection,
-                mySqlOptionsAction => {
-                    mySqlOptionsAction.ServerVersion(new Version(8, 0, 16), ServerType.MySql);
-                }));
+                options => options.UseMySQL(connection));
         }
 
 

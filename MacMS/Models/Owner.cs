@@ -39,20 +39,10 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Mail")]
         public string Mail { get; set; }
 
-        private List<Equipment> _Equipment;
 
         [JsonIgnore]
         [Display(Name = "Equipment")]
-        public List<Equipment> Equipment {
-            get {
-
-                return _Equipment ?? new List<Equipment>();
-            }
-            set {
-                _Equipment = new List<Equipment>();
-                _Equipment = value;
-            }
-        }
+        public virtual ICollection<Equipment> Equipment { get; set; }
 
         [Display(Name = "FullName")]
         public string FullName {

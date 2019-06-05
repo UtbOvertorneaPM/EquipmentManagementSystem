@@ -14,7 +14,8 @@ namespace EquipmentManagementSystem.Models {
 
     public class Equipment : Entity, IEqualityComparer {
 
-        public bool IDCheck { get; set; }
+        [NotMapped]
+        public bool? IDCheck { get; set; }
 
         [Display(Name = "Model")]
         public string Model { get; set; }
@@ -25,11 +26,8 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Notes")]
         public string Notes { get; set; }
 
-        public int? OwnerID;
-
         [Display(Name = "Owner")]
-        [ForeignKey("OwnerID")]
-        public Owner Owner { get; set; }
+        public virtual Owner Owner { get; set; }
 
         [Display(Name = "Location")]
         public string Location { get; set; }

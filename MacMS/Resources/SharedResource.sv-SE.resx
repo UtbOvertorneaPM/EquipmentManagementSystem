@@ -216,4 +216,7 @@
   <data name="Last edited" xml:space="preserve">
     <value>Senast ändrad</value>
   </data>
+  <data name="Are you sure you wish to Import?" xml:space="preserve">
+    <value>Är du säker på att du vill importera?</value>
+  </data>
 </root>

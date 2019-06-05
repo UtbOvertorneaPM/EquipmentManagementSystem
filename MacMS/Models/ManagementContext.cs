@@ -22,12 +22,18 @@ namespace EquipmentManagementSystem.Models {
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
-            modelBuilder.Entity<Owner>()
-                .HasMany(o => o.Equipment);
+            modelBuilder.Entity<Owner>(entity => {
 
-            modelBuilder.Entity<Equipment>()
-                .HasOne(e => e.Owner);
+                entity.HasKey(o => o.ID);
+                entity.HasMany(o => o.Equipment);
+            });
 
+
+            modelBuilder.Entity<Equipment>(entity => {
+
+                entity.HasKey(e => e.ID);
+                entity.HasOne(e => e.Owner);
+            });
 
         }
 
