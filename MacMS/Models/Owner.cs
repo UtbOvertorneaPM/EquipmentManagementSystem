@@ -12,35 +12,26 @@ using System.Collections;
 namespace EquipmentManagementSystem.Models {
 
 
-    [JsonObject]
     public class Owner : Entity, IEqualityComparer, IEquatable<Owner> {
 
-        [JsonProperty]
         [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 
-        [JsonProperty]
         [Display(Name = "LastName")]
         public string LastName { get; set; }
 
-        [JsonProperty]
         [Display(Name = "SSN")]
         public string SSN { get; set; }
 
-        [JsonProperty]
         [Display(Name = "Address")]
         public string Address { get; set; }
 
-        [JsonProperty]
         [Display(Name = "TelNr")]
         public string TelNr { get; set; }
 
-        [JsonProperty]
         [Display(Name = "Mail")]
         public string Mail { get; set; }
 
-
-        [JsonIgnore]
         [Display(Name = "Equipment")]
         public virtual ICollection<Equipment> Equipment { get; set; }
 

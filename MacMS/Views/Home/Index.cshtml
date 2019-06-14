@@ -147,7 +147,19 @@
                 processData: false,
                 contentType: false,
                 data: formData,
-                type: "POST"
+                type: "POST",
+                success: function (response) {
+
+                    if (response) {
+                        alert("Import succeded!");
+                    }
+                    else if (!response) {
+                        alert("Import failed!");
+                    }
+                    else {
+                        alert("Error!");
+                    }
+                }
             });
 
         };

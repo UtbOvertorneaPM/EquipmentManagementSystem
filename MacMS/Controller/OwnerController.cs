@@ -236,6 +236,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
         [HttpPost]
+        [HttpGet]
         public IActionResult Export(string exportType, string searchString) {
 
             var file = new ExportHandler().Export(repo.context, typeof(Owner), searchString, exportType);

@@ -37,7 +37,7 @@ namespace EquipmentManagementSystem.Data {
                 var ownerData = string.IsNullOrEmpty(searchString) ? ownerRepo.GetAll() : ownerRepo.Search(searchString);
 
                 file.FileName = $"OwnerExport-{DateTime.Now.ToString("dd/MM/yyyy")}";
-                file.Data = exportType.ToLower() == "excel" ? ExcelExportReflection(ownerData, typeof(Owner), new List<string>() { "Name", "SSN", "Mail", "TelNr", "Added" }) : JsonExport(ownerData);
+                file.Data = exportType.ToLower() == "excel" ? ExcelExportReflection(ownerData, typeof(Owner), new List<string>() { "FullName", "SSN", "Mail", "TelNr", "Added" }) : JsonExport(ownerData);
             }
 
             if (exportType.ToLower() == "excel") {
@@ -80,7 +80,6 @@ namespace EquipmentManagementSystem.Data {
                         foreach (var equipType in equipment.Keys) {
 
                             propertyNames = GetEquipmentPropertyNames(equipType, equipment[equipType][0]);
-
                             propertyInfo = GetPropertyInfo(type, propertyNames);
 
                             var eqpsheet = package.Workbook.Worksheets.Add(equipType.ToString());
@@ -102,17 +101,21 @@ namespace EquipmentManagementSystem.Data {
 
                         package.Workbook.Properties.Title = "Owners";
 
-                        var sheet = package.Workbook.Worksheets.Add("Owner");
-                        sheet = AddPropertyHeader(sheet, propertyNames);
+                        var sheet = package.Workbook.Worksheets.Add("Owner");                        
 
                         var ownerData = data.ToList();
-                        for (int i = 0; i < data.Count(); i++) {
+
+                        sheet.InsertRow(3, ownerData.Count);
+                        sheet = AddPropertyHeader(sheet, propertyNames);
+
+                        for (int i = 0; i < ownerData.Count; i++) {
 
                             var values = GetPropertyValue(ownerData[i], propertyInfo);
-                            sheet = AddPropertyValues(sheet, i, values);
+                            sheet = AddPropertyValues(sheet, i + 3, values);
                         }
 
                         sheet.Cells.AutoFitColumns(0);
+
                         break;
                 }
 
@@ -203,13 +206,7 @@ namespace EquipmentManagementSystem.Data {
             prop.Add("Location");
 
             switch (type) {
-                case Equipment.EquipmentType.Laptop:
-                case Equipment.EquipmentType.Chromebook:
-                case Equipment.EquipmentType.Mac:
-                case Equipment.EquipmentType.Desktop:
-                case Equipment.EquipmentType.Tablet:
 
-                    break;
                 case Equipment.EquipmentType.Projector:
                     prop.Add("Resolution");
                     break;
@@ -224,8 +221,6 @@ namespace EquipmentManagementSystem.Data {
                 case Equipment.EquipmentType.Switch:
                     prop.Add("IP");
                     prop.Add("Ports");
-                    break;
-                case Equipment.EquipmentType.Misc:
                     break;
                 default:
                     break;

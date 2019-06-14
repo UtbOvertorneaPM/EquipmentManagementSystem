@@ -22,24 +22,34 @@ namespace EquipmentManagementSystem {
             List<Mac> macs = new List<Mac>();
             List<Owner> owners = new List<Owner>();
             List<Equipment> equip = new List<Equipment>();
-
+            var owner = new List<Owner>();
             var dateToday = DateTime.Now;
 
             string json = GetFileAsJson(file);
 
-            macs = JsonConvert.DeserializeObject<List<Mac>>(json);
+            if (file.FileName.Contains("vit")) {
 
-            for (int i = 0; i < macs.Count; i++) {
+                equip = JsonConvert.DeserializeObject<List<Equipment>>(json);
 
-                equip.Add(macs[i]);
-                equip[equip.Count - 1].EquipType = Equipment.EquipmentType.Mac;
-                owners.Add(macs[i].Owner);
+                for (int i = 0; i < equip.Count; i++) {
+
+                    equip[i].EquipType = Equipment.EquipmentType.Mac;
+                    owners.Add(equip[i].Owner);
+                }
+            }
+            else {
+                macs = JsonConvert.DeserializeObject<List<Mac>>(json);
+
+                for (int i = 0; i < macs.Count; i++) {
+
+                    equip.Add(macs[i]);
+                    equip[equip.Count - 1].EquipType = Equipment.EquipmentType.Mac;
+                    owners.Add(macs[i].Owner);
+                }
+
+                owner = owners.Distinct().ToList();
             }
 
-            var eqpTasks = new List<Task>();
-            var ownerTasks = new List<Task>();
-
-            var owner = owners.Distinct().ToList();
 
             for (int i = 0; i < owner.Count; i++) {
 
@@ -57,8 +67,6 @@ namespace EquipmentManagementSystem {
             }
 
             equipRepo.Save();
-
-
         }
 
 

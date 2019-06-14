@@ -88,25 +88,32 @@ namespace EquipmentManagementSystem.Controller {
             }
 
             var migration = new DataMigrations();
+            try {
+                switch (source) {
 
-            switch (source) {
+                    case "MacService":
 
-                case "MacService":
+                        // Used to import Macservice data
+                        migration.InsertMacServiceJson(repo, new OwnerHandler(repo.context), file);
+                        break;
 
-                    // Used to import Macservice data
-                    migration.InsertMacServiceJson(repo, new OwnerHandler(repo.context), file);
-                    break;
+                    case "Backup":
 
-                case "Backup":
+                        migration.InsertBackupJson(file, IsEquipment, repo, new OwnerHandler(repo.context));
+                        break;
 
-                    migration.InsertBackupJson(file, IsEquipment, repo, new OwnerHandler(repo.context));
-                    break;
+                    default:
 
-                default:
-                    break;
+                        return Json(false);
+                }
             }
+            catch (Exception) {
+
+                throw;
+            }
+
             
-            return RedirectToAction(nameof(Index));
+            return Json(true);
         }
 
 
