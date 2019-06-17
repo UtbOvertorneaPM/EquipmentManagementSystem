@@ -127,7 +127,8 @@ namespace EquipmentManagementSystem.Controller {
         [HttpGet]
         public IActionResult Export(string exportType, string searchString) {
 
-            var file = new ExportHandler().Export(repo.context, typeof(Equipment), searchString, exportType);
+            var handler = new ExportHandler();
+            var file = handler.Export(repo.context, typeof(Equipment), searchString, exportType);
             var stream = new MemoryStream(file.Data);
             stream.Position = 0;
 

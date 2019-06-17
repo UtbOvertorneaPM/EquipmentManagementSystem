@@ -32,6 +32,7 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Mail")]
         public string Mail { get; set; }
 
+        [JsonIgnore]
         [Display(Name = "Equipment")]
         public virtual ICollection<Equipment> Equipment { get; set; }
 

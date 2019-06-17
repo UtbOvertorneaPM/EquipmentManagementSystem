@@ -38,9 +38,13 @@
 
             var element = document.getElementById('exportSelect');
             var exportTypeVal = element.options[element.selectedIndex].text;
+            var searchVal = document.getElementById("search").value;
+            //alert(searchVal);
 
-            var str = "@Url.Action("Export", new { exportType = "_exportType_", searchString = ViewData["SearchString"] })"
-                .replace("_exportType_", exportTypeVal);
+            var str = "@Html.Raw(Url.Action("Export", new { exportType = "_exportType_", searchString = "_searchValue_" }))"
+                .replace("_exportType_", exportTypeVal)
+                .replace("_searchValue_", searchVal);
+
             window.location = str;
         };
 

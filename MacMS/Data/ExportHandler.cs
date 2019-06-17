@@ -202,7 +202,7 @@ namespace EquipmentManagementSystem.Data {
             prop.Add("Model");
             prop.Add("Serial");
 
-            prop.Add("Owner");
+            prop.Add("OwnerName");
             prop.Add("Location");
 
             switch (type) {

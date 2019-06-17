@@ -65,8 +65,7 @@ namespace EquipmentManagementSystem.Data {
 
             var parameter = Expression.Parameter(typeof(Equipment), "type");
             
-
-            var queryValues = searchString.Split(", ");
+            var queryValues = searchString.Split(",");
 
             for (int i = 0; i < queryValues.Length; i++) {
 
@@ -90,7 +89,6 @@ namespace EquipmentManagementSystem.Data {
                             queries.Add(Contains(query[0], constant));
                             break;
 
-
                         case "Owner":
 
                             queries.Add(Contains("FullName", constant, true));
@@ -106,7 +104,7 @@ namespace EquipmentManagementSystem.Data {
                             break;
                     }
                 }
-                else if (!string.IsNullOrEmpty(query[0])) {
+                else if (!string.IsNullOrEmpty(query[0]) && !string.IsNullOrWhiteSpace(query[0])) {
 
                     constant = Expression.Constant(query[0]);
                     queries.AddRange(SearchWide(parameter, constant));

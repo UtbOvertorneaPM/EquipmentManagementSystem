@@ -29,6 +29,9 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Owner")]
         public virtual Owner Owner { get; set; }
 
+        [NotMapped]
+        public string OwnerName { get { return Owner.FullName; } }
+
         [Display(Name = "Location")]
         public string Location { get; set; }
 
