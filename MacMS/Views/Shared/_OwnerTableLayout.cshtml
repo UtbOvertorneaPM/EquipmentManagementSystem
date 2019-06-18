@@ -20,9 +20,10 @@
     <script>
         // Prevents doubleclicking from selecting text in table
         $('document').ready(function () {
-
+            
             var table = document.getElementById('table');
             table.addEventListener('mousedown', function (event) {
+
                 if (event.detail > 1 && event.ctrlKey == false) {
                     event.preventDefault();
                 }
@@ -37,6 +38,16 @@
                     }
                     else {
                         $target.addClass("SelectedRow");
+                    }
+
+                    var rowItems = $('.SelectedRow');
+
+                    if (rowItems.length > 0) {
+
+                        document.getElementById("selectionButtons").style.display = "";
+                    }
+                    else {
+                        document.getElementById("selectionButtons").style.display = "none";
                     }
                 }
             }, false);

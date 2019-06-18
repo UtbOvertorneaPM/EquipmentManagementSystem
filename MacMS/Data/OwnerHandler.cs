@@ -118,6 +118,10 @@ namespace EquipmentManagementSystem.Data {
 
                             queries.Add(Contains("Address", constant));
                             break;
+                        case "Mail":
+
+                            queries.Add(Contains("Mail", constant));
+                            break;
 
                         default:
                             break;

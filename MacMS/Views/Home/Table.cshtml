@@ -151,9 +151,10 @@
 
             for (var i = 0, row; row = rows.rows[i]; i++) {
 
-                serial[i] = row.cells[4].innerHTML;
+                alert("oi2");
+                serial[i] = row.cells[1].innerHTML;
             }
-
+            
             $.post("@Url.Action("DeleteSelection", "Home", new { serial = "_serials_" })"
                 .replace("_serials_", encodeURIComponent(serial)), function (response) {
 
@@ -235,7 +236,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EquipType)
             </td>
-            <td class="Actions">
+            <td class="Actions">            
                 @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
                 @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
             </td>

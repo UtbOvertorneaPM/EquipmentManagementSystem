@@ -267,5 +267,24 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
+        [HttpPost]
+        public IActionResult DeleteSelection(string mail) {
+
+            try {
+                var mails = mail.Trim().Replace("\n", " ").Split(" ");
+
+                for (int i = 0; i < mails.Count(); i++) {
+
+                    var id = repo.context.Set<Owner>().FirstOrDefault(o => mails[i] == o.Mail).ID;
+                    repo.Delete<Owner>(id);
+                }
+
+                return Json(true);
+            }
+            catch (Exception) {
+
+                return Json(null);
+            }
+        }
     }
 }

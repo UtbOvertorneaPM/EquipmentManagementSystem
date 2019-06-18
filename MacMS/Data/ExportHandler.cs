@@ -39,11 +39,9 @@ namespace EquipmentManagementSystem.Data {
 
                     for (int i = 0; i < serials.Count(); i++) {
 
-                        //eqpDataS.Add(context.Set<Equipment>().FirstOrDefault(e => serials[i] == e.Serial));
                         serials[i] = serials[i].Insert(0, "Serial:");
                     }
 
-                    //eqpData.Concat(eqpDataS);
                     eqpData = eqpRepo.Search(string.Join("", serials));
                 }
                 
@@ -62,13 +60,12 @@ namespace EquipmentManagementSystem.Data {
                 else {
 
                     var mail = selection.Trim().Replace("\n", " ").Split(" ");
-                    var data = new List<Owner>();
                     for (int i = 0; i < mail.Count(); i++) {
 
-                        data.Add(context.Set<Owner>().FirstOrDefault(o => o.Mail == mail[i]));
+                        mail[i] = mail[i].Insert(0, "Mail:");
                     }
 
-                    ownerData.Concat(data);
+                    ownerData = ownerRepo.Search(string.Join("", mail));
                 }
 
                 file.FileName = $"OwnerExport-{DateTime.Now.ToString("dd/MM/yyyy")}";
