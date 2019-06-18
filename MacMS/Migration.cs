@@ -117,33 +117,33 @@ namespace EquipmentManagementSystem {
 
             for (int i = 0; i < usersToAdd; i++) {
 
-                var owner = new Owner();
+                var owner = new Owner {
+                    FirstName = new string(Enumerable.Repeat(chars, 10)
+                    .Select(s => s[random.Next(s.Length)]).ToArray()),
 
-                owner.FirstName = new string(Enumerable.Repeat(chars, 10)
-                    .Select(s => s[random.Next(s.Length)]).ToArray());
+                    LastName = new string(Enumerable.Repeat(chars, 10)
+                    .Select(s => s[random.Next(s.Length)]).ToArray()),
 
-                owner.LastName = new string(Enumerable.Repeat(chars, 10)
-                    .Select(s => s[random.Next(s.Length)]).ToArray());
-
-                owner.LastEdited = DateTime.Now;
+                    LastEdited = DateTime.Now
+                };
 
                 owners.Add(owner);
             }
 
             for (int i = 0; i < equipmentToAdd; i++) {
 
-                var eqp = new Equipment();
+                var eqp = new Equipment {
+                    Serial = new string(Enumerable.Repeat(numbers, 15)
+                    .Select(s => s[random.Next(s.Length)]).ToArray()),
 
-                eqp.Serial = new string(Enumerable.Repeat(numbers, 15)
-                    .Select(s => s[random.Next(s.Length)]).ToArray());
-
-                eqp.Model = new string(new string(Enumerable.Repeat(chars, 10)
+                    Model = new string(new string(Enumerable.Repeat(chars, 10)
                     .Select(s => s[random.Next(s.Length)]).ToArray()) +
                     new string(Enumerable.Repeat(numbers, 8)
-                    .Select(s => s[random.Next(s.Length)]).ToArray()));
+                    .Select(s => s[random.Next(s.Length)]).ToArray())),
 
-                eqp.LastEdited = DateTime.Now;
-                eqp.EquipType = Equipment.EquipmentType.Laptop;
+                    LastEdited = DateTime.Now,
+                    EquipType = Equipment.EquipmentType.Laptop
+                };
 
                 equipment.Add(eqp);
             }

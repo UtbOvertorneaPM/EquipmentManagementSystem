@@ -1,0 +1,29 @@
+[
+  {
+    "outputFileName": "wwwroot/js/Index-Table.min.js",
+    "inputFiles": [
+      "wwwroot/js/Index-Table.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/Search.min.js",
+    "inputFiles": [
+      "wwwroot/js/Search.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/ConfirmationDialogue.min.js",
+    "inputFiles": [
+      "wwwroot/js/ConfirmationDialogue.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  }
+]

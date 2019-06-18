@@ -93,46 +93,11 @@ li {
     margin-left: 3%;
 }
 
-#curList {
-    font-size: 20px;
-    padding: 0px 5px 0px 5px;
+
+
+#deleteDialog {
+    width: auto !important;
 }
-
-#pageList > div > a {
-    margin: 0px 5px 0px 5px;
-}
-
-#pageList {
-    margin: 0px 0px 7px 0;
-}
-
-#pageListClone {
-    margin: 7px 0px 7px 0px;
-}
-
-    #pageListClone > div > div > a {
-        margin: 0px 5px 0px 5px;
-    }
-
 hr {
     margin-top: 37px;
-}
-
-
-.PageLink {
-    text-decoration: none;
-    font-size: 20px;
-    border: 1px solid rgba(1,1,1,0.2);
-    box-shadow: 1px 2px 3px rgba(0,0,0,.5);
-    background-color: darkgrey;
-    text-align: left;
-    align-content: center;
-    padding: 0px 5px 0px 5px;
-}
-
-.CurPage {
-    text-decoration: none;
-    padding-left: 5px;
-    font-size: 25px;
-    color: black;
 }

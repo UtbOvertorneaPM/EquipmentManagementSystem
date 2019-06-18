@@ -25,8 +25,32 @@
 
             var table = document.getElementById('table');
             table.addEventListener('mousedown', function (event) {
-                if (event.detail > 1) {
+
+                if (event.detail > 1 && event.ctrlKey == false) {
                     event.preventDefault();
+                }
+                // Ctrl click selecting rows for delete/export
+                else if (event.ctrlKey) {
+
+                    event.preventDefault();
+                    var $target = $(event.target).closest('tr');
+
+                    if ($target.hasClass("SelectedRow")) {
+                        $target.removeClass("SelectedRow");
+                    }
+                    else {
+                        $target.addClass("SelectedRow"); 
+                    }
+
+                    var rowItems = $('.SelectedRow');
+
+                    if (rowItems.length > 0) {
+
+                        document.getElementById("selectionButtons").style.display = "";
+                    }
+                    else {
+                        document.getElementById("selectionButtons").style.display = "none";
+                    }
                 }
             }, false);
         });

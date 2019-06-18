@@ -73,7 +73,6 @@
         });
 
 
-
         $('a.sortLink').click(function (e) {
 
             e.preventDefault();
@@ -82,7 +81,7 @@
 
         function PageClick(page) {
 
-            PostTable(page, "@ViewData["SearchString"]", "@ViewData["CurrentSort"]");           
+            PostTable(page, "@ViewData["SearchString"]", "@ViewData["CurrentSort"]");
         };
 
         function Sort(value) {
@@ -109,21 +108,91 @@
 
         };
 
+
+        $("#selectionDelete").click( function (event) {
+
+
+            var table = document.getElementById("deleteTable");
+            var rowItems = $(".SelectedRow");
+
+            for (var i = 0; i < rowItems.length; i++) {
+
+                var model = rowItems[i].cells[1].innerHTML;
+                var serial = rowItems[i].cells[2].innerHTML;
+                var owner = rowItems[i].cells[3].innerHTML;
+
+                var row = document.createElement("tr");
+                var cell = document.createElement("td");
+
+                cell.innerHTML = model;
+                row.append(cell);
+                cell = document.createElement("td");
+                cell.innerHTML = serial;
+                row.append(cell);
+                cell = document.createElement("td");
+                cell.innerHTML = owner;
+                row.append(cell);
+
+                table.appendChild(row);
+            }
+            
+            $.getScript("/js/ConfirmationDialogue.js", function () {
+                ConfirmClickGeneric(Delete, '#deleteDialog', 900);
+            });
+
+        });
+
+
+        function Delete() {
+
+            
+            var rows = document.getElementById("deleteTable");
+            var serial = Array();
+
+            for (var i = 0, row; row = rows.rows[i]; i++) {
+
+                serial[i] = row.cells[4].innerHTML;
+            }
+
+            $.post("@Url.Action("DeleteSelection", "Home", new { serial = "_serials_" })"
+                .replace("_serials_", encodeURIComponent(serial)), function (response) {
+
+                });
+        };
+
+        $("#selectionExport").click(function() {
+
+            $.getScript("/js/ConfirmationDialogue.js", function () {
+                ConfirmClickGeneric(Export, '#exportDialog');
+            });
+        });
+
+
     </script>
 }
 
+
 <table class="table NoPaddingMargin" id="table">
     <thead>
-        <tr>
-
+        <tr id="pageListRow">
             @if (@Model.TotalPages > 1) {
 
+            <p>Total entries: @Model.TotalEntries</p>
                 <div style="float:left" id="pageList">
                     <div style="float:left" id="startList"></div>
                     <div style="float:left" id="curList"></div>
                     <div style="float:left" id="endList"></div>
                 </div>
+
             }
+        </tr>
+        <tr id="selectionRow">
+            <th id="selectionButtons" style="display:none">
+                Selection
+                <input type="button" id="selectionDelete" value="Delete" />
+                <input type="button" id="selectionExport" value="Export" />
+            </th>
+
         </tr>
         <tr>
             <th>

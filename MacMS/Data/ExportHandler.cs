@@ -19,25 +19,60 @@ namespace EquipmentManagementSystem.Data {
     public class ExportHandler {
 
 
-        public ExportFile Export(ManagementContext context, Type type, string searchString, string exportType) {
+        public ExportFile Export(ManagementContext context, Type type, string searchString, string exportType, string selection) {
 
             var file = new ExportFile();
 
             if (type.Name == "Equipment") {
 
                 var eqpRepo = new EquipmentHandler(context);
-                var eqpData = string.IsNullOrEmpty(searchString) ? eqpRepo.GetAll() : eqpRepo.Search(searchString);
+                var eqpData = Enumerable.Empty<Equipment>();
 
+                if (string.IsNullOrEmpty(selection)) {
+
+                    eqpData = string.IsNullOrEmpty(searchString) ? eqpRepo.GetAll() : eqpRepo.Search(searchString);
+                }
+                else {
+
+                    var serials = selection.Trim().Replace("\n", " ").Split(" ");
+                    var eqpDataS = new List<Equipment>();
+
+                    for (int i = 0; i < serials.Count(); i++) {
+
+                        //eqpDataS.Add(context.Set<Equipment>().FirstOrDefault(e => serials[i] == e.Serial));
+                        serials[i] = serials[i].Insert(0, "Serial:");
+                    }
+
+                    //eqpData.Concat(eqpDataS);
+                    eqpData = eqpRepo.Search(string.Join("", serials));
+                }
+                
                 file.FileName = $"EquipmentExport-{DateTime.Now.ToString("dd/MM/yyyy")}";
-                file.Data = exportType.ToLower() == "excel" ? ExcelExportReflection(eqpData, typeof(Equipment), new List<string>()) : JsonExport(eqpData);
+                file.Data = exportType.ToLower() == "excel" ? ExcelExportReflection(eqpData.AsQueryable(), typeof(Equipment), new List<string>()) : JsonExport(eqpData);
             }
             else if (type.Name == "Owner") {
 
                 var ownerRepo = new OwnerHandler(context);
-                var ownerData = string.IsNullOrEmpty(searchString) ? ownerRepo.GetAll() : ownerRepo.Search(searchString);
+                var ownerData = Enumerable.Empty<Owner>();
+
+                if (string.IsNullOrEmpty(selection)) {
+
+                    ownerData = string.IsNullOrEmpty(searchString) ? ownerRepo.GetAll() : ownerRepo.Search(searchString);
+                }
+                else {
+
+                    var mail = selection.Trim().Replace("\n", " ").Split(" ");
+                    var data = new List<Owner>();
+                    for (int i = 0; i < mail.Count(); i++) {
+
+                        data.Add(context.Set<Owner>().FirstOrDefault(o => o.Mail == mail[i]));
+                    }
+
+                    ownerData.Concat(data);
+                }
 
                 file.FileName = $"OwnerExport-{DateTime.Now.ToString("dd/MM/yyyy")}";
-                file.Data = exportType.ToLower() == "excel" ? ExcelExportReflection(ownerData, typeof(Owner), new List<string>() { "FullName", "SSN", "Mail", "TelNr", "Added" }) : JsonExport(ownerData);
+                file.Data = exportType.ToLower() == "excel" ? ExcelExportReflection(ownerData.AsQueryable(), typeof(Owner), new List<string>() { "FullName", "SSN", "Mail", "TelNr", "Added" }) : JsonExport(ownerData);
             }
 
             if (exportType.ToLower() == "excel") {
@@ -234,12 +269,7 @@ namespace EquipmentManagementSystem.Data {
 
     }
 
-    public class ExportFile {
 
-        public string FileName { get; set; }
-        public string ContentType { get; set; }
-        public byte[] Data { get; set; }
-    }
 
 
 

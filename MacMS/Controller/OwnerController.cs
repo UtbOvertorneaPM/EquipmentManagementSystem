@@ -209,6 +209,26 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
+        [HttpPost]
+        public IActionResult Delete(List<string> names) {
+
+            try {
+
+                for (int i = 0; i < names.Count; i++) {
+
+                    var id = repo.context.Set<Owner>().FirstOrDefault(e => names[i] == e.FullName).ID;
+                    repo.Delete<Owner>(id);
+                }
+
+                return Json(true);
+            }
+            catch (Exception) {
+
+                return Json(null);
+            }
+        }
+
+
         /// <summary>
         /// AJAX get list of owners
         /// </summary>
@@ -237,9 +257,9 @@ namespace EquipmentManagementSystem.Controller {
 
         [HttpPost]
         [HttpGet]
-        public IActionResult Export(string exportType, string searchString) {
+        public IActionResult Export(string exportType, string searchString, string selection = null) {
 
-            var file = new ExportHandler().Export(repo.context, typeof(Owner), searchString, exportType);
+            var file = new ExportHandler().Export(repo.context, typeof(Owner), searchString, exportType, selection);
             var stream = new MemoryStream(file.Data);
             stream.Position = 0;
 

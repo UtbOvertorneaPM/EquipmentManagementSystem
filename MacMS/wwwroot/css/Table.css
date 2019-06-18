@@ -59,10 +59,56 @@ td {
         cursor: pointer;
     }
 
+.SelectedRow {
+    background-color: dodgerblue !important;
+}
+
 .ChildRow {
     display: none;
     border-radius: 25px 0 0 0;
     background-color: aliceblue;
 }
+
+#curList {
+    font-size: 20px;
+    padding: 0px 5px 0px 5px;
+}
+
+#pageListRow {
+    height: 20px;
+}
+
+#selectionRow {
+    height:20px;
+    width: 10%;
+}
+
+#pageList {
+    margin: 0px 0px 7px 0;
+}
+
+    #pageList > div > a {
+        margin: 0px 5px 0px 5px;
+    }
+
+.PageLink {
+    text-decoration: none;
+    font-size: 20px;
+    border: 1px solid rgba(1,1,1,0.2);
+    box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+    background-color: darkgrey;
+    text-align: left;
+    align-content: center;
+    padding: 0px 5px 0px 5px;
+}
+
+.CurPage {
+    text-decoration: none;
+    padding-left: 5px;
+    font-size: 25px;
+    color: black;
+}
+
+
 
 

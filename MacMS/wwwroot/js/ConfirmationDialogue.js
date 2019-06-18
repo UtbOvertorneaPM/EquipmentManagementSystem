@@ -20,12 +20,13 @@ function ConfirmClick(e, callBack) {
 }
 
 
-function ConfirmClickGeneric(callBack, dialogId) {
+function ConfirmClickGeneric(callBack, dialogId, widthVal = 300) {
 
     $(dialogId).dialog({
         autoOpen: false,
         modal: true,
         resizable: false,
+        width: widthVal,
         buttons: {
             "Confirm": function () {
                 callBack();

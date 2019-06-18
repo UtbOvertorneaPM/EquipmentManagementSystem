@@ -123,6 +123,38 @@
                 }
             )
         };
+
+
+        var exportHandler = function () {
+
+            $.getScript("/js/ConfirmationDialogue.js", function () {
+                ConfirmClickGeneric(Export, '#exportDialog');
+            });
+        };
+
+        function Export() {
+
+            var element = document.getElementById('exportSelect');
+            var exportTypeVal = element.options[element.selectedIndex].text;
+            var searchVal = document.getElementById("search").value;
+
+            var rowItems = $(".SelectedRow");
+            var selection = "";
+
+            for (var i = 0; i < rowItems.length; i++) {
+
+                selection += rowItems[i].cells[4].innerHTML + " ";
+            }
+
+
+            var str = "@Html.Raw(Url.Action("Export", new { exportType = "_exportType_", searchString = "_searchValue_", selection = "_selection_" }))"
+                .replace("_exportType_", exportTypeVal)
+                .replace("_searchValue_", searchVal)
+                .replace("_selection_", selection);
+
+            window.location = str;
+        };
+
     </script>
 }
 
@@ -147,7 +179,7 @@
                 <input class="CategoryButton" type="button" id="categoryLastName" value="LastName" />
             </li>
             <li>
-                <input class="CategoryButton" type="button" id="categoryAddress" value="Address" />
+                <input class="CategoryButton" type="button" id="categoryMail" value="Mail" />
             </li>
         </ul>
     </div>

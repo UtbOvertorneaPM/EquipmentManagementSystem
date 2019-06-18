@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -125,10 +126,10 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         [HttpPost]
         [HttpGet]
-        public IActionResult Export(string exportType, string searchString) {
+        public IActionResult Export(string exportType, string searchString, string selection = null) {
 
             var handler = new ExportHandler();
-            var file = handler.Export(repo.context, typeof(Equipment), searchString, exportType);
+            var file = handler.Export(repo.context, typeof(Equipment), searchString, exportType, selection);
             var stream = new MemoryStream(file.Data);
             stream.Position = 0;
 
@@ -245,6 +246,27 @@ namespace EquipmentManagementSystem.Controller {
                 return Json(true);
             }
             catch {
+
+                return Json(null);
+            }
+        }
+
+
+        [HttpPost]
+        public IActionResult DeleteSelection(string serial) {
+
+            try {
+                var serials = serial.Trim().Replace("\n", " ").Split(" ");
+
+                for (int i = 0; i < serials.Count(); i++) {
+
+                    var id = repo.context.Set<Equipment>().FirstOrDefault(e => serials[i] == e.Serial).ID;
+                    repo.Delete<Equipment>(id);
+                }
+
+                return Json(true);
+            }
+            catch (Exception) {
 
                 return Json(null);
             }

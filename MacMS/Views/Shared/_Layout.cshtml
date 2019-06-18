@@ -27,27 +27,6 @@
 
     <script>
 
-        var exportHandler = function () {
-
-            $.getScript("/js/ConfirmationDialogue.js", function () {
-                ConfirmClickGeneric(Export, '#exportDialog');
-            });
-        };
-
-        function Export() {
-
-            var element = document.getElementById('exportSelect');
-            var exportTypeVal = element.options[element.selectedIndex].text;
-            var searchVal = document.getElementById("search").value;
-            //alert(searchVal);
-
-            var str = "@Html.Raw(Url.Action("Export", new { exportType = "_exportType_", searchString = "_searchValue_" }))"
-                .replace("_exportType_", exportTypeVal)
-                .replace("_searchValue_", searchVal);
-
-            window.location = str;
-        };
-
         var languageClick = function (event) {
 
             var str = "@Url.Action("Index", new { culture ="_language_"})"
@@ -96,9 +75,13 @@
             <option value="1">Backup</option>
             <option value="1">Random</option>
         </select>
-        <input type="file" name="file" id="file"/>
+        <input type="file" name="file" id="file" />
         <p>@Localizer["Are you sure you wish to Import?"]</p>
 
+    </div>
+
+    <div id="deleteDialog" class="Dialog" title="Delete" hidden>
+        <table id="deleteTable"></table>
     </div>
 
     @RenderSection("Scripts", false/*required*/)
