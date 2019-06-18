@@ -158,6 +158,14 @@
             $.post("@Url.Action("DeleteSelection", "Home", new { serial = "_serials_" })"
                 .replace("_serials_", encodeURIComponent(serial)), function (response) {
 
+                    switch (response) {
+                        case true:
+                            windows.location.href = "@Url.Action("Index")";
+                        case null:
+                            alert("Deletion failed");
+                            break;
+                        default:
+                    }
                 });
         };
 

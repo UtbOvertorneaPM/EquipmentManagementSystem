@@ -164,6 +164,17 @@
             $.post("@Url.Action("DeleteSelection", "Owner", new { mail = "_mail_" })"
                 .replace("_mail_", encodeURIComponent(mail)), function (response) {
 
+                    switch (response) {
+                        case true:
+
+                            window.location.href = "@Url.Action("Index")";
+                            break;
+                        case null:
+
+                            alert("Deletion failed, check that the user has a valid E-mail address");
+                            break;
+                        default:
+                    }
                 });
         };
 
