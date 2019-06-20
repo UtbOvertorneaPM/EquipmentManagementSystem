@@ -185,6 +185,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Owner/Delete/5
+        [HttpGet]
         public IActionResult Delete(int id) {
 
             return View(repo.Get(id));
@@ -197,6 +198,15 @@ namespace EquipmentManagementSystem.Controller {
         public IActionResult Delete(int id, IFormCollection collection) {
 
             try {
+                var owner = repo.Get(id);
+
+                if (owner.Equipment != null) {
+
+                    foreach (Equipment item in owner.Equipment) {
+                        item.Owner = null;
+                        item.OwnerID = null;
+                    }
+                }
 
                 repo.Delete<Owner>(id);
 
@@ -210,7 +220,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
         [HttpPost]
-        public IActionResult Delete(List<string> names) {
+        public IActionResult DeleteSelection(List<string> names) {
 
             try {
 

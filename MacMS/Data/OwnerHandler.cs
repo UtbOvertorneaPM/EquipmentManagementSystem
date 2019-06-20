@@ -23,6 +23,10 @@ namespace EquipmentManagementSystem.Data {
 
         public Owner Get(int id, bool include = true) {
 
+            if (include) {
+
+                return context.Set<Owner>().Where(o => o.ID == id).Include(o => o.Equipment).FirstOrDefault();
+            }
             return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
         }
 
