@@ -202,14 +202,10 @@ namespace EquipmentManagementSystem.Controller {
 
                 // If Owner was chosen in dropdown
                 if (equipment.Owner.ID != -1) {
-
-
-                }                
-                else if (equipment.Owner.ID == -1) {
-                    
+                    equipment.OwnerID = equipment.Owner.ID;
                     equipment.Owner = null;
                 }
-                
+
                 equipment.LastEdited = DateTime.Now;
                 repo.Update(equipment);
 
