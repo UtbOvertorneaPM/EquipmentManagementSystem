@@ -11,7 +11,7 @@ using System.Collections;
 
 namespace EquipmentManagementSystem.Models {
 
-
+    
     public class Owner : Entity, IEqualityComparer, IEquatable<Owner> {
 
         [Display(Name = "FirstName")]

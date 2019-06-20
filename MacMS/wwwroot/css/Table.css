@@ -25,6 +25,8 @@ table {
         background-color: darkgray;
     }
 
+    
+
 tr {
     height: 50px;
 }
@@ -42,7 +44,11 @@ td {
     border-collapse: collapse;
     align-content: center;
 }
-    .ownerTable tr:nth-child(odd) {
+    .ownerTable > thead {
+        background-color: lightgray;
+    }
+
+    .ownerTable > tbody > tr:nth-child(4n+3) {
         background-color: darkgray;
     }
 

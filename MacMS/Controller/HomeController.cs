@@ -149,37 +149,31 @@ namespace EquipmentManagementSystem.Controller {
         [ValidateAntiForgeryToken]
         public IActionResult Create(Equipment equipment) {
 
-            try {
 
-                // If Owner doesn't exists
-                if ((bool)equipment.IDCheck) {
-
-                    return Json(false);
-                }
-
-                // If Owner was chosen in dropdown
-                if (equipment.Owner.ID != -1) {
-
-                }
-                else if (equipment.Owner.ID == -1) {
-
-                    equipment.Owner = null;
-                }
-
-                if (ModelState.IsValid) {
-
-                    equipment.LastEdited = DateTime.Now;
-                    repo.Insert(equipment);
-                    
-                    return Json(true);
-                }
+            // If Owner doesn't exists
+            if ((bool)equipment.IDCheck) {
 
                 return Json(false);
             }
-            catch {
 
-                return Json(null);
+
+            if (equipment.Owner.ID != -1) {
+                equipment.OwnerID = equipment.Owner.ID;
+                equipment.Owner = null;
             }
+
+
+            //repo.context.Entry(equipment.Owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+
+            if (ModelState.IsValid) {
+
+                equipment.LastEdited = DateTime.Now;
+                repo.Insert(equipment);
+
+                return Json(true);
+            }
+
+            return Json(false);
         }
 
 

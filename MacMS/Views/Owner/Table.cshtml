@@ -189,11 +189,13 @@
     </script>
 }
 
-<table class="table NoPaddingMargin" id="table">
+<table class="ownerTable NoPaddingMargin" id="table">
     <thead>
         <tr id="pageListRow">
 
             @if (@Model.TotalPages > 1) {
+
+            <p>Displaying: @Model.PageEntries - @Model.PageEnd of @Model.TotalEntries entries</p>
 
                 <div style="float:left" id="pageList">
                     <div style="float:left" id="startList"></div>

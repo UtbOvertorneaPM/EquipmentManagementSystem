@@ -163,7 +163,14 @@ namespace EquipmentManagementSystem.Data {
 
 
         public void Save() {
-            context.SaveChanges();
+            try {
+                context.SaveChanges();
+            }
+            catch (Exception) {
+
+                throw;
+            }
+            
         }
     }
 }
