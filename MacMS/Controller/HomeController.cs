@@ -84,15 +84,16 @@ namespace EquipmentManagementSystem.Controller {
 
         public IActionResult Import(string source, IFormFile file, bool IsEquipment = true) {
 
-            if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
-                throw new Exception("No appropriate file selected!");
-            }
+
 
             var migration = new DataMigrations();
             try {
                 switch (source) {
 
                     case "MacService":
+                        if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
+                            throw new Exception("No appropriate file selected!");
+                        }
 
                         // Used to import Macservice data
                         migration.InsertMacServiceJson(repo, new OwnerHandler(repo.context), file);
@@ -100,7 +101,16 @@ namespace EquipmentManagementSystem.Controller {
 
                     case "Backup":
 
+                        if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
+                            throw new Exception("No appropriate file selected!");
+                        }
+
                         migration.InsertBackupJson(file, IsEquipment, repo, new OwnerHandler(repo.context));
+                        break;
+
+                    case "Random":
+
+                        migration.InsertRandomData(repo, new OwnerHandler(repo.context));
                         break;
 
                     default:
