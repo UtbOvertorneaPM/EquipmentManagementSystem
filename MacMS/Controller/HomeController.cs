@@ -84,8 +84,6 @@ namespace EquipmentManagementSystem.Controller {
 
         public IActionResult Import(string source, IFormFile file, bool IsEquipment = true) {
 
-
-
             var migration = new DataMigrations();
             try {
                 switch (source) {

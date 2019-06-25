@@ -152,6 +152,8 @@
 
                     if (response) {
                         alert("Import succeded!");
+
+                        window.location.href = "@Url.Action("Index", "Home")";
                     }
                     else if (!response) {
                         alert("Import failed!");

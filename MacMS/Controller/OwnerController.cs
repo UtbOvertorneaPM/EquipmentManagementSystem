@@ -239,6 +239,50 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
+        public IActionResult Import(string source, IFormFile file, bool IsEquipment = false) {
+
+            var migration = new DataMigrations();
+            try {
+                switch (source) {
+
+                    case "MacService":
+                        if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
+                            throw new Exception("No appropriate file selected!");
+                        }
+
+                        // Used to import Macservice data
+                        migration.InsertMacServiceJson(new EquipmentHandler(repo.context), repo, file);
+                        break;
+
+                    case "Backup":
+
+                        if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
+                            throw new Exception("No appropriate file selected!");
+                        }
+
+                        migration.InsertBackupJson(file, IsEquipment, new EquipmentHandler(repo.context), repo);
+                        break;
+
+                    case "Random":
+
+                        migration.InsertRandomData(new EquipmentHandler(repo.context), repo);
+                        break;
+
+                    default:
+
+                        return Json(false);
+                }
+            }
+            catch (Exception) {
+
+                throw;
+            }
+
+
+            return Json(true);
+        }
+
+
         /// <summary>
         /// AJAX get list of owners
         /// </summary>
