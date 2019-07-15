@@ -13,6 +13,7 @@ Requirements
 
   <a href="https://dotnet.microsoft.com/download/dotnet-core/2.2" target="_blank">.Net Core Hosting Bundle 2.2</a>
 
+-------------------------------------------------------------------------------------------------------------------------------
 
 1. Download the latest version of Oracle MySQL Server (https://dev.mysql.com/downloads/mysql/)
   
