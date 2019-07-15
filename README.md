@@ -28,7 +28,7 @@ To setup the Equipment Management System
         "User": "",
         "Password": "",
         "Server": "",
-        "DbName": "",
+        "DbName": "equipmentmanagementsystem",
         "Domain": "",
         "DebugDomain": ""
       }
@@ -44,4 +44,17 @@ To setup the Equipment Management System
     DebugDomain is the same as domain, but only in use for debugging with VS
     ```
     
-      
+    `Example prodSettings.json`
+    
+    ```
+    {
+      "Credentials": {
+        "User": "JohnS",
+        "Password": "SecureTestingPlatform3452",
+        "Server": "localhost",
+        "DbName": "equipmentmanagementsystem",
+        "Domain": "Work\\JohnS",
+        "DebugDomain": "Work\\JohnS"
+      }
+    }
+    ```
