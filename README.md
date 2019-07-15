@@ -56,7 +56,7 @@ Requirements
     DebugDomain is the same as domain, but only in use for debugging with VS
     ```
     
-    `Example prodSettings.json`
+Example prodSettings.json:
     
     ```
     {
