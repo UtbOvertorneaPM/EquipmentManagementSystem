@@ -50,9 +50,14 @@ Requirements
     ```
     User is your MySQL username
     Password is your MySQL password
+    
     Server is the IP of the server, if it's on the local computer set it to localhost
+    
     DbName is the name of the database
-    Domain is the domain and/or users that will have access to the application page, domain and users are delimited by \\ ( DomainName\\Username )
+    
+    Domain is the domain and/or users that will have access to the application page, 
+    domain and users must be delimited by \\ ( DomainName\\Username )
+    
     DebugDomain is the same as domain, but only in use for debugging with VS
     ```
     
