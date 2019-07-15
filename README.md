@@ -53,7 +53,7 @@ Requirements
     
     Server is the IP of the server, if it's on the local computer set it to localhost
     
-    DbName is the name of the database
+    DbName is the name of the database (step 3)
     
     Domain is the domain and/or users that will have access to the application page, 
     domain and users must be delimited by \\ ( DomainName\\Username )
