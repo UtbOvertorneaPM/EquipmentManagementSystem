@@ -21,18 +21,28 @@ namespace EquipmentManagementSystem.Data {
         public EquipmentHandler(ManagementContext ctx) : base(ctx) { }
 
 
-        public IQueryable<Equipment> GetAll() { return context.Set<Equipment>().Include(o => o.Owner); }
+        public IQueryable<Equipment> GetAll() {
+            return context.Set<Equipment>().Include(o => o.Owner);
+        }
 
-        public Equipment Get(int id, bool owner = true) { return context.Set<Equipment>().Where(e => e.ID == id).Include(o => o.Owner).FirstOrDefault(); }
-
-
-        public Owner GetOwner(int id) { return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault(); }
-
-
-        public IEnumerable<Equipment> Sort(IEnumerable<Equipment> equipment, string sortVariable) { return GetSorting(sortVariable, equipment); }
+        public Equipment Get(int id, bool owner = true) {
+            return context.Set<Equipment>().Where(e => e.ID == id).Include(o => o.Owner).FirstOrDefault();
+        }
 
 
-        public IEnumerable<Equipment> Search(string searchString) { return GetData(searchString, GetAll()); }
+        public Owner GetOwner(int id) {
+            return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
+        }
+
+
+        public IEnumerable<Equipment> Sort(IEnumerable<Equipment> equipment, string sortVariable) {
+            return GetSorting(sortVariable, equipment);
+        }
+
+
+        public IEnumerable<Equipment> Search(string searchString) {
+            return GetData(searchString, GetAll());
+        }
         
 
         /// <summary>

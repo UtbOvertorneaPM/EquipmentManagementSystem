@@ -41,6 +41,9 @@ namespace EquipmentManagementSystem.Models {
         public EquipmentType EquipType { get; set; }
 
 
+        public Equipment() { }
+
+
         public new bool Equals(object x, object y) {
 
             if (x is Equipment && y is Equipment) {
