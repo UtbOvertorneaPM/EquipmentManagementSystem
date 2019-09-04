@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Controller {
 
-    public class ChromebookController  : BaseController {
+    public class ChromebookController : BaseController, IController<Equipment> {
 
         private ChromebookService<Equipment> _service;
         private int pageSize = 25;
@@ -49,10 +49,10 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
-        public IActionResult Import(string source, IFormFile file, bool IsEquipment = true) {
+        public Task<IActionResult> Import(string source, IFormFile file, bool IsEquipment = true) {
 
             throw new NotImplementedException();
-
+            /*
             var migration = new DataMigrations();
             try {
                 switch (source) {
@@ -92,6 +92,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
             return Json(true);
+            */
         }
 
 
@@ -131,6 +132,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
             if (equipment.Owner.ID != -1) {
+
                 equipment.OwnerID = equipment.Owner.ID;
                 equipment.Owner = null;
             }

@@ -259,7 +259,7 @@ namespace EquipmentManagementSystem.newData {
 
             var file = await ExportHandler.Export(data, typeof(Equipment), searchString, exportType, selection);
 
-            return new FileStreamResult(new MemoryStream(file.Data), file.ContentType) { FileDownloadName = file.FileName };
+            return new FileStreamResult(new MemoryStream(file.Data), file.ContentType) { FileDownloadName = file.FileName + file.FileSuffix };
         }
 
     }

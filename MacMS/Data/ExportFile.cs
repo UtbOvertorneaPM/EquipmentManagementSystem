@@ -8,6 +8,7 @@ namespace EquipmentManagementSystem.Data {
     public class ExportFile {
 
         public string FileName { get; set; }
+        public string FileSuffix { get; set; }
         public string ContentType { get; set; }
         public byte[] Data { get; set; }
     }

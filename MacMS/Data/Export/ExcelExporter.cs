@@ -12,7 +12,7 @@ namespace EquipmentManagementSystem.Data.Export {
     public class ExcelExporter : IExporter {
 
 
-        public Task<byte[]> Export<T>(IEnumerable<T> data) {
+        public async Task<byte[]> Export<T>(IEnumerable<T> data) {
 
             var type = data.GetType().GetGenericArguments()[0];
             var propertyNames = new List<string>();
@@ -25,7 +25,7 @@ namespace EquipmentManagementSystem.Data.Export {
                     case "Equipment":
 
                         package.Workbook.Properties.Title = "Equipment";
-                        var equipment = SortEquipmentByCategory((IQueryable<Equipment>)data);
+                        var equipment = SortEquipmentByCategory((IEnumerable<Equipment>)data);
 
                         foreach (var equipType in equipment.Keys) {
 
@@ -71,7 +71,7 @@ namespace EquipmentManagementSystem.Data.Export {
 
                 package.Workbook.Properties.Company = $"Övertorneå Kommun {DateTime.Now.ToString("dd/MM/YYYY")}";
 
-                return Task.Run(() => package.GetAsByteArray());
+                return await Task.Run(() => package.GetAsByteArray());
             }
         }
 
@@ -120,7 +120,7 @@ namespace EquipmentManagementSystem.Data.Export {
         }
 
 
-        private Dictionary<Equipment.EquipmentType, List<Equipment>> SortEquipmentByCategory(IQueryable<Equipment> data) {
+        private Dictionary<Equipment.EquipmentType, List<Equipment>> SortEquipmentByCategory(IEnumerable<Equipment> data) {
 
             var equipment = new Dictionary<Equipment.EquipmentType, List<Equipment>>();
             var types = Enum.GetValues(typeof(Equipment.EquipmentType));
@@ -136,7 +136,7 @@ namespace EquipmentManagementSystem.Data.Export {
             return equipment;
         }
 
-        private List<Equipment> GetEquipment(IQueryable<Equipment> data, Equipment.EquipmentType equipType) {
+        private List<Equipment> GetEquipment(IEnumerable<Equipment> data, Equipment.EquipmentType equipType) {
 
             return (from m in data
                     where m.EquipType == equipType

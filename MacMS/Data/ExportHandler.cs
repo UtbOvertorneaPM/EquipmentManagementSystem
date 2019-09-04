@@ -29,27 +29,27 @@ namespace EquipmentManagementSystem.Data {
             if (exportType.ToLower() == "excel") {
 
                 file.ContentType = "application/excel";
-                file.FileName += ".xlsx";
+                file.FileSuffix += ".xlsx";
                 exporter = new ExcelExporter();
             }
             else {
 
                 file.ContentType = "text/json";
-                file.FileName += ".json";
+                file.FileSuffix += ".json";
                 exporter = new JsonExporter();
             }
 
             if (type.Name == "Equipment") {
 
                 file.FileName = $"EquipmentExport-{DateTime.Now.ToString("dd/MM/yyyy")}";
-                file.Data = await exporter.Export<Equipment>((IEnumerable<Equipment>)data);
+                file.Data = await exporter.Export((IEnumerable<Equipment>)data);
 
             }
             else if (type.Name == "Owner") {
 
 
                 file.FileName = $"OwnerExport-{DateTime.Now.ToString("dd/MM/yyyy")}";
-                file.Data = await exporter.Export<Owner>((IEnumerable<Owner>)data);
+                file.Data = await exporter.Export((IEnumerable<Owner>)data);
             }
 
             return file;
