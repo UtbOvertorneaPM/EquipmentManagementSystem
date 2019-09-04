@@ -175,7 +175,7 @@ namespace EquipmentManagementSystem.Data {
 
             return new List<Expression<Func<Equipment, bool>>>() {
 
-                Contains("FirstName", constant, true),
+                Contains("FirstName", constant, true),  
                 Contains("LastName", constant, true),
                 Contains("Model",  constant),
                 Contains("Serial", constant),

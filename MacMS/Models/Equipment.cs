@@ -20,6 +20,7 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Model")]
         public string Model { get; set; }
 
+        [Required]
         [Display(Name = "Serial")]
         public string Serial { get; set; }
 
@@ -37,6 +38,7 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Location")]
         public string Location { get; set; }
 
+        [Required]
         [Display(Name = "EquipType")]
         public EquipmentType EquipType { get; set; }
 

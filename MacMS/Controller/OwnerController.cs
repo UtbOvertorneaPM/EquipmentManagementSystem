@@ -311,13 +311,14 @@ namespace EquipmentManagementSystem.Controller {
 
         [HttpPost]
         [HttpGet]
-        public IActionResult Export(string exportType, string searchString, string selection = null) {
+        public async Task<IActionResult> Export(string exportType, string searchString, string selection = null) {
 
-            var file = new ExportHandler().Export(repo.context, typeof(Owner), searchString, exportType, selection);
-            var stream = new MemoryStream(file.Data);
-            stream.Position = 0;
+            throw new NotImplementedException();
+            //var file = await new ExportHandler().Export(repo.context, typeof(Owner), searchString, exportType, selection);
+            //var stream = new MemoryStream(file.Data);
+            //stream.Position = 0;
 
-            return File(stream, file.ContentType, file.FileName);
+            //return File(stream, file.ContentType, file.FileName);
         }
 
 

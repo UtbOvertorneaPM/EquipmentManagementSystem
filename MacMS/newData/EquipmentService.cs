@@ -11,7 +11,7 @@ namespace EquipmentManagementSystem.newData {
 
     public class EquipmentService<T> where T : Equipment {
 
-        private ManagementContext _context;
+        internal ManagementContext _context;
         private IValidator<Equipment> _validator;
 
 
@@ -27,15 +27,33 @@ namespace EquipmentManagementSystem.newData {
             return await _context.Set<Equipment>().Include(e => e.Owner).ToListAsync();
         }
 
+        public IQueryable<Equipment> GetAllAsQueryable() {
+
+            return _context.Set<Equipment>().Include(e => e.Owner).AsQueryable();
+        }
+
+
         public async Task<IEnumerable<Equipment>> GetAll(Expression<Func<Equipment, bool>> predicate) {
 
             return await _context.Equipment.Where(predicate).ToListAsync();
         }
 
 
-        public async Task<IEnumerable<Equipment>> Sort<TKey>(IQueryable<Equipment> query, Expression<Func<Equipment, TKey>> order) {
+        public async Task<IEnumerable<Equipment>> Sort<TKey>(IQueryable<Equipment> query, string sortVariable) {
 
-            return await query.OrderBy(order).ToListAsync();
+            switch (sortVariable) {
+                case "Date_desc":
+                    return await query.OrderByDescending(e => e.LastEdited).ToListAsync();
+                case "Date":
+                     return await query.OrderBy(e => e.LastEdited).ToListAsync();
+
+                case "Owner_desc":
+                    return await query.OrderByDescending(e => e.Owner.LastName).ToListAsync();
+                case "Owner":
+                    return await query.OrderBy(e => e.Owner.LastName).ToListAsync();
+                default:
+                    return null;
+            }
         }
 
 
@@ -44,9 +62,23 @@ namespace EquipmentManagementSystem.newData {
             return await _context.Equipment.Where(q => q.ID == id).Include(e => e.Owner).FirstAsync();
         }
 
+
         public async Task<Equipment> FirstOrDefault(Expression<Func<Equipment, bool>> predicate) {
 
             return await _context.Equipment.FirstOrDefaultAsync(predicate);
+        }
+
+        
+        public async Task<int> Count() {
+
+            return await _context.Equipment.CountAsync();
+        }
+
+
+        public async Task Create(T entity) {
+
+            _context.Equipment.Add(entity);
+            await _context.SaveChangesAsync();
         }
 
 
@@ -71,11 +103,12 @@ namespace EquipmentManagementSystem.newData {
         }
 
 
-        private async Task<IEnumerable<Equipment>> Search(string searchString, IQueryable<Equipment> data) {
 
-            var parameter = Expression.Parameter(typeof(Equipment), "type");
+        public IQueryable<Equipment> Search(string searchString) {
+
+            var data = GetAllAsQueryable();
+
             var queryValues = searchString.Split(",");
-
             var returnData = Enumerable.Empty<Equipment>().AsQueryable();
 
             for (int i = 0; i < queryValues.Length; i++) {
@@ -93,6 +126,7 @@ namespace EquipmentManagementSystem.newData {
                                 .Split(' ');
 
                             for (int j = 0; j < dates.Count(); j++) {
+
                                 returnData.Concat(from x in data
                                            where x.LastEdited.ToString().Contains(dates[j])
                                            select x);
@@ -101,21 +135,31 @@ namespace EquipmentManagementSystem.newData {
                             break;
 
                         case "Model":
+
+                            returnData.Concat(from x in data
+                                              where x.Model.Contains(query[0])
+                                              select x);
+                            break;
                         case "Serial":
 
-
-                            queries.Add(Contains(query[0], constant));
+                            returnData.Concat(from x in data
+                                              where x.Serial.Contains(query[0])
+                                              select x);
                             break;
 
                         case "Owner":
 
-                            queries.Add(Contains("FullName", constant, true));
+                            returnData.Concat(from x in data
+                                              where x.Owner.FullName.Contains(query[0])
+                                              select x);
                             break;
 
                         case "EquipType":
 
                             Enum.TryParse<Equipment.EquipmentType>(query[1], out var eqpVal);
-                            queries.Add(SearchEquipmentType(eqpVal, parameter));
+                            returnData.Concat(from x in data
+                                              where x.EquipType == eqpVal
+                                              select x);
                             break;
 
                         default:
@@ -124,19 +168,17 @@ namespace EquipmentManagementSystem.newData {
                 }
                 else if (!string.IsNullOrEmpty(query[0]) && !string.IsNullOrWhiteSpace(query[0])) {
 
-                    constant = Expression.Constant(query[0]);
-                    queries.AddRange(SearchWide(parameter, constant));
+                    returnData.Concat(from x in data
+                                      where x.Owner.FullName.Contains(query[0]) ||
+                                      x.Model.Contains(query[0]) ||
+                                      x.Serial.Contains(query[0]) ||
+                                      x.Notes.Contains(query[0]) ||
+                                      x.Location.Contains(query[0])
+                                      select x);
                 }
             }
 
-            var eqp = new List<Equipment>();
-
-            for (int i = 0; i < data.Count(); i++) {
-
-                eqp.AddRange(await data.ToListAsync());
-            }
-
-            return eqp;
+            return returnData;
         }
 
     }

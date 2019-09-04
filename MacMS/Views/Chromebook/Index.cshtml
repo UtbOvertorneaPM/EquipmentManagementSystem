@@ -1,9 +1,8 @@
 ﻿@using EquipmentManagementSystem.Models
 @using EquipmentManagementSystem.Data
-<a href="~/Views/Home/Index.cshtml">~/Views/Home/Index.cshtml</a>
 @inject Localizer Localizer
 
-@{ 
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Placeholder";
 }
@@ -16,7 +15,7 @@
 
         $('document').ready(function () {
 
-            var tableView = "@Html.Raw(Url.Action("Table", "Home", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+            var tableView = "@Html.Raw(Url.Action("Table", "Chromebook", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
                 .replace("_Sort_", encodeURIComponent("@ViewData["CurrentSort"]"))
                 .replace("_Search_", encodeURIComponent("@ViewData["SearchString"]"))
                 .replace("_Page_", encodeURIComponent("@ViewData["Page"]"))
@@ -72,7 +71,7 @@
 
                 var list = document.getElementById("searchCategories");
                 list.style.display = "block";
-            }
+            }            
         });
 
 
@@ -112,7 +111,7 @@
 
         function PostTable(uri, searchString, currentSort) {
 
-            var tableView = "@Html.Raw(Url.Action("Table", "Home", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+            var tableView = "@Html.Raw(Url.Action("Table", "Chromebook", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
                 .replace("_Sort_", encodeURIComponent(currentSort))
                 .replace("_Search_", encodeURIComponent(searchString))
                 .replace("_Page_", encodeURIComponent(uri));
@@ -154,7 +153,7 @@
                     if (response) {
                         alert("Import succeded!");
 
-                        window.location.href = "@Url.Action("Index", "Home")";
+                        window.location.href = "@Url.Action("Index", "Chromebook")";
                     }
                     else if (!response) {
                         alert("Import failed!");
@@ -203,30 +202,30 @@
 <h2>@Localizer["Equipment"]</h2>
 
 
-<div>
-    @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
-    <input id="submitSearch" type="button" value="@Localizer["Search"]" />
+    <div>
+        @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
+        <input id="submitSearch" type="button" value="@Localizer["Search"]"/>
 
-    <div id="searchCategories" hidden>
-        <ul class="CategoryList">
-            <li>
-                <input class="CategoryButton" type="button" id="categoryDate" value="LastEdited" />
-            </li>
-            <li>
-                <input class="CategoryButton" type="button" id="categoryModel" value="Model" />
-            </li>
-            <li>
-                <input class="CategoryButton" type="button" id="categorySerial" value="Serial" />
-            </li>
-            <li>
-                <input class="CategoryButton" type="button" id="categoryOwner" value="Owner" />
-            </li>
-            <li>
-                <input class="CategoryButton" type="button" id="categoryType" value="EquipType" />
-            </li>
-        </ul>
+        <div id="searchCategories" hidden>
+            <ul class="CategoryList">
+                <li>
+                    <input class="CategoryButton" type="button" id="categoryDate" value="LastEdited" />
+                </li>
+                <li>
+                    <input class="CategoryButton" type="button" id="categoryModel" value="Model" />
+                </li>
+                <li>
+                    <input class="CategoryButton" type="button" id="categorySerial" value="Serial" />
+                </li>
+                <li>
+                    <input class="CategoryButton" type="button" id="categoryOwner" value="Owner" />
+                </li>
+                <li>
+                    <input class="CategoryButton" type="button" id="categoryType" value="EquipType" />
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
 <p>
     <a href="#" onclick="importHandler()" id="importButton">@Localizer["Import"]</a>
 </p>

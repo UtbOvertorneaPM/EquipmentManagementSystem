@@ -10,18 +10,21 @@ using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
+using EquipmentManagementSystem.newData;
 
 namespace EquipmentManagementSystem.Controller {
 
 
-    public class HomeController : BaseController { 
+    public class HomeController : BaseController {
 
         EquipmentHandler repo;
+        //EquipmentService _service;
 
 
         public HomeController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
+            //_service = new EquipmentService(ctx, new EquimentValidator());
             repo = new EquipmentHandler(ctx);
         }
 
@@ -134,14 +137,15 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         [HttpPost]
         [HttpGet]
-        public IActionResult Export(string exportType, string searchString, string selection = null) {
+        public async Task<IActionResult> Export(string exportType, string searchString, string selection = null) {
 
-            var handler = new ExportHandler();
-            var file = handler.Export(repo.context, typeof(Equipment), searchString, exportType, selection);
-            var stream = new MemoryStream(file.Data);
-            stream.Position = 0;
+            throw new NotImplementedException();
+            //var handler = new ExportHandler();
+            //var file = await handler.Export(repo.context, typeof(Equipment), searchString, exportType, selection);
+            //var stream = new MemoryStream(file.Data);
+            //stream.Position = 0;
 
-            return File(stream, file.ContentType, file.FileName);
+            //return File(stream, file.ContentType, file.FileName);
         }
 
 

@@ -15,14 +15,14 @@ namespace EquipmentManagementSystem.Controller {
 
     public class ChromebookController  : BaseController {
 
-        EquipmentService<Equipment> repo;
+        private ChromebookService<Equipment> _service;
         private int pageSize = 25;
+
 
         public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-            //repo = new EquipmentHandler(ctx);
-            repo = new EquipmentService<Equipment>(ctx, new EquipmentValidator());
+            _service = new ChromebookService<Equipment>(ctx, new EquipmentValidator());
         }
 
 
@@ -34,7 +34,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="culture"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
+        public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
@@ -45,41 +45,13 @@ namespace EquipmentManagementSystem.Controller {
             SetCultureCookie(culture, Response);
             SetLanguage(culture);
 
-            var data = Enumerable.Empty<Equipment>();
-
-            var pagedList = new PagedList<Equipment>();
-
-            // Search then sort
-            if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
-
-                data = repo.SearchSort(searchString, sortVariable);
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
-            }
-            // Search
-            else if (!string.IsNullOrEmpty(searchString)) {
-
-                data = repo.Search(searchString);
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
-            }
-            // Sort
-            else if (!string.IsNullOrEmpty(sortVariable)) {
-
-                data = repo.Sort(repo.GetAll(), sortVariable);
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
-
-            }
-            // Index request without modifiers
-            else {
-
-                data = repo.Sort(repo.GetAll(), "Date_desc");
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
-            }
-
-            return PartialView(pagedList);
+            return PartialView(await _service.HandleRequest(sortVariable, searchString, page, pageSize));
         }
 
 
         public IActionResult Import(string source, IFormFile file, bool IsEquipment = true) {
+
+            throw new NotImplementedException();
 
             var migration = new DataMigrations();
             try {
@@ -91,7 +63,7 @@ namespace EquipmentManagementSystem.Controller {
                         }
 
                         // Used to import Macservice data
-                        migration.InsertMacServiceJson(repo, new OwnerHandler(repo.context), file);
+                        //migration.InsertMacServiceJson(_service, new OwnerHandler(_service._context), file);
                         break;
 
                     case "Backup":
@@ -100,12 +72,12 @@ namespace EquipmentManagementSystem.Controller {
                             throw new Exception("No appropriate file selected!");
                         }
 
-                        migration.InsertBackupJson(file, IsEquipment, repo, new OwnerHandler(repo.context));
+                        //migration.InsertBackupJson(file, IsEquipment, _service, new OwnerHandler(_service._context));
                         break;
 
                     case "Random":
 
-                        migration.InsertRandomData(repo, new OwnerHandler(repo.context));
+                        //migration.InsertRandomData(_service, new OwnerHandler(_service._context));
                         break;
 
                     default:
@@ -131,14 +103,10 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         [HttpPost]
         [HttpGet]
-        public IActionResult Export(string exportType, string searchString, string selection = null) {
+        public async Task<IActionResult> Export(string exportType, string searchString, string selection = null) {
 
-            var handler = new ExportHandler();
-            var file = handler.Export(repo.context, typeof(Equipment), searchString, exportType, selection);
-            var stream = new MemoryStream(file.Data);
-            stream.Position = 0;
+            return await _service.Export(searchString, exportType, selection);
 
-            return File(stream, file.ContentType, file.FileName);
         }
 
 
@@ -152,7 +120,7 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Home/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Equipment equipment) {
+        public async Task<IActionResult> Create(Equipment equipment) {
 
 
             // If Owner doesn't exists
@@ -168,12 +136,12 @@ namespace EquipmentManagementSystem.Controller {
             }
 
 
-            //repo.context.Entry(equipment.Owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            //_service.context.Entry(equipment.Owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
 
             if (ModelState.IsValid) {
 
                 equipment.LastEdited = DateTime.Now;
-                repo.Insert(equipment);
+                await _service.Create(equipment);
 
                 return Json(true);
             }
@@ -184,10 +152,10 @@ namespace EquipmentManagementSystem.Controller {
 
         // GET: Home/Edit/5
         [HttpGet]
-        public IActionResult Edit(int id) {
+        public async Task<IActionResult> Edit(int id) {
 
             ViewData["IDCheck"] = false;
-            return View(repo.Get(id));
+            return View(await _service.GetById(id));
         }
 
 
@@ -212,7 +180,7 @@ namespace EquipmentManagementSystem.Controller {
                 }
 
                 equipment.LastEdited = DateTime.Now;
-                repo.Update(equipment);
+                await _service.Update(equipment);
 
                 return Json(true);
             }
@@ -224,20 +192,20 @@ namespace EquipmentManagementSystem.Controller {
 
 
         // GET: Home/Delete/5
-        public IActionResult Delete(int id) {
+        public async Task<IActionResult> Delete(int id) {
 
-            return View(repo.Get(id));
+            return View(await _service.GetById(id));
         }
 
 
         // POST: Home/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection) {
+        public async Task<IActionResult> Delete(Equipment equipment, IFormCollection collection) {
 
             try {
 
-                repo.Delete<Equipment>(id);
+                await _service.Remove(equipment);
                 return Json(true);
             }
             catch {
@@ -248,15 +216,14 @@ namespace EquipmentManagementSystem.Controller {
 
 
         [HttpPost]
-        public IActionResult DeleteSelection(string serial) {
+        public async Task<IActionResult> DeleteSelection(string serial) {
 
             try {
                 var serials = serial.Trim().Replace("\n", " ").Split(" ");
 
                 for (int i = 0; i < serials.Count(); i++) {
 
-                    var id = repo.context.Set<Equipment>().FirstOrDefault(e => serials[i] == e.Serial).ID;
-                    repo.Delete<Equipment>(id);
+                    await _service.Remove(await _service.FirstOrDefault(e => e.Serial == serials[i]));
                 }
 
                 return Json(true);

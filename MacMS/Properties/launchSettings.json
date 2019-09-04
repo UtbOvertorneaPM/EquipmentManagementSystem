@@ -1,4 +1,4 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": true,
     "anonymousAuthentication": false,
@@ -18,10 +18,10 @@
     "EquipmentManagementSystem": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:443;http://localhost:44307",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:443;http://localhost:44307"
     }
   }
 }

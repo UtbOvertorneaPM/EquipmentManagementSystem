@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
@@ -112,6 +111,9 @@ namespace EquipmentManagementSystem {
                         return factory.Create("SharedResource", assemblyName.Name);
                     };
                 });
+
+            services.AddMvcCore().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
+            services.AddMvcCore().AddRazorViewEngine();
 
             services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
             services.AddSingleton<Localizer>();
