@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace EquipmentManagementSystem.Data.Export {
     public interface IExporter {
 
-        Task<byte[]> Export<T>(IEnumerable<T> data);
+        Task<ExportFile> FormatData<T>(IEnumerable<T> data, string fileName);
+        ExportFile SetFileInfo(ExportFile file, string fileName);
     }
 }

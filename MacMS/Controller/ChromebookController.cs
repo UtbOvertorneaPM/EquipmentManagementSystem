@@ -1,4 +1,5 @@
 ﻿using EquipmentManagementSystem.Data;
+using EquipmentManagementSystem.Data.Export;
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.newData;
 using EquipmentManagementSystem.newData.Validation;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static EquipmentManagementSystem.Domain.Service.Export.ExportService;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -22,7 +24,7 @@ namespace EquipmentManagementSystem.Controller {
         public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-            _service = new ChromebookService<Equipment>(ctx, new EquipmentValidator());
+            _service = new ChromebookService<Equipment>(ctx, new EquipmentValidator(), new ExportHandler());
         }
 
 
@@ -106,8 +108,8 @@ namespace EquipmentManagementSystem.Controller {
         [HttpGet]
         public async Task<IActionResult> Export(string exportType, string searchString, string selection = null) {
 
-            return await _service.Export(searchString, exportType, selection);
-
+            Enum.TryParse(exportType, out ExportType exportTypes);
+            return await _service.Export(searchString, selection, exportTypes);
         }
 
 

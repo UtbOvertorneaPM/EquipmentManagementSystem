@@ -12,67 +12,78 @@ namespace EquipmentManagementSystem.Data.Export {
     public class ExcelExporter : IExporter {
 
 
-        public async Task<byte[]> Export<T>(IEnumerable<T> data) {
+        public async Task<ExportFile> FormatData<T>(IEnumerable<T> data, string fileName) {
 
             var type = data.GetType().GetGenericArguments()[0];
-            var propertyNames = new List<string>();
-            var propertyInfo = GetPropertyInfo(type, propertyNames);
-            
 
             using (var package = new ExcelPackage()) {
 
-                switch (type.Name) {
-                    case "Equipment":
+                var file = new ExportFile(await CreatePackage(package, data, type));
+                SetFileInfo(file, fileName);
 
-                        package.Workbook.Properties.Title = "Equipment";
-                        var equipment = SortEquipmentByCategory((IEnumerable<Equipment>)data);
-
-                        foreach (var equipType in equipment.Keys) {
-
-                            propertyNames = GetEquipmentPropertyNames(equipType, equipment[equipType][0]);
-                            propertyInfo = GetPropertyInfo(type, propertyNames);
-
-                            var eqpsheet = package.Workbook.Worksheets.Add(equipType.ToString());
-                            eqpsheet.InsertRow(3, equipment[equipType].Count);
-                            eqpsheet = AddPropertyHeader(eqpsheet, propertyNames);
-
-                            for (int i = 0; i < equipment[equipType].Count; i++) {
-
-                                var values = GetPropertyValue(equipment[equipType][i], propertyInfo);
-
-                                eqpsheet = AddPropertyValues(eqpsheet, i + 3, values);
-                            }
-
-                            eqpsheet.Cells.AutoFitColumns(0);
-                        }
-                        break;
-
-                    case "Owner":
-
-                        package.Workbook.Properties.Title = "Owners";
-
-                        var sheet = package.Workbook.Worksheets.Add("Owner");
-
-                        List<Owner> ownerData = ((IEnumerable<Owner>)data).ToList();
-
-                        sheet.InsertRow(3, ownerData.Count);
-                        sheet = AddPropertyHeader(sheet, propertyNames);
-
-                        for (int i = 0; i < ownerData.Count; i++) {
-
-                            var values = GetPropertyValue<Owner>(ownerData[i], propertyInfo);
-                            sheet = AddPropertyValues(sheet, i + 3, values);
-                        }
-
-                        sheet.Cells.AutoFitColumns(0);
-
-                        break;
-                }
-
-                package.Workbook.Properties.Company = $"Övertorneå Kommun {DateTime.Now.ToString("dd/MM/YYYY")}";
-
-                return await Task.Run(() => package.GetAsByteArray());
+                return file;
             }
+        }
+
+
+        private async Task<byte[]> CreatePackage<T>(ExcelPackage package, IEnumerable<T> data, Type type) {
+
+            var propertyNames = new List<string>();
+            var propertyInfo = GetPropertyInfo(type, propertyNames);
+
+
+            switch (type.Name) {
+                case "Equipment":
+
+                    package.Workbook.Properties.Title = "Equipment";
+                    var equipment = SortEquipmentByCategory((IEnumerable<Equipment>)data);
+
+                    foreach (var equipType in equipment.Keys) {
+
+                        propertyNames = GetEquipmentPropertyNames(equipType, equipment[equipType][0]);
+                        propertyInfo = GetPropertyInfo(type, propertyNames);
+
+                        var eqpsheet = package.Workbook.Worksheets.Add(equipType.ToString());
+                        eqpsheet.InsertRow(3, equipment[equipType].Count);
+                        eqpsheet = AddPropertyHeader(eqpsheet, propertyNames);
+
+                        for (int i = 0; i < equipment[equipType].Count; i++) {
+
+                            var values = GetPropertyValue(equipment[equipType][i], propertyInfo);
+
+                            eqpsheet = AddPropertyValues(eqpsheet, i + 3, values);
+                        }
+
+                        eqpsheet.Cells.AutoFitColumns(0);
+                    }
+                    break;
+
+                case "Owner":
+
+                    package.Workbook.Properties.Title = "Owners";
+
+                    var sheet = package.Workbook.Worksheets.Add("Owner");
+
+                    List<Owner> ownerData = ((IEnumerable<Owner>)data).ToList();
+
+                    sheet.InsertRow(3, ownerData.Count);
+                    sheet = AddPropertyHeader(sheet, propertyNames);
+
+                    for (int i = 0; i < ownerData.Count; i++) {
+
+                        var values = GetPropertyValue<Owner>(ownerData[i], propertyInfo);
+                        sheet = AddPropertyValues(sheet, i + 3, values);
+                    }
+
+                    sheet.Cells.AutoFitColumns(0);
+
+                    break;
+            }
+
+            package.Workbook.Properties.Company = $"Övertorneå Kommun {DateTime.Now.ToString("dd/MM/YYYY")}";
+
+
+            return await Task.Run(() => package.GetAsByteArray());
         }
 
 
@@ -179,6 +190,15 @@ namespace EquipmentManagementSystem.Data.Export {
             prop.Add("Notes");
 
             return prop;
+        }
+
+
+        public ExportFile SetFileInfo(ExportFile file, string fileName) {
+
+            file.ContentType = "application/excel";
+            file.FileName = fileName + ".xlsx";
+
+            return file;
         }
     }
 }

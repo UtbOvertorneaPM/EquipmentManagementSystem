@@ -9,6 +9,7 @@ using EquipmentManagementSystem.newData.Validation;
 using System.IO;
 using EquipmentManagementSystem.Data;
 using Microsoft.AspNetCore.Mvc;
+using EquipmentManagementSystem.Data.Export;
 
 namespace EquipmentManagementSystem.newData {
 
@@ -16,16 +17,17 @@ namespace EquipmentManagementSystem.newData {
 
         internal ManagementContext _context;
         private IValidator<Equipment> _validator;
+        private IExportHandler _exporter;
 
-
-        public ChromebookService(ManagementContext context, IValidator<Equipment> validator) {
+        public ChromebookService(ManagementContext context, IValidator<Equipment> validator, IExportHandler exporter) {
 
             _context = context;
             _validator = validator;
+            _exporter = exporter;
         }
 
 
-        public async Task<PagedList<Equipment>> HandleRequest(string sortVariable, string searchString, int page, int pageSize) {
+        public async Task<PagedList<Equipment>> IndexRequest(string sortVariable, string searchString, int page, int pageSize) {
 
             var pagedList = new PagedList<Equipment>();
 
@@ -75,27 +77,9 @@ namespace EquipmentManagementSystem.newData {
         }
 
 
-        public async Task<IEnumerable<Equipment>> GetAll(Expression<Func<Equipment, bool>> predicate) {
+        public async Task<IQueryable<Equipment>> GetAll(Expression<Func<Equipment, bool>> predicate) {
 
             return await _context.Equipment.Where(predicate).ToListAsync();
-        }
-
-
-        public async Task<IEnumerable<Equipment>> Sort<TKey>(IQueryable<Equipment> query, string sortVariable) {
-
-            switch (sortVariable) {
-                case "Date_desc":
-                    return await query.OrderByDescending(e => e.LastEdited).ToListAsync();
-                case "Date":
-                    return await query.OrderBy(e => e.LastEdited).ToListAsync();
-
-                case "Owner_desc":
-                    return await query.OrderByDescending(e => e.Owner.LastName).ToListAsync();
-                case "Owner":
-                    return await query.OrderBy(e => e.Owner.LastName).ToListAsync();
-                default:
-                    return null;
-            }
         }
 
 
@@ -146,103 +130,37 @@ namespace EquipmentManagementSystem.newData {
 
 
 
-        public IQueryable<Equipment> Search(string searchString) {
+       
 
-            var data = GetAllAsQueryable();
 
-            var queryValues = searchString.Split(",");
-            var returnData = Enumerable.Empty<Equipment>().AsQueryable();
+        public async Task<FileStreamResult> Export(string searchString, string selection, string exportType) {
 
-            for (int i = 0; i < queryValues.Length; i++) {
+            switch (exportType) {
 
-                var query = queryValues[i].Split(":");
+                case "excel":
+                    _exporter.SetExporter(new ExcelExporter());
+                    break;
 
-                if (query.Length > 1) {
+                case "json":
+                    _exporter.SetExporter(new JsonExporter());
+                    break;
 
-                    switch (query[0]) {
-
-                        case "LastEdited":
-
-                            var dates = query[1]
-                                .Replace("/", " ")
-                                .Split(' ');
-
-                            for (int j = 0; j < dates.Count(); j++) {
-
-                                returnData.Concat(from x in data
-                                                  where x.LastEdited.ToString().Contains(dates[j])
-                                                  && x.EquipType == Equipment.EquipmentType.Chromebook
-                                                  select x);
-                            }
-
-                            break;
-
-                        case "Model":
-
-                            returnData.Concat(from x in data
-                                              where x.Model.Contains(query[0])
-                                              && x.EquipType == Equipment.EquipmentType.Chromebook
-                                              select x);
-                            break;
-                        case "Serial":
-
-                            returnData.Concat(from x in data
-                                              where x.Serial.Contains(query[0])
-                                              && x.EquipType == Equipment.EquipmentType.Chromebook
-                                              select x);
-                            break;
-
-                        case "Owner":
-
-                            returnData.Concat(from x in data
-                                              where x.Owner.FullName.Contains(query[0])
-                                              && x.EquipType == Equipment.EquipmentType.Chromebook
-                                              select x);
-                            break;
-
-                        case "EquipType":
-
-                            Enum.TryParse<Equipment.EquipmentType>(query[1], out var eqpVal);
-                            returnData.Concat(from x in data
-                                              where x.EquipType == eqpVal
-                                              select x);
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else if (!string.IsNullOrEmpty(query[0]) && !string.IsNullOrWhiteSpace(query[0])) {
-
-                    if (query[0] == "Find model/date/owner...") {
-
-                        return data;
-                    }
-                    else {
-                        returnData.Concat(from x in data
-                                          where x.Owner.FullName.Contains(query[0]) ||
-                                          x.Model.Contains(query[0]) ||
-                                          x.Serial.Contains(query[0]) ||
-                                          x.Notes.Contains(query[0]) ||
-                                          x.Location.Contains(query[0])
-                                          select x);
-
-                        returnData = returnData.Where(x => x.EquipType == Equipment.EquipmentType.Chromebook);
-                    }
-                }
+                default:
+                    break;
             }
 
-            return returnData;
+            var data = await GetExportData(searchString, selection);
+            var file = await _exporter.Export(data, typeof(Equipment));
+
+            return new FileStreamResult(new MemoryStream(file.Data), file.ContentType) { FileDownloadName = file.FileName };
         }
 
 
-        public async Task<FileStreamResult> Export(string searchString, string exportType, string selection) {
-
-            var data = Enumerable.Empty<Equipment>();
+        public async Task<IEnumerable<Equipment>> GetExportData(string searchString, string selection) {
 
             if (string.IsNullOrEmpty(selection)) {
 
-                data = string.IsNullOrEmpty(searchString) ? await GetAll() : await Search(searchString).ToListAsync();
+                return string.IsNullOrEmpty(searchString) ? await GetAll() : await Search(searchString).ToListAsync();
             }
             else {
 
@@ -254,12 +172,8 @@ namespace EquipmentManagementSystem.newData {
                     serials[i] = serials[i].Insert(0, "Serial:");
                 }
 
-                data = await Search(string.Join("", serials)).ToListAsync();
+                return await Search(string.Join("", serials)).ToListAsync();
             }
-
-            var file = await ExportHandler.Export(data, typeof(Equipment), searchString, exportType, selection);
-
-            return new FileStreamResult(new MemoryStream(file.Data), file.ContentType) { FileDownloadName = file.FileName + file.FileSuffix };
         }
 
     }

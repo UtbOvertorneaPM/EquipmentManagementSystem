@@ -14,9 +14,11 @@ namespace EquipmentManagementSystem.Models {
     
     public class Owner : Entity, IEqualityComparer, IEquatable<Owner> {
 
+        [Required]
         [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 
+        [Required]
         [Display(Name = "LastName")]
         public string LastName { get; set; }
 
@@ -29,6 +31,7 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "TelNr")]
         public string TelNr { get; set; }
 
+        [Required]
         [Display(Name = "Mail")]
         public string Mail { get; set; }
 
@@ -46,6 +49,23 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "Added")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Added { get; set; }
+
+
+        public Owner(string firstName, string lastName, string mail) {
+
+            FirstName = firstName;
+            LastName = lastName;
+            Mail = mail;
+            LastEdited = DateTime.Now;
+        }
+
+        public Owner(string firstName, string lastName, string mail, int eqpId) : this(firstName, lastName, mail) {
+
+            //Equipment.Add(id);
+            //throw new NotImplementedException();
+
+            //AddEquipment(id);
+        }
  
 
         public new bool Equals(object x, object y) {
