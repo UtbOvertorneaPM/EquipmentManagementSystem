@@ -1,5 +1,6 @@
 ﻿using EquipmentManagementSystem.Data;
 using EquipmentManagementSystem.Data.Export;
+using EquipmentManagementSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +8,11 @@ using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Domain.Service.Export {
 
-    public class ExportService {
+    public class ExportService<T> where T : class {
 
         IExporter exporter;
 
-        public enum ExportType {
-            Json,
-            Excel
-        }
-
-        public async Task<ExportFile> Export<T>(IEnumerable<T> data, ExportType exportType) {
-
+        public async Task<ExportFile> Export(IEnumerable<T> data, ExportType exportType) {
 
             SetExporter(exportType);
             return await exporter.FormatData(data, GetFileName(data.GetType().Name));
@@ -71,7 +66,10 @@ namespace EquipmentManagementSystem.Domain.Service.Export {
             }
         }
 
+    }
 
-
+    public enum ExportType {
+        Json,
+        Excel
     }
 }

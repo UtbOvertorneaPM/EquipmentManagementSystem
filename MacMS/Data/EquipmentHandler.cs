@@ -53,6 +53,8 @@ namespace EquipmentManagementSystem.Data {
         /// <returns></returns>
         public IEnumerable<Equipment> SearchSort(string searchString, string sortVariable) {
 
+            throw new NotImplementedException();
+            /*
             var data = GetData(searchString, GetAll()).ToList();
 
             for (int i = 0; i < data.Count; i++) {
@@ -66,11 +68,14 @@ namespace EquipmentManagementSystem.Data {
             }
 
             return GetSorting(sortVariable, data);
+            */
         }
         
 
         private IQueryable<Equipment> GetData(string searchString, IQueryable<Equipment> data) {
 
+            throw new NotImplementedException();
+            /*
             var queries = new List<Expression<Func<Equipment, bool>>>();
 
             var parameter = Expression.Parameter(typeof(Equipment), "type");
@@ -122,6 +127,7 @@ namespace EquipmentManagementSystem.Data {
             }
 
             return base.Search(queries, data);
+            */
         }
 
 
@@ -212,7 +218,8 @@ namespace EquipmentManagementSystem.Data {
 
 
         private IEnumerable<Equipment> GetSorting(string sortOrder, IEnumerable<Equipment> data) {
-
+            throw new NotImplementedException();
+            /*
             var parameter = Expression.Parameter(typeof(Equipment), "type");
 
             switch (sortOrder) {
@@ -232,6 +239,7 @@ namespace EquipmentManagementSystem.Data {
             }
 
             return data;
+            */
         }
 
 

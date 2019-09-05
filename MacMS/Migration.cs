@@ -18,7 +18,8 @@ namespace EquipmentManagementSystem {
 
 
         public void InsertMacServiceJson(EquipmentHandler equipRepo, OwnerHandler ownerRepo, IFormFile file) {
-
+            throw new NotImplementedException();
+            /*
             List<Mac> macs = new List<Mac>();
             List<Owner> owners = new List<Owner>();
             List<Equipment> equip = new List<Equipment>();
@@ -67,11 +68,14 @@ namespace EquipmentManagementSystem {
             }
 
             equipRepo.Save();
+            */
         }
 
 
         public void InsertBackupJson(IFormFile file, bool IsEquipment, EquipmentHandler equipRepo, OwnerHandler ownerRepo) {
 
+            throw new NotImplementedException();
+            /*
             string json = GetFileAsJson(file);
 
             if (IsEquipment) {
@@ -99,11 +103,14 @@ namespace EquipmentManagementSystem {
 
                 ownerRepo.Save();
             }
+            */
         }
 
 
         public void InsertRandomData(EquipmentHandler equipRepo, OwnerHandler ownerRepo) {
 
+            throw new NotImplementedException();
+            /*
             var usersToAdd = 500;
             var equipmentToAdd = 500;
 
@@ -164,6 +171,7 @@ namespace EquipmentManagementSystem {
             }
 
             ownerRepo.Save();
+            */
         }
 
 

@@ -28,10 +28,23 @@ namespace EquipmentManagementSystem.Domain.Service {
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> GetAll() {
+        public async Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate) {
 
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>().Where(predicate).FirstOrDefaultAsync();
         }
+
+        public IQueryable<T> GetAll() {
+
+            return _context.Set<T>().AsQueryable();
+        }
+
+
+        public async Task Create(T entity) {
+
+            _context.Set<T>().Add(entity);
+            await _context.SaveChangesAsync();
+        }
+
 
         public async Task Update(T entity) {
 
@@ -39,10 +52,17 @@ namespace EquipmentManagementSystem.Domain.Service {
             await _context.SaveChangesAsync();
         }
 
+
         public async Task Remove(T entity) {
 
             _context.Remove(entity);
             await _context.SaveChangesAsync();
+        }
+
+        
+        public async Task<int> Count() {
+
+            return await _context.Set<T>().CountAsync();
         }
     }
 

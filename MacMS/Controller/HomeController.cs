@@ -39,7 +39,8 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-
+            throw new NotImplementedException();
+            /*
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
@@ -82,6 +83,7 @@ namespace EquipmentManagementSystem.Controller {
             }
 
             return PartialView(pagedList);
+            */
         }
 
 
@@ -180,7 +182,7 @@ namespace EquipmentManagementSystem.Controller {
             if (ModelState.IsValid) {
 
                 equipment.LastEdited = DateTime.Now;
-                repo.Insert(equipment);
+                //repo.Insert(equipment);
 
                 return Json(true);
             }
@@ -219,7 +221,7 @@ namespace EquipmentManagementSystem.Controller {
                 }
 
                 equipment.LastEdited = DateTime.Now;
-                repo.Update(equipment);
+                //repo.Update(equipment);
 
                 return Json(true);
             }
@@ -244,7 +246,7 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
 
-                repo.Delete<Equipment>(id);                
+                //repo.Delete<Equipment>(id);                
                 return Json(true);
             }
             catch {
@@ -263,7 +265,7 @@ namespace EquipmentManagementSystem.Controller {
                 for (int i = 0; i < serials.Count(); i++) {
 
                     var id = repo.context.Set<Equipment>().FirstOrDefault(e => serials[i] == e.Serial).ID;
-                    repo.Delete<Equipment>(id);
+                    //repo.Delete<Equipment>(id);
                 }
 
                 return Json(true);

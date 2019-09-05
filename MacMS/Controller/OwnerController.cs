@@ -39,6 +39,8 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
 
+            throw new NotImplementedException();
+            /*
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
@@ -81,6 +83,7 @@ namespace EquipmentManagementSystem.Controller {
             }
 
             return PartialView(pagedList);
+            */
         }
 
 
@@ -97,8 +100,9 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public IActionResult CreateModal() {
 
-            var owner = new Owner();
-            return PartialView("_OwnerModalPartial", owner);
+            throw new NotImplementedException();
+            //var owner = new Owner();
+            //return PartialView("_OwnerModalPartial", owner);
         }
 
         /// <summary>

@@ -12,7 +12,15 @@ using Newtonsoft.Json;
 namespace EquipmentManagementSystem.Models {
 
 
-    public class Equipment : Entity, IEqualityComparer {
+    public class Equipment : IEqualityComparer {
+
+
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime LastEdited { get; set; }
+
 
         [NotMapped]
         public bool? IDCheck { get; set; }

@@ -1,5 +1,8 @@
 ﻿using EquipmentManagementSystem.Data;
 using EquipmentManagementSystem.Data.Export;
+using EquipmentManagementSystem.Domain.Business;
+using EquipmentManagementSystem.Domain.Service;
+using EquipmentManagementSystem.Domain.Service.Export;
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.newData;
 using EquipmentManagementSystem.newData.Validation;
@@ -11,20 +14,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static EquipmentManagementSystem.Domain.Service.Export.ExportService;
 
 namespace EquipmentManagementSystem.Controller {
 
     public class ChromebookController : BaseController, IController<Equipment> {
 
-        private ChromebookService<Equipment> _service;
+        private EquipmentRequestHandler<Equipment> _service;
         private int pageSize = 25;
 
 
         public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-            _service = new ChromebookService<Equipment>(ctx, new EquipmentValidator(), new ExportHandler());
+            _service = new EquipmentRequestHandler<Equipment>(new GenericService<Equipment>(ctx));
         }
 
 
@@ -47,7 +49,7 @@ namespace EquipmentManagementSystem.Controller {
             SetCultureCookie(culture, Response);
             SetLanguage(culture);
 
-            return PartialView(await _service.HandleRequest(sortVariable, searchString, page, pageSize));
+            return PartialView(await _service.IndexRequest(sortVariable, searchString, page, pageSize));
         }
 
 

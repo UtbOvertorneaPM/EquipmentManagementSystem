@@ -1,34 +1,39 @@
-﻿using System;
+﻿using EquipmentManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Domain.Business {
 
-    public class DataFormatting {
+    public static class EquipmentDataFormatting {
 
-        public async Task<IEnumerable<Equipment>> Sort<TKey>(IQueryable<Equipment> query, string sortVariable) {
+        public static IEnumerable<Equipment> Sort<TKey>(IEnumerable<Equipment> query, string sortVariable) {
 
             switch (sortVariable) {
                 case "Date_desc":
-                    return await query.OrderByDescending(e => e.LastEdited).ToListAsync();
+                    return query.OrderByDescending(e => e.LastEdited);
+
                 case "Date":
-                    return await query.OrderBy(e => e.LastEdited).ToListAsync();
+                    return query.OrderBy(e => e.LastEdited);
 
                 case "Owner_desc":
-                    return await query.OrderByDescending(e => e.Owner.LastName).ToListAsync();
+                    return query.OrderByDescending(e => e.Owner.LastName);
+
                 case "Owner":
-                    return await query.OrderBy(e => e.Owner.LastName).ToListAsync();
+                    return query.OrderBy(e => e.Owner.LastName);
+
                 default:
                     return null;
             }
         }
 
 
-        public IQueryable<T> Search(IQueryable<T> data, string searchString) {
+        public async static Task<List<Equipment>> Search(IQueryable<Equipment> data, string searchString) {
 
             var queryValues = searchString.Split(",");
-            var returnData = Enumerable.Empty<T>().AsQueryable();
+            var returnData = new List<Equipment>();
 
             for (int i = 0; i < queryValues.Length; i++) {
 
@@ -46,43 +51,43 @@ namespace EquipmentManagementSystem.Domain.Business {
 
                             for (int j = 0; j < dates.Count(); j++) {
 
-                                returnData.Concat(from x in data
+                                returnData.AddRange(await (from x in data
                                                   where x.LastEdited.ToString().Contains(dates[j])
                                                   && x.EquipType == Equipment.EquipmentType.Chromebook
-                                                  select x);
+                                                  select x).ToListAsync());
                             }
 
                             break;
 
                         case "Model":
 
-                            returnData.Concat(from x in data
-                                              where x.Model.Contains(query[0])
-                                              && x.EquipType == Equipment.EquipmentType.Chromebook
+                            returnData.AddRange(from x in data
+                                              where x.Model.Contains(query[1])
+                                              
                                               select x);
                             break;
                         case "Serial":
 
-                            returnData.Concat(from x in data
-                                              where x.Serial.Contains(query[0])
+                            returnData.AddRange(await (from x in data
+                                              where x.Serial.Contains(query[1])
                                               && x.EquipType == Equipment.EquipmentType.Chromebook
-                                              select x);
+                                              select x).ToListAsync());
                             break;
 
                         case "Owner":
 
-                            returnData.Concat(from x in data
-                                              where x.Owner.FullName.Contains(query[0])
+                            returnData.AddRange(await(from x in data
+                                              where x.Owner.FullName.Contains(query[1])
                                               && x.EquipType == Equipment.EquipmentType.Chromebook
-                                              select x);
+                                              select x).ToListAsync());
                             break;
 
                         case "EquipType":
 
                             Enum.TryParse<Equipment.EquipmentType>(query[1], out var eqpVal);
-                            returnData.Concat(from x in data
+                            returnData.AddRange(await(from x in data
                                               where x.EquipType == eqpVal
-                                              select x);
+                                              select x).ToListAsync());
                             break;
 
                         default:
@@ -93,23 +98,23 @@ namespace EquipmentManagementSystem.Domain.Business {
 
                     if (query[0] == "Find model/date/owner...") {
 
-                        return data;
+                        return await data.ToListAsync();
                     }
                     else {
                         returnData.Concat(from x in data
-                                          where x.Owner.FullName.Contains(query[0]) ||
-                                          x.Model.Contains(query[0]) ||
-                                          x.Serial.Contains(query[0]) ||
-                                          x.Notes.Contains(query[0]) ||
-                                          x.Location.Contains(query[0])
+                                          where x.Owner.FullName.Contains(query[1]) ||
+                                          x.Model.Contains(query[1]) ||
+                                          x.Serial.Contains(query[1]) ||
+                                          x.Notes.Contains(query[1]) ||
+                                          x.Location.Contains(query[1])
                                           select x);
 
-                        returnData = returnData.Where(x => x.EquipType == Equipment.EquipmentType.Chromebook);
+                        returnData = returnData.Where(x => x.EquipType == Equipment.EquipmentType.Chromebook).ToList();
                     }
                 }
             }
 
-            return returnData;
+            return await Task.Run(() => returnData.Distinct().ToList());
         }
     }
 }

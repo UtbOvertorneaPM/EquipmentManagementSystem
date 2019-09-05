@@ -14,16 +14,14 @@ using EquipmentManagementSystem.Data.Export;
 namespace EquipmentManagementSystem.newData {
 
     public class ChromebookService<T> where T : Equipment {
-
+        /*
         internal ManagementContext _context;
         private IValidator<Equipment> _validator;
-        private IExportHandler _exporter;
 
-        public ChromebookService(ManagementContext context, IValidator<Equipment> validator, IExportHandler exporter) {
+        public ChromebookService(ManagementContext context, IValidator<Equipment> validator) {
 
             _context = context;
             _validator = validator;
-            _exporter = exporter;
         }
 
 
@@ -175,6 +173,7 @@ namespace EquipmentManagementSystem.newData {
                 return await Search(string.Join("", serials)).ToListAsync();
             }
         }
-
+*/
     }
+
 }
