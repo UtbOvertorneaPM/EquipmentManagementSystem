@@ -17,11 +17,9 @@ namespace EquipmentManagementSystem {
     public class DataMigrations {
 
 
-        public void InsertMacServiceJson(EquipmentHandler equipRepo, OwnerHandler ownerRepo, IFormFile file) {
-            throw new NotImplementedException();
-            /*
+        public async Task<IEnumerable<Equipment>> InsertMacServiceJson(IFormFile file) {
+
             List<Mac> macs = new List<Mac>();
-            List<Owner> owners = new List<Owner>();
             List<Equipment> equip = new List<Equipment>();
             var owner = new List<Owner>();
             var dateToday = DateTime.Now;
@@ -30,12 +28,11 @@ namespace EquipmentManagementSystem {
 
             if (file.FileName.Contains("vit")) {
 
-                equip = JsonConvert.DeserializeObject<List<Equipment>>(json);
+                equip = await Task.Run(() => JsonConvert.DeserializeObject<List<Equipment>>(json));
 
                 for (int i = 0; i < equip.Count; i++) {
 
                     equip[i].EquipType = Equipment.EquipmentType.Mac;
-                    owners.Add(equip[i].Owner);
                 }
             }
             else {
@@ -45,72 +42,35 @@ namespace EquipmentManagementSystem {
 
                     equip.Add(macs[i]);
                     equip[equip.Count - 1].EquipType = Equipment.EquipmentType.Mac;
-                    owners.Add(macs[i].Owner);
                 }
 
-                owner = owners.Distinct().ToList();
             }
 
 
-            for (int i = 0; i < owner.Count; i++) {
-
-                owner[i].LastEdited = dateToday;
-                ownerRepo.Insert(owner[i], false);
-
-                if (i % 100 == 0) { ownerRepo.Save(); }
-            }
-
-            ownerRepo.Save();
-
-            for (int i = 0; i < equip.Count; i++) {
-
-                equipRepo.Insert(equip[i], false);
-            }
-
-            equipRepo.Save();
-            */
+            return equip;
         }
 
 
-        public void InsertBackupJson(IFormFile file, bool IsEquipment, EquipmentHandler equipRepo, OwnerHandler ownerRepo) {
+        public async Task<IEnumerable<T>> InsertBackupJson<T>(IFormFile file, bool IsEquipment) where T : class{
 
-            throw new NotImplementedException();
-            /*
-            string json = GetFileAsJson(file);
+            var json = GetFileAsJson(file);
+            var data = Enumerable.Empty<T>();
 
             if (IsEquipment) {
 
-                var equip = JsonConvert.DeserializeObject<List<Equipment>>(json);
-
-                for (int i = 0; i < equip.Count; i++) {
-
-                    equipRepo.Insert(equip[i], false);
-                    if (i % 20 == 0) { equipRepo.Save(); }
-                }
-
-                equipRepo.Save();
+                data = await Task.Run(() => JsonConvert.DeserializeObject<List<T>>(json));
             }
             else {
 
-                List<Owner> owners = new List<Owner>();
-
-                for (int i = 0; i < owners.Count; i++) {
-
-                    ownerRepo.Insert(owners[i], false);
-
-                    if (i % 20 == 0) { ownerRepo.Save(); }
-                }
-
-                ownerRepo.Save();
+                data = await Task.Run(() => JsonConvert.DeserializeObject<List<T>>(json));
             }
-            */
+
+            return data;
         }
 
         
         public List<Equipment> InsertRandomData() {
 
-            //throw new NotImplementedException();
-           
             var usersToAdd = 500;
             var equipmentToAdd = 500;
 

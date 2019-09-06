@@ -15,6 +15,7 @@
 
         $('document').ready(function () {
 
+
             var tableView = "@Html.Raw(Url.Action("Table", "Chromebook", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
                 .replace("_Sort_", encodeURIComponent("@ViewData["CurrentSort"]"))
                 .replace("_Search_", encodeURIComponent("@ViewData["SearchString"]"))
@@ -25,7 +26,8 @@
                     var partial = $('#partialTable');
                     partial.replaceWith(data);
                 }
-            )
+            );
+            
         });
 
 
@@ -118,8 +120,9 @@
 
             $.get(tableView,
                 function (data) {
-
-                    $('table').replaceWith(data);
+                    var partial = document.getElementById('partialTable');
+                    partial.innerHTML = data;
+                    ReloadTable();
                 }
             )
         };
@@ -235,9 +238,6 @@
 <p>
     @Html.ActionLink(Localizer["Create New"], "Create", new { culture = ViewData["Language"] })
 </p>
-
-
-
 
 <div id="partialTable"></div>
 

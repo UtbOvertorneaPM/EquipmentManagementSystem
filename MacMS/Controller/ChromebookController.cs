@@ -53,8 +53,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-
-            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
+            sortVariable = sortVariable == "Date" ? "Date_desc" : "Date";
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
 
@@ -69,7 +68,8 @@ namespace EquipmentManagementSystem.Controller {
         public async Task<IActionResult> Import(string source, IFormFile file, bool IsEquipment = true) {
 
             //throw new NotImplementedException();
-            
+            var data = new List<Equipment>();
+
             var migration = new DataMigrations();
             try {
                 switch (source) {
@@ -80,30 +80,33 @@ namespace EquipmentManagementSystem.Controller {
                         }
 
                         // Used to import Macservice data
-                        //migration.InsertMacServiceJson(_service, new OwnerHandler(_service._context), file);
+                        data = (await migration.InsertMacServiceJson(file)).ToList();
                         break;
 
                     case "Backup":
 
+                        //Restore from .json Export
                         if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
                             throw new Exception("No appropriate file selected!");
                         }
 
-                        //migration.InsertBackupJson(file, IsEquipment, _service, new OwnerHandler(_service._context));
+                        data = (await migration.InsertBackupJson<Equipment>(file, IsEquipment)).ToList();
                         break;
 
                     case "Random":
-                        var data = migration.InsertRandomData();
 
-                        for (int i = 0; i < data.Count; i++) {
-
-                            await _service.Create<Equipment>(data[i]);
-                        }
+                        //Random for testing
+                        data = migration.InsertRandomData();
                         break;
 
                     default:
 
                         return Json(false);
+                }
+
+                for (int i = 0; i < data.Count; i++) {
+
+                    await _service.Create<Equipment>(data[i]);
                 }
             }
             catch (Exception) {
@@ -143,23 +146,6 @@ namespace EquipmentManagementSystem.Controller {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Equipment equipment) {
-
-
-            // If Owner doesn't exists
-            if ((bool)equipment.IDCheck) {
-
-                return Json(false);
-            }
-
-
-            if (equipment.Owner.ID != -1) {
-
-                equipment.OwnerID = equipment.Owner.ID;
-                equipment.Owner = null;
-            }
-
-
-            //_service.context.Entry(equipment.Owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
 
             if (ModelState.IsValid) {
 

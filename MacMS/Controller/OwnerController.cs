@@ -256,7 +256,7 @@ namespace EquipmentManagementSystem.Controller {
                         }
 
                         // Used to import Macservice data
-                        migration.InsertMacServiceJson(new EquipmentHandler(repo.context), repo, file);
+                        //migration.InsertMacServiceJson(new EquipmentHandler(repo.context), repo, file);
                         break;
 
                     case "Backup":
@@ -265,7 +265,7 @@ namespace EquipmentManagementSystem.Controller {
                             throw new Exception("No appropriate file selected!");
                         }
 
-                        migration.InsertBackupJson(file, IsEquipment, new EquipmentHandler(repo.context), repo);
+                        //migration.InsertBackupJson(file, IsEquipment, new EquipmentHandler(repo.context), repo);
                         break;
 
                     case "Random":
