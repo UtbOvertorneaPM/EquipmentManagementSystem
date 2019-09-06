@@ -177,7 +177,7 @@
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Serial"]: </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial) @Html.ValidationMessage("Equipment.Serial", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Location"]: </p></td>

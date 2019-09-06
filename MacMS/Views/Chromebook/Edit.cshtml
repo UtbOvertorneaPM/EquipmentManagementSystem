@@ -16,9 +16,12 @@
 
     <script type="text/javascript">
 
-        $('document').ready(function () {
+            $('#Owner_FullName').autocomplete({
 
-            GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
+                source: '@Url.Action("AutoComplete", "Chromebook")'
+            });
+
+        $('document').ready(function () {
 
             var row = document.getElementById('AdditionalInformation');
             var td = document.createElement('td');
@@ -88,43 +91,6 @@
         });
 
 
-        $('#Owner_FullName').keyup(function() {
-
-            var nameInput = document.getElementById('Owner_FullName');
-
-            if (nameInput.value.length > 1) {
-                Search(nameInput, document.getElementById('ownerList'));
-
-                var bool = document.getElementById('IDCheck');
-                bool.value = nameInput.value.trim() ? true : false;
-            }
-
-        });
-
-
-        $(document).click(function () {
-
-            var list = document.getElementById("ownerList");
-            list.style.display = "none";
-        });
-
-
-        function ClickName(event) {
-
-            event.preventDefault();
-
-            var input = document.getElementById("Owner_FullName");
-            input.value = event.target.textContent;
-
-            var ownerID = document.getElementById("Owner_ID");
-            ownerID.value = event.target.id;
-
-            var list = document.getElementById("ownerList");
-            list.style.display = "none";
-
-            var bool = document.getElementById('IDCheck');
-            bool.value = false;
-        };
 
         function submitted() {
 
@@ -168,6 +134,21 @@
 
         };
 
+
+        function RequestCreateOwnerModal() {
+
+                $.get("@Url.Action("CreateModal", "Owner")").done(function (data2) {
+
+                    phElement.html(data2);
+                    phElement.find('.modal').modal('show');
+                });
+
+                var x = document.getElementById("modal-placeholder");
+                x.style.display = "block";
+        }
+
+
+
         // Prevents enter press from submitting form when in Serial editor, for barcode readers
         $("#Serial").keydown(function (e) { if (e.which == 13) e.preventDefault(); });
 
@@ -177,7 +158,7 @@
 
     <h2>@Localizer["Edit"]</h2>
 
-@using (Html.BeginForm("Edit", "Chromebook", FormMethod.Post, new { id = "form", @class = "postAjax" })) {
+@using (Html.BeginForm("Edit", "Chromebook", FormMethod.Post, new { id = "form" })) {
 
     @Html.AntiForgeryToken()
     <h3></h3>
@@ -194,7 +175,7 @@
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Serial"] </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial) @Html.ValidationMessage("Equipment.Serial", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Equip Type"] </p></td>
@@ -207,8 +188,10 @@
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["FullName"] </p></td>
                 <td>
-                    @Html.EditorFor(model => model.Owner.FullName)
-                    <ul class="DropDownContent" id="ownerList"></ul>
+                    <p class=" CategoryText">@Html.EditorFor(model => model.Owner.FullName)</p>                    
+                </td>
+                <td>
+                    <input type="button" onclick="RequestCreateOwnerModal()" value="Create new Owner" />
                 </td>
             </tr>
             <tr>
@@ -220,7 +203,8 @@
         <div class="ModalForm" id="modal-placeholder"></div>
     </div>
     <div class="SubmitDiv">
-        <input type="button" value="@Localizer["Edit"]" id="confirmButton" />
+        <!--<input type="button" value="@Localizer["Edit"]" id="confirmButton" />-->
+        <input type="submit" value="@Localizer["Edit"]"/>
         <input type="button" value="@Localizer["Back"]" onclick="location.href='@Url.Action("Index", "Chromebook")'" />
     </div>
 }

@@ -7,7 +7,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
     public static class DataIncludes {
 
-        public const string Owner = "Equipment.Owner";
-        public const string Equipment = "Owner.Equipment";
+        public const string Owner = "Owner";
+        public const string Equipment = "Equipment";
     }
 }

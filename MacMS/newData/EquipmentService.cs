@@ -12,10 +12,10 @@ namespace EquipmentManagementSystem.newData {
     public class EquipmentService<T> where T : Equipment {
 
         internal ManagementContext _context;
-        private IValidator<Equipment> _validator;
+        private IValidator _validator;
 
 
-        public EquipmentService(ManagementContext context, IValidator<Equipment> validator) {
+        public EquipmentService(ManagementContext context, IValidator validator) {
 
             _context = context;
             _validator = validator;
@@ -91,7 +91,7 @@ namespace EquipmentManagementSystem.newData {
 
         public async Task<bool> Update(T entity) {
 
-            if (await _validator.Validate(entity)) {
+            if (_validator.Validate(entity)) {
 
                 _context.Entry(entity).State = EntityState.Modified;
                 await _context.SaveChangesAsync();

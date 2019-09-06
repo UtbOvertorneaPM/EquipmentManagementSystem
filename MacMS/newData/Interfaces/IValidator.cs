@@ -3,9 +3,9 @@
 namespace EquipmentManagementSystem.newData.Validation {
 
 
-    public interface IValidator<T> where T : class {
+    public interface IValidator {
 
 
-        Task<bool> Validate(T entity);
+        bool Validate<T>(T entity) where T : class;
     }
 }

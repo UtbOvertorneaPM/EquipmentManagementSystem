@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EquipmentManagementSystem.Migrations
 {
     [DbContext(typeof(ManagementContext))]
-    [Migration("20190906061035_rewrite")]
-    partial class rewrite
+    [Migration("20190906080554_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

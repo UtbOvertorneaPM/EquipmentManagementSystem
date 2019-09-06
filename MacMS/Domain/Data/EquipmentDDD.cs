@@ -82,7 +82,7 @@ namespace EquipmentManagementSystem.Models {
 
             if (_owner != null) {
             
-                _owner = new Owner(firstName, lastName, mail);
+                _owner = new Owner(firstName, lastName);
             }
             else if (context == null) {
                 throw new ArgumentNullException(nameof(context),
@@ -91,7 +91,7 @@ namespace EquipmentManagementSystem.Models {
             else if (context.Entry(this).IsKeySet) {
 
                 throw new NotImplementedException();
-                context.Add(new Owner(firstName, lastName, mail, ID));
+                context.Add(new Owner(firstName, lastName, ID));
             }
         }
 

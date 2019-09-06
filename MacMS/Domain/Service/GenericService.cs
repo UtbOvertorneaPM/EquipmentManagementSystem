@@ -24,13 +24,12 @@ namespace EquipmentManagementSystem.Domain.Service {
         }
 
         public async Task<T> GetById<T>(int id) where T : class {
-
-            return await _context.Set<T>().FindAsync(id);
+            return await _context.Set<T>().FindAsync();
         }
 
-        public async Task<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class {
+        public IQueryable<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class {
 
-            return await _context.Set<T>().Where(predicate).FirstOrDefaultAsync();
+            return _context.Set<T>().Where(predicate);
         }
 
         public IQueryable<T> GetAll<T>() where T : class {

@@ -47,15 +47,15 @@
         <table>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["FirstName"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.FirstName)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.FirstName) @Html.ValidationMessage("FirstName", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["LastName"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.LastName)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.LastName) @Html.ValidationMessage("LastName", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Mail"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Mail)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Mail) @Html.ValidationMessage("Mail", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Address"]:  </p></td>

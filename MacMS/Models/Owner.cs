@@ -31,7 +31,7 @@ namespace EquipmentManagementSystem.Models {
         [Display(Name = "TelNr")]
         public string TelNr { get; set; }
 
-        [Required]
+        //[Required]
         [Display(Name = "Mail")]
         public string Mail { get; set; }
 
@@ -51,18 +51,17 @@ namespace EquipmentManagementSystem.Models {
         public DateTime Added { get; set; }
 
 
+
         private Owner() { }
 
-
-        public Owner(string firstName, string lastName, string mail) {
+        public Owner(string firstName, string lastName) {
 
             FirstName = firstName;
             LastName = lastName;
-            Mail = mail;
             LastEdited = DateTime.Now;
         }
 
-        public Owner(string firstName, string lastName, string mail, int eqpId) : this(firstName, lastName, mail) {
+        public Owner(string firstName, string lastName, int eqpId) : this(firstName, lastName) {
 
             //Equipment.Add(id);
             //throw new NotImplementedException();

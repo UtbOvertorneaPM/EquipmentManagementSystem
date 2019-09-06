@@ -25,7 +25,7 @@ namespace EquipmentManagementSystem.Data {
 
             if (include) {
 
-                return context.Set<Owner>().Where(o => o.ID == id).Include(o => o.Equipment).FirstOrDefault();
+                return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
             }
             return context.Set<Owner>().Where(o => o.ID == id).FirstOrDefault();
         }

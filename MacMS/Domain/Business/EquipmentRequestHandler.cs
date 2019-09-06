@@ -2,6 +2,7 @@
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
 using EquipmentManagementSystem.Models;
+using EquipmentManagementSystem.newData.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,17 +17,19 @@ namespace EquipmentManagementSystem.Domain.Business {
     public class EquipmentRequestHandler {
 
         private IGenericService _service;
+        private IValidator _validator;
 
-        public EquipmentRequestHandler(IGenericService service) {
+        public EquipmentRequestHandler(IGenericService service, IValidator validator) {
 
             _service = service;
+            _validator = validator;
         }
 
         public async Task<IEnumerable<T>> GetAll<T>() where T : class =>
             await _service.GetAll<T>().ToListAsync();
 
-        public async Task<IEnumerable<T>> Get<T>(Expression<Func<T, bool>> predicate) where T : class =>
-            await _service.Get(predicate).ToListAsync();
+        public IQueryable<T> Get<T>(Expression<Func<T, bool>> predicate) where T : class =>
+            _service.Get(predicate);
 
         public async Task<T> GetById<T>(int id) where T : class  =>
             await _service.GetById<T>(id);
@@ -38,11 +41,20 @@ namespace EquipmentManagementSystem.Domain.Business {
         public async Task Remove<T>(T equipment) where T : class =>
             await _service.Remove(equipment);
 
-        public async Task Update<T>(T equipment) where T : class =>    
-            await _service.Update(equipment);
+        public async Task<bool> Update<T>(T equipment) where T : class {
 
-        public async Task<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class =>
-            await _service.FirstOrDefault(predicate);
+            if (_validator.Validate(equipment)) {
+
+                await _service.Update(equipment);
+                return true;
+            }
+
+            return false;            
+        }   
+            
+
+        public IQueryable<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class =>
+            _service.FirstOrDefault(predicate);
 
 
 
@@ -77,6 +89,8 @@ namespace EquipmentManagementSystem.Domain.Business {
         }
 
 
+
+
         public async Task<PagedList<Equipment>> IndexRequest<T>(string sortVariable, string searchString, int page, int pageSize) where T : class {
 
             var pagedList = new PagedList<Equipment>();
@@ -88,7 +102,7 @@ namespace EquipmentManagementSystem.Domain.Business {
             // Search
             if (!string.IsNullOrEmpty(searchString)) {
 
-                query = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), searchString);
+                query = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>().AddIncludes(DataIncludes.Owner), searchString);
                 searched = true;
             }
 
@@ -101,7 +115,7 @@ namespace EquipmentManagementSystem.Domain.Business {
                 }
                 else {
 
-                    data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), sortVariable);
+                    data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>().AddIncludes(DataIncludes.Owner), sortVariable);
                 }
                 
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), await _service.Count<T>(), page, pageSize);
@@ -110,7 +124,7 @@ namespace EquipmentManagementSystem.Domain.Business {
             // Index request without modifiers
             else {
 
-                data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), "Date_desc");
+                data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>().AddIncludes(DataIncludes.Owner), "Date_desc");
                 pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), await _service.Count<T>(), page, pageSize);
             }
 

@@ -1,6 +1,7 @@
 ﻿using EquipmentManagementSystem.Data;
 using EquipmentManagementSystem.Data.Export;
 using EquipmentManagementSystem.Domain.Business;
+using EquipmentManagementSystem.Domain.Data;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
 using EquipmentManagementSystem.Models;
@@ -8,6 +9,8 @@ using EquipmentManagementSystem.newData;
 using EquipmentManagementSystem.newData.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
@@ -35,7 +38,7 @@ namespace EquipmentManagementSystem.Controller {
         public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-            _service = new EquipmentRequestHandler(new GenericService(ctx));
+            _service = new EquipmentRequestHandler(new GenericService(ctx), new EquipmentValidator());
 
         }
       
@@ -63,10 +66,10 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
-        public Task<IActionResult> Import(string source, IFormFile file, bool IsEquipment = true) {
+        public async Task<IActionResult> Import(string source, IFormFile file, bool IsEquipment = true) {
 
-            throw new NotImplementedException();
-            /*
+            //throw new NotImplementedException();
+            
             var migration = new DataMigrations();
             try {
                 switch (source) {
@@ -90,8 +93,12 @@ namespace EquipmentManagementSystem.Controller {
                         break;
 
                     case "Random":
+                        var data = migration.InsertRandomData();
 
-                        //migration.InsertRandomData(_service, new OwnerHandler(_service._context));
+                        for (int i = 0; i < data.Count; i++) {
+
+                            await _service.Create<Equipment>(data[i]);
+                        }
                         break;
 
                     default:
@@ -106,7 +113,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
             return Json(true);
-            */
+            
         }
 
         
@@ -171,7 +178,12 @@ namespace EquipmentManagementSystem.Controller {
         public async Task<IActionResult> Edit(int id) {
 
             ViewData["IDCheck"] = false;
-            return View(await _service.GetById<Equipment>(id));
+
+            return View(await _service
+                .FirstOrDefault<Equipment>(e => e.ID == id)
+                .AddIncludes(DataIncludes.Owner)
+                .FirstOrDefaultAsync()
+                );
         }
 
 
@@ -183,26 +195,19 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
 
-                // If Owner doesn't exists
-                if ((bool)equipment.IDCheck) {
-
-                    return Json(false);
-                }
-
-                // If Owner was chosen in dropdown
-                if (equipment.Owner.ID != -1) {
-                    equipment.OwnerID = equipment.Owner.ID;
-                    equipment.Owner = null;
-                }
-
                 equipment.LastEdited = DateTime.Now;
-                await _service.Update(equipment);
+                //equipment.Owner = await _service.GetById<Owner>(equipment.Owner.ID);
 
-                return Json(true);
+                if (await _service.Update(equipment) is false) {
+
+                    return View(equipment);
+                }
+
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception) {
+            catch (Exception e) {
 
-                throw;
+                return View(equipment);
             }
         }
 
@@ -239,7 +244,7 @@ namespace EquipmentManagementSystem.Controller {
 
                 for (int i = 0; i < serials.Count(); i++) {
 
-                    await _service.Remove(await _service.FirstOrDefault<Equipment>(e => e.Serial == serials[i]));
+                    await _service.Remove(await _service.FirstOrDefault<Equipment>(e => e.Serial == serials[i]).FirstOrDefaultAsync());
                 }
 
                 return Json(true);
@@ -251,9 +256,16 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
-        public async Task<JsonResult> GetOwnerList() {
 
-            return Json(await _service.GetAll<Owner>());
+        public async Task<ActionResult> AutoComplete(string term) {
+
+            if (!string.IsNullOrEmpty(term)) {
+
+                var data = await _service.Get<Owner>(o => o.FullName.Contains(term)).Select(e => e.FullName).ToListAsync();
+                return Json(data);
+            }
+
+            return null;
         }
         
 

@@ -18,8 +18,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace EquipmentManagementSystem.Controller {
 
 
-    public class OwnerController  { 
-            /*
+    public class OwnerController : BaseController  { 
+            
         OwnerHandler repo;
 
 
@@ -83,6 +83,7 @@ namespace EquipmentManagementSystem.Controller {
             }
 
             return PartialView(pagedList);
+            */
             
         }
 
@@ -269,7 +270,7 @@ namespace EquipmentManagementSystem.Controller {
 
                     case "Random":
 
-                        migration.InsertRandomData(new EquipmentHandler(repo.context), repo);
+                        //migration.InsertRandomData(new EquipmentHandler(repo.context), repo);
                         break;
 
                     default:
@@ -345,6 +346,6 @@ namespace EquipmentManagementSystem.Controller {
                 return Json(null);
             }
         }
-        */
+        
     }
 }

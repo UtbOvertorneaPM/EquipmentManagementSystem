@@ -106,11 +106,11 @@ namespace EquipmentManagementSystem {
             */
         }
 
-
-        public void InsertRandomData(EquipmentHandler equipRepo, OwnerHandler ownerRepo) {
+        
+        public List<Equipment> InsertRandomData() {
 
             throw new NotImplementedException();
-            /*
+           /*
             var usersToAdd = 500;
             var equipmentToAdd = 500;
 
@@ -149,30 +149,18 @@ namespace EquipmentManagementSystem {
                     .Select(s => s[random.Next(s.Length)]).ToArray())),
 
                     LastEdited = DateTime.Now,
-                    EquipType = Equipment.EquipmentType.Laptop
+                    EquipType = Equipment.EquipmentType.Laptop,
+                    Owner = owners[i]
                 };
 
                 equipment.Add(eqp);
             }
 
-            for (int i = 0; i < equipment.Count; i++) {
-
-                equipRepo.Insert(equipment[i], false);
-                if (i % 20 == 0) { equipRepo.Save(); }
-            }
-
-            equipRepo.Save();
-
-            for (int i = 0; i < owners.Count; i++) {
-
-                ownerRepo.Insert(owners[i], false);
-
-                if (i % 20 == 0) { ownerRepo.Save(); }
-            }
-
-            ownerRepo.Save();
+            return equipment;
             */
         }
+
+        
 
 
         private string GetFileAsJson(IFormFile file) {

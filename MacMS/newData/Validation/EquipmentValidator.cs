@@ -6,10 +6,20 @@ using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.newData.Validation {
 
-    public class EquipmentValidator : IValidator<Equipment> {
+    public class EquipmentValidator : IValidator {
 
-        public Task<bool> Validate(Equipment entity) {
-            throw new NotImplementedException();
+        public bool Validate<T>(T entity) where T : class {
+
+            var isValid = true;
+
+            if (entity is Equipment equipment) {
+
+                if (string.IsNullOrEmpty(equipment.Serial)) {
+                    isValid = false;
+                }
+            }
+
+            return isValid;
         }
     }
 }
