@@ -54,6 +54,11 @@ namespace EquipmentManagementSystem.Models {
         public Equipment() { }
 
 
+        public Equipment(string serial) {
+
+        }
+
+
         public new bool Equals(object x, object y) {
 
             if (x is Equipment && y is Equipment) {

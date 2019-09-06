@@ -68,8 +68,7 @@ namespace EquipmentManagementSystem.Migrations
                     b.Property<string>("LastName")
                         .IsRequired();
 
-                    b.Property<string>("Mail")
-                        .IsRequired();
+                    b.Property<string>("Mail");
 
                     b.Property<string>("SSN");
 

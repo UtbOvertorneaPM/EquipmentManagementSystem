@@ -188,10 +188,11 @@
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["FullName"] </p></td>
                 <td>
-                    <p class=" CategoryText">@Html.EditorFor(model => model.Owner.FullName)</p>                    
+                    <p class=" CategoryText">@Html.EditorFor(model => model.Owner.FullName)</p>   
+                    <input type="button" onclick="RequestCreateOwnerModal()" value="Create new Owner" />
                 </td>
                 <td>
-                    <input type="button" onclick="RequestCreateOwnerModal()" value="Create new Owner" />
+                    
                 </td>
             </tr>
             <tr>

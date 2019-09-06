@@ -109,8 +109,8 @@ namespace EquipmentManagementSystem {
         
         public List<Equipment> InsertRandomData() {
 
-            throw new NotImplementedException();
-           /*
+            //throw new NotImplementedException();
+           
             var usersToAdd = 500;
             var equipmentToAdd = 500;
 
@@ -130,7 +130,7 @@ namespace EquipmentManagementSystem {
 
                     LastName = new string(Enumerable.Repeat(chars, 10)
                     .Select(s => s[random.Next(s.Length)]).ToArray()),
-
+                    Added = DateTime.Now,
                     LastEdited = DateTime.Now
                 };
 
@@ -157,7 +157,7 @@ namespace EquipmentManagementSystem {
             }
 
             return equipment;
-            */
+            
         }
 
         

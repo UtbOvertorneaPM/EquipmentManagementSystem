@@ -261,8 +261,8 @@ namespace EquipmentManagementSystem.Controller {
 
             if (!string.IsNullOrEmpty(term)) {
 
-                var data = await _service.Get<Owner>(o => o.FullName.Contains(term)).Select(e => e.FullName).ToListAsync();
-                return Json(data);
+                var request = _service.GetAll<Owner>();
+                return Json(await request.Select(e => e.FullName).ToListAsync());
             }
 
             return null;

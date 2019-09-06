@@ -52,7 +52,7 @@ namespace EquipmentManagementSystem.Models {
 
 
 
-        private Owner() { }
+        public Owner() { }
 
         public Owner(string firstName, string lastName) {
 

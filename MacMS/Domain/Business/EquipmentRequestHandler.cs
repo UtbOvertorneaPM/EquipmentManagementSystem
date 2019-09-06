@@ -25,8 +25,8 @@ namespace EquipmentManagementSystem.Domain.Business {
             _validator = validator;
         }
 
-        public async Task<IEnumerable<T>> GetAll<T>() where T : class =>
-            await _service.GetAll<T>().ToListAsync();
+        public IQueryable<T> GetAll<T>() where T : class =>
+            _service.GetAll<T>();
 
         public IQueryable<T> Get<T>(Expression<Func<T, bool>> predicate) where T : class =>
             _service.Get(predicate);

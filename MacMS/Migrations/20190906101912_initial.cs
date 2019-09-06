@@ -19,7 +19,7 @@ namespace EquipmentManagementSystem.Migrations
                     SSN = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
                     TelNr = table.Column<string>(nullable: true),
-                    Mail = table.Column<string>(nullable: false),
+                    Mail = table.Column<string>(nullable: true),
                     Added = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -29,8 +29,7 @@ namespace EquipmentManagementSystem.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Equipment",
-                columns: table => new
-                {
+                columns: table => new {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     LastEdited = table.Column<DateTime>(nullable: false),
@@ -45,21 +44,10 @@ namespace EquipmentManagementSystem.Migrations
                     Ports = table.Column<int>(nullable: true),
                     Resolution = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Equipment", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Equipment_Owners_OwnerID",
-                        column: x => x.OwnerID,
-                        principalTable: "Owners",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Equipment_OwnerID",
-                table: "Equipment",
-                column: "OwnerID");
+                }
+                );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
