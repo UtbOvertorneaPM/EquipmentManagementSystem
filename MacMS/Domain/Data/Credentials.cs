@@ -1,5 +1,5 @@
 ﻿
-namespace EquipmentManagementSystem {
+namespace EquipmentManagementSystem.Business.Data {
 
     public class Rootobject {
         public Credentials Credentials { get; set; }

@@ -18,8 +18,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace EquipmentManagementSystem.Controller {
 
 
-    public class OwnerController : BaseController { 
-            
+    public class OwnerController  { 
+            /*
         OwnerHandler repo;
 
 
@@ -83,7 +83,7 @@ namespace EquipmentManagementSystem.Controller {
             }
 
             return PartialView(pagedList);
-            */
+            
         }
 
 
@@ -345,5 +345,6 @@ namespace EquipmentManagementSystem.Controller {
                 return Json(null);
             }
         }
+        */
     }
 }

@@ -15,8 +15,8 @@ using EquipmentManagementSystem.newData;
 namespace EquipmentManagementSystem.Controller {
 
 
-    public class HomeController : BaseController {
-
+    public class HomeController  {
+        /*
         EquipmentHandler repo;
         //EquipmentService _service;
 
@@ -83,7 +83,7 @@ namespace EquipmentManagementSystem.Controller {
             }
 
             return PartialView(pagedList);
-            */
+            
         }
 
 
@@ -276,6 +276,6 @@ namespace EquipmentManagementSystem.Controller {
             }
         }
 
-
+    */
     }
 }

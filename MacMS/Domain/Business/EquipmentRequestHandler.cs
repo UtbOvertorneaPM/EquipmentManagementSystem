@@ -13,32 +13,37 @@ using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Domain.Business {
 
-    public class EquipmentRequestHandler<T> where T : class {
+    public class EquipmentRequestHandler {
 
-        private IGenericService<Equipment> _service;
+        private IGenericService _service;
 
-        public EquipmentRequestHandler(IGenericService<Equipment> service) {
+        public EquipmentRequestHandler(IGenericService service) {
 
             _service = service;
         }
 
-        public async Task<IEnumerable<Equipment>> Get(Expression<Func<Equipment, bool>> predicate) =>
+        public async Task<IEnumerable<T>> GetAll<T>() where T : class =>
+            await _service.GetAll<T>().ToListAsync();
+
+        public async Task<IEnumerable<T>> Get<T>(Expression<Func<T, bool>> predicate) where T : class =>
             await _service.Get(predicate).ToListAsync();
 
-        public async Task<Equipment> GetById(int id) =>
-            await _service.GetById(id);
+        public async Task<T> GetById<T>(int id) where T : class  =>
+            await _service.GetById<T>(id);
 
-        public async Task Create(Equipment equipment) =>
-            await _service.Create(equipment);
+        public async Task Create<T>(T equipment) where T : class =>
+            await _service.Create<T>(equipment);
+            
 
-        public async Task Remove(Equipment equipment) =>
+        public async Task Remove<T>(T equipment) where T : class =>
             await _service.Remove(equipment);
 
-        public async Task Update(Equipment equipment) =>    
+        public async Task Update<T>(T equipment) where T : class =>    
             await _service.Update(equipment);
 
-        public async Task<Equipment> FirstOrDefault(Expression<Func<Equipment, bool>> predicate) =>
+        public async Task<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class =>
             await _service.FirstOrDefault(predicate);
+
 
 
         public async Task<FileStreamResult> Export(string searchString, string selection, ExportType exportType) {
@@ -48,10 +53,10 @@ namespace EquipmentManagementSystem.Domain.Business {
 
             if (string.IsNullOrEmpty(selection)) {
                 if (searchString == "Find model/date/owner...") {
-                    data = await _service.GetAll().AddIncludes(DataIncludes.Owner).ToListAsync();
+                    data = await _service.GetAll<Equipment>().AddIncludes(DataIncludes.Owner).ToListAsync();
                 }
                 else {
-                    data = await EquipmentDataFormatting.Search(_service.GetAll(), searchString);
+                    data = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), searchString);
                 }                
             }
             else {
@@ -60,7 +65,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
                 for (int i = 0; i < serials.Count(); i++) {
 
-                    data.Concat(_service.Get(x => x.Serial == serials[i]).AddIncludes(DataIncludes.Owner));
+                    data.Concat(_service.Get<Equipment>(x => x.Serial == serials[i]).AddIncludes(DataIncludes.Owner));
                 }
 
             }
@@ -72,7 +77,7 @@ namespace EquipmentManagementSystem.Domain.Business {
         }
 
 
-        public async Task<PagedList<Equipment>> IndexRequest(string sortVariable, string searchString, int page, int pageSize) {
+        public async Task<PagedList<Equipment>> IndexRequest<T>(string sortVariable, string searchString, int page, int pageSize) where T : class {
 
             var pagedList = new PagedList<Equipment>();
 
@@ -83,7 +88,7 @@ namespace EquipmentManagementSystem.Domain.Business {
             // Search
             if (!string.IsNullOrEmpty(searchString)) {
 
-                query = await EquipmentDataFormatting.Search(_service.GetAll(), searchString);
+                query = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), searchString);
                 searched = true;
             }
 
@@ -96,17 +101,17 @@ namespace EquipmentManagementSystem.Domain.Business {
                 }
                 else {
 
-                    data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll(), sortVariable);
+                    data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), sortVariable);
                 }
                 
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), await _service.Count(), page, pageSize);
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), await _service.Count<T>(), page, pageSize);
 
             }
             // Index request without modifiers
             else {
 
-                data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll(), "Date_desc");
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), await _service.Count(), page, pageSize);
+                data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), "Date_desc");
+                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), await _service.Count<T>(), page, pageSize);
             }
 
 

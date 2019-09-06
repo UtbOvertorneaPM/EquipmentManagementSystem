@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace EquipmentManagementSystem.Domain.Service {
 
 
-    public class GenericService<T> : IGenericService<T> where T : class {
+    public class GenericService : IGenericService {
 
 
         DbContext _context;
@@ -18,52 +18,53 @@ namespace EquipmentManagementSystem.Domain.Service {
             _context = context;
         }
 
-        public IQueryable<T> Get(Expression<Func<T, bool>> predicate) {
+        public IQueryable<T> Get<T>(Expression<Func<T, bool>> predicate) where T : class {
 
             return _context.Set<T>().Where(predicate);
         }
 
-        public async Task<T> GetById(int id) {
+        public async Task<T> GetById<T>(int id) where T : class {
 
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate) {
+        public async Task<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class {
 
             return await _context.Set<T>().Where(predicate).FirstOrDefaultAsync();
         }
 
-        public IQueryable<T> GetAll() {
+        public IQueryable<T> GetAll<T>() where T : class {
 
             return _context.Set<T>().AsQueryable();
         }
 
 
-        public async Task Create(T entity) {
+        public async Task Create<T>(T entity) where T : class {
 
             _context.Set<T>().Add(entity);
             await _context.SaveChangesAsync();
         }
 
 
-        public async Task Update(T entity) {
+        public async Task Update<T>(T entity) where T : class {
 
             _context.Update(entity);
             await _context.SaveChangesAsync();
         }
 
 
-        public async Task Remove(T entity) {
+        public async Task Remove<T>(T entity) where T : class {
 
             _context.Remove(entity);
             await _context.SaveChangesAsync();
         }
 
         
-        public async Task<int> Count() {
+        public async Task<int> Count<T>() where T : class {
 
             return await _context.Set<T>().CountAsync();
         }
+
     }
 
 

@@ -51,6 +51,9 @@ namespace EquipmentManagementSystem.Models {
         public DateTime Added { get; set; }
 
 
+        private Owner() { }
+
+
         public Owner(string firstName, string lastName, string mail) {
 
             FirstName = firstName;

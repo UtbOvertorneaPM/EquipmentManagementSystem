@@ -17,18 +17,28 @@ using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Controller {
 
-    public class ChromebookController : BaseController, IController<Equipment> {
 
-        private EquipmentRequestHandler<Equipment> _service;
+
+    public class ChromebookController : BaseController { //Microsoft.AspNetCore.Mvc.Controller { //, IController<Equipment> {
+
+        private EquipmentRequestHandler _service;
         private int pageSize = 25;
 
+        /*
+        public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
+
+            ctx.Database.EnsureCreated();
+            _service = new EquipmentRequestHandler<T>(new GenericService(ctx));
+        }
+        */
 
         public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-            _service = new EquipmentRequestHandler<Equipment>(new GenericService<Equipment>(ctx));
-        }
+            _service = new EquipmentRequestHandler(new GenericService(ctx));
 
+        }
+      
 
         /// <summary>
         /// JQuery Table update route
@@ -49,7 +59,7 @@ namespace EquipmentManagementSystem.Controller {
             SetCultureCookie(culture, Response);
             SetLanguage(culture);
 
-            return PartialView(await _service.IndexRequest(sortVariable, searchString, page, pageSize));
+            return PartialView(await _service.IndexRequest<Equipment>(sortVariable, searchString, page, pageSize));
         }
 
 
@@ -99,7 +109,7 @@ namespace EquipmentManagementSystem.Controller {
             */
         }
 
-
+        
         /// <summary>
         /// Exports current table data
         /// </summary>
@@ -161,7 +171,7 @@ namespace EquipmentManagementSystem.Controller {
         public async Task<IActionResult> Edit(int id) {
 
             ViewData["IDCheck"] = false;
-            return View(await _service.GetById(id));
+            return View(await _service.GetById<Equipment>(id));
         }
 
 
@@ -200,7 +210,7 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Home/Delete/5
         public async Task<IActionResult> Delete(int id) {
 
-            return View(await _service.GetById(id));
+            return View(await _service.GetById<Equipment>(id));
         }
 
 
@@ -229,7 +239,7 @@ namespace EquipmentManagementSystem.Controller {
 
                 for (int i = 0; i < serials.Count(); i++) {
 
-                    await _service.Remove(await _service.FirstOrDefault(e => e.Serial == serials[i]));
+                    await _service.Remove(await _service.FirstOrDefault<Equipment>(e => e.Serial == serials[i]));
                 }
 
                 return Json(true);
@@ -239,6 +249,13 @@ namespace EquipmentManagementSystem.Controller {
                 return Json(null);
             }
         }
+
+
+        public async Task<JsonResult> GetOwnerList() {
+
+            return Json(await _service.GetAll<Owner>());
+        }
+        
 
     }
 }

@@ -4,12 +4,9 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+
 
   <ItemGroup>
-    <Content Remove="Production\web.config" />
     <Content Remove="wwwroot\js\Search.js" />
   </ItemGroup>
 
@@ -22,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Production\web.config" />
     <None Include="wwwroot\css\CRUD.css">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -39,9 +35,6 @@
     </Content>
     <Content Update="prodSettings.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\css\CRUD.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -75,8 +68,5 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="ReplaceConfig" AfterTargets="Publish">
-    <Copy SourceFiles="$(SolutionDir)MacMS\Production\web.config" DestinationFiles="$(PublishDir)web.config" OverwriteReadOnlyFiles="true" />
-  </Target>
   
 </Project>

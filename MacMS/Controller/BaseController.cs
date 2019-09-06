@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace EquipmentManagementSystem.Controller {
 
 
-    [Authorize("Administrators")]
+    //[Authorize("Administrators")]
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller, IDisposable {
 
 
@@ -70,7 +70,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="culture"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
+        public virtual IActionResult Index(string sortVariable, string searchString, string culture, int page = 0) {
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;

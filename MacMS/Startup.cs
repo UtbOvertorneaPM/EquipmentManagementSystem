@@ -20,7 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
-
+using EquipmentManagementSystem.Business.Data;
 
 namespace EquipmentManagementSystem {
 
@@ -68,7 +68,7 @@ namespace EquipmentManagementSystem {
 #endif
 
             roles = roles.Replace("\\", @"\");
-
+            /*
             services.AddAuthorization(options => {
                 options.AddPolicy("Administrators", policy => {
                     policy.Requirements.Add(new RoleRequirement(roles.Split(" ")));
@@ -77,7 +77,7 @@ namespace EquipmentManagementSystem {
             });
 
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
-
+            */
             // Sets Localization to use SharedResource.sv-SE.resx
             services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
 
@@ -134,14 +134,14 @@ namespace EquipmentManagementSystem {
 
             app.UseStaticFiles();
             app.UseRequestLocalization();
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
 
             app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Chromebook}/{action=Index}/{id?}");
             });
         }
 
