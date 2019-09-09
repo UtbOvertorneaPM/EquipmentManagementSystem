@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using EquipmentManagementSystem.Data;
 using Newtonsoft.Json;
 
-namespace EquipmentManagementSystem.Models {
+namespace EquipmentManagementSystem.Domain.Data.Models {
 
 
     public class Equipment : IEqualityComparer {

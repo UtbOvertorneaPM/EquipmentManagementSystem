@@ -1,5 +1,7 @@
 ﻿using EquipmentManagementSystem.Data;
 using EquipmentManagementSystem.Domain.Data;
+using EquipmentManagementSystem.Domain.Data.DbAccess;
+using EquipmentManagementSystem.Domain.Data.Models;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
 using EquipmentManagementSystem.Models;
@@ -12,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static EquipmentManagementSystem.Models.Equipment;
+using static EquipmentManagementSystem.Domain.Data.Models.Equipment;
 
 namespace EquipmentManagementSystem.Domain.Business {
 

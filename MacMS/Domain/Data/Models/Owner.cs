@@ -10,10 +10,17 @@ using EquipmentManagementSystem.Data;
 using System.Collections;
 using EquipmentManagementSystem.Domain.Data;
 
-namespace EquipmentManagementSystem.Models {
+namespace EquipmentManagementSystem.Domain.Data.Models {
 
-    
-    public class Owner : Entity, IEqualityComparer, IEquatable<Owner> {
+
+    public class Owner : IEqualityComparer, IEquatable<Owner> {
+
+
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime LastEdited { get; set; }
 
         [Required]
         [Display(Name = "FirstName")]

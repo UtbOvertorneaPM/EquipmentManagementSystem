@@ -22,7 +22,6 @@ namespace EquipmentManagementSystem {
 
         public async Task ImportMacServiceJson(EquipmentRequestHandler service, IFormFile file) {
 
-            List<Mac> macs = new List<Mac>();
             List<Equipment> equip = new List<Equipment>();
             var owners = new List<Owner>();
             var dateToday = DateTime.Now;

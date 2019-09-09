@@ -1,11 +1,12 @@
-﻿using EquipmentManagementSystem.Models;
+﻿using EquipmentManagementSystem.Domain.Data.Models;
+using EquipmentManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EquipmentManagementSystem.Domain.Business {
+namespace EquipmentManagementSystem.Domain.Data.DbAccess {
 
     public static class EquipmentDataFormatting {
 

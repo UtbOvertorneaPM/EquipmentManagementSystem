@@ -15,6 +15,8 @@ using EquipmentManagementSystem.newData.Validation;
 using EquipmentManagementSystem.Domain.Data;
 using EquipmentManagementSystem.Domain.Service.Export;
 using Microsoft.EntityFrameworkCore;
+using EquipmentManagementSystem.Domain.Data.DbAccess;
+using EquipmentManagementSystem.Domain.Data.Models;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -157,9 +159,9 @@ namespace EquipmentManagementSystem.Controller {
         public async Task<IActionResult> Edit(int id) {
 
             ViewData["IDCheck"] = false;
-            var viewModel = new EquipmentViewModel();
-
-            viewModel.Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync();
+            var viewModel = new EquipmentViewModel {
+                Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync()
+            };
 
             if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
 
@@ -190,9 +192,9 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Home/Delete/5
         public async Task<IActionResult> Delete(int id) {
 
-            var viewModel = new EquipmentViewModel();
-
-            viewModel.Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync();
+            var viewModel = new EquipmentViewModel {
+                Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync()
+            };
 
             if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
 

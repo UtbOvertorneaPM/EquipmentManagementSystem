@@ -1,6 +1,6 @@
 ﻿using EquipmentManagementSystem.Domain.Business;
+using EquipmentManagementSystem.Domain.Data.Models;
 using EquipmentManagementSystem.Domain.Service;
-using EquipmentManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
