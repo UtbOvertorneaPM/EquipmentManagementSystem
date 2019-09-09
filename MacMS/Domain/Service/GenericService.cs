@@ -55,6 +55,11 @@ namespace EquipmentManagementSystem.Domain.Service {
         }
 
         
+        public async Task<int> Count<T>(Expression<Func<T, bool>> predicate = null) where T : class {
+
+            return await _context.Set<T>().Where(predicate).CountAsync();
+        }
+
         public async Task<int> Count<T>() where T : class {
 
             return await _context.Set<T>().CountAsync();

@@ -22,7 +22,7 @@ namespace EquipmentManagementSystem.Controller {
 
 
 
-    public class ChromebookController : BaseController { //Microsoft.AspNetCore.Mvc.Controller { //, IController<Equipment> {
+    public class ChromebookController : BaseController {
 
         private EquipmentRequestHandler _service;
         private int pageSize = 25;
@@ -53,7 +53,15 @@ namespace EquipmentManagementSystem.Controller {
             SetCultureCookie(culture, Response);
             SetLanguage(culture);
 
-            return PartialView(await _service.IndexRequest<EquipmentViewModel>(sortVariable, searchString, page, pageSize));
+            if (searchString == "Find model / date / owner...") {
+
+                searchString = "EquipType:Chromebook";
+            }
+            else {
+                searchString += "EquipType: Chromebook";
+            }
+
+            return PartialView(await _service.IndexRequest<EquipmentViewModel>(sortVariable, searchString, page, pageSize, "Chromebook"));
         }
 
 

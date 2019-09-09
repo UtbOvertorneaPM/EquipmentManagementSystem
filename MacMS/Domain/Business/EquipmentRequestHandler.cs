@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using static EquipmentManagementSystem.Models.Equipment;
 
 namespace EquipmentManagementSystem.Domain.Business {
 
@@ -115,10 +116,22 @@ namespace EquipmentManagementSystem.Domain.Business {
 
 
 
-        public async Task<PagedList<EquipmentViewModel>> IndexRequest<T>(string sortVariable, string searchString, int page, int pageSize) where T : class {
+        public async Task<PagedList<EquipmentViewModel>> IndexRequest<T>(string sortVariable, string searchString, int page, int pageSize, string type = null) where T : class {
 
             var pagedList = new PagedList<EquipmentViewModel>();
             var list = new List<EquipmentViewModel>();
+            int count;
+
+            if (string.IsNullOrEmpty(type) is false) {
+
+                Enum.TryParse(type, out EquipmentType choiceType);
+                count = await _service.Count<Equipment>(x => x.EquipType == choiceType);
+            }
+            else {
+
+                count = await _service.Count<Equipment>();
+            }
+            
 
             var data = Enumerable.Empty<Equipment>();
             var query = Enumerable.Empty<Equipment>();
@@ -148,7 +161,7 @@ namespace EquipmentManagementSystem.Domain.Business {
                     list.Add(new EquipmentViewModel() { Equipment = item });
                 }
 
-                pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), await _service.Count<Equipment>(), page, pageSize);
+                pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), count, page, pageSize);
             }
             // Index request without modifiers
             else {
@@ -160,7 +173,7 @@ namespace EquipmentManagementSystem.Domain.Business {
                     list.Add(new EquipmentViewModel() { Equipment = item });
                 }
 
-                pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), await _service.Count<Equipment>(), page, pageSize);
+                pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), count, page, pageSize);
             }
 
             return pagedList;

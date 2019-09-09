@@ -7,25 +7,28 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using EquipmentManagementSystem.Models;
-using EquipmentManagementSystem.Data;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
-using EquipmentManagementSystem.newData;
+using EquipmentManagementSystem.Domain.Business;
+using EquipmentManagementSystem.Domain.Service;
+using EquipmentManagementSystem.newData.Validation;
+using EquipmentManagementSystem.Domain.Data;
+using EquipmentManagementSystem.Domain.Service.Export;
+using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentManagementSystem.Controller {
 
 
-    public class HomeController  {
-        /*
-        EquipmentHandler repo;
-        //EquipmentService _service;
+    public class HomeController : BaseController {
 
+        private EquipmentRequestHandler _service;
+        private int pageSize = 25;
 
         public HomeController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-            //_service = new EquipmentService(ctx, new EquimentValidator());
-            repo = new EquipmentHandler(ctx);
+            _service = new EquipmentRequestHandler(new GenericService(ctx), new EquipmentValidator());
+
         }
 
 
@@ -37,57 +40,23 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="culture"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
+        public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-            throw new NotImplementedException();
-            /*
-            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
+            sortVariable = sortVariable == "Date_desc" ? "Date" : "Date_desc";
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
 
             SetSearchString(ref searchString);
-
             SetCultureCookie(culture, Response);
-
             SetLanguage(culture);
 
-            var data = Enumerable.Empty<Equipment>();
-            var pageSize = repo.PageSize;
-
-            var pagedList = new PagedList<Equipment>();
-
-            // Search then sort
-            if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
-
-                data = repo.SearchSort(searchString, sortVariable);
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
-            }
-            // Search
-            else if (!string.IsNullOrEmpty(searchString)) {
-
-                data = repo.Search(searchString);
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
-            }
-            // Sort
-            else if (!string.IsNullOrEmpty(sortVariable)) {
-
-                data = repo.Sort(repo.GetAll(), sortVariable);
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
-
-            }
-            // Index request without modifiers
-            else {
-
-                data = repo.Sort(repo.GetAll(), "Date_desc");
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
-            }
-
-            return PartialView(pagedList);
-            
+            return PartialView(await _service.IndexRequest<EquipmentViewModel>(sortVariable, searchString, page, pageSize));
         }
 
 
-        public IActionResult Import(string source, IFormFile file, bool IsEquipment = true) {
+        public async Task<IActionResult> Import(string source, IFormFile file, bool IsEquipment = true) {
+
+            var data = new List<Equipment>();
 
             var migration = new DataMigrations();
             try {
@@ -99,26 +68,34 @@ namespace EquipmentManagementSystem.Controller {
                         }
 
                         // Used to import Macservice data
-                        migration.InsertMacServiceJson(repo, new OwnerHandler(repo.context), file);
+                        await migration.ImportMacServiceJson(_service, file);
                         break;
 
                     case "Backup":
 
+                        //Restore from .json Export
                         if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
                             throw new Exception("No appropriate file selected!");
                         }
 
-                        migration.InsertBackupJson(file, IsEquipment, repo, new OwnerHandler(repo.context));
+                        data = (await migration.InsertBackupJson<Equipment>(file, IsEquipment)).ToList();
                         break;
 
                     case "Random":
 
-                        migration.InsertRandomData(repo, new OwnerHandler(repo.context));
-                        break;
+                        //Random for testing
+                        await migration.InsertRandomData(_service);
+
+                        return Json(true);
 
                     default:
 
                         return Json(false);
+                }
+
+                for (int i = 0; i < data.Count; i++) {
+
+                    await _service.Create<Equipment>(data[i]);
                 }
             }
             catch (Exception) {
@@ -126,8 +103,9 @@ namespace EquipmentManagementSystem.Controller {
                 throw;
             }
 
-            
+
             return Json(true);
+
         }
 
 
@@ -141,134 +119,115 @@ namespace EquipmentManagementSystem.Controller {
         [HttpGet]
         public async Task<IActionResult> Export(string exportType, string searchString, string selection = null) {
 
-            throw new NotImplementedException();
-            //var handler = new ExportHandler();
-            //var file = await handler.Export(repo.context, typeof(Equipment), searchString, exportType, selection);
-            //var stream = new MemoryStream(file.Data);
-            //stream.Position = 0;
-
-            //return File(stream, file.ContentType, file.FileName);
+            Enum.TryParse(exportType, out ExportType exportTypes);
+            return await _service.Export(searchString, selection, exportTypes);
         }
 
 
         // GET: Home/Create
         public IActionResult Create() {
-            
-            return View(new Equipment());
+
+            return View(new EquipmentViewModel());
         }
 
 
         // POST: Home/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Equipment equipment) {
+        public async Task<IActionResult> Create(EquipmentViewModel viewModel) {
 
+            viewModel.Equipment.LastEdited = DateTime.Now;
 
-            // If Owner doesn't exists
-            if ((bool)equipment.IDCheck) {
+            if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
 
-                return Json(false);
+                await viewModel.AddOwner(_service, viewModel.Equipment.OwnerName);
             }
 
+            if (await _service.Create(viewModel.Equipment) is false) {
 
-            if (equipment.Owner.ID != -1) {
-                equipment.OwnerID = equipment.Owner.ID;
-                equipment.Owner = null;
+                return View(viewModel);
             }
 
-
-            //repo.context.Entry(equipment.Owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-
-            if (ModelState.IsValid) {
-
-                equipment.LastEdited = DateTime.Now;
-                //repo.Insert(equipment);
-
-                return Json(true);
-            }
-
-            return Json(false);
+            return RedirectToAction(nameof(Index));
         }
 
 
         // GET: Home/Edit/5
         [HttpGet]
-        public IActionResult Edit(int id) {
+        public async Task<IActionResult> Edit(int id) {
 
             ViewData["IDCheck"] = false;
-            return View(repo.Get(id));
-        }   
+            var viewModel = new EquipmentViewModel();
+
+            viewModel.Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
+
+                await viewModel.AddOwner(_service, viewModel.Equipment.OwnerName);
+            }
+
+            return View(viewModel);
+        }
 
 
         // POST: Home/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         //public IActionResult Edit(Equipment equipment) {
-        public async Task<IActionResult> Edit(Equipment equipment) {
+        public async Task<IActionResult> Edit(EquipmentViewModel viewModel) {
 
-            try {
+            viewModel.Equipment.LastEdited = DateTime.Now;
 
-                // If Owner doesn't exists
-                if ((bool)equipment.IDCheck) {
+            if (await _service.Update(viewModel.Equipment) is false) {
 
-                    return Json(false);
-                }
-
-                // If Owner was chosen in dropdown
-                if (equipment.Owner.ID != -1) {
-                    equipment.OwnerID = equipment.Owner.ID;
-                    equipment.Owner = null;
-                }
-
-                equipment.LastEdited = DateTime.Now;
-                //repo.Update(equipment);
-
-                return Json(true);
+                return View(viewModel.Equipment);
             }
-            catch(Exception) {
 
-                throw;
-            }
+            return RedirectToAction(nameof(Index));
         }
 
 
         // GET: Home/Delete/5
-        public IActionResult Delete(int id) {
+        public async Task<IActionResult> Delete(int id) {
 
-            return View(repo.Get(id));
+            var viewModel = new EquipmentViewModel();
+
+            viewModel.Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
+
+                await viewModel.AddOwner(_service, viewModel.Equipment.OwnerName);
+            }
+
+            return View(viewModel);
         }
 
 
         // POST: Home/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection) {
+        public async Task<IActionResult> Delete(EquipmentViewModel viewModel) {
 
             try {
 
-                //repo.Delete<Equipment>(id);                
-                return Json(true);
+                await _service.Remove(viewModel.Equipment);
+
+                return RedirectToAction(nameof(Index));
             }
             catch {
 
-                return Json(null);
+                return View(viewModel);
             }
         }
 
 
         [HttpPost]
-        public IActionResult DeleteSelection(string serial) {
+        public async Task<IActionResult> DeleteSelection(string serial) {
 
             try {
-                var serials = serial.Trim().Replace("\n", " ").Split(" ");
 
-                for (int i = 0; i < serials.Count(); i++) {
-
-                    var id = repo.context.Set<Equipment>().FirstOrDefault(e => serials[i] == e.Serial).ID;
-                    //repo.Delete<Equipment>(id);
-                }
-
-                return Json(true);
+                await _service.DeleteSelection(serial);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception) {
 
@@ -276,6 +235,18 @@ namespace EquipmentManagementSystem.Controller {
             }
         }
 
-    */
+
+
+        public async Task<ActionResult> AutoComplete(string term) {
+
+            if (!string.IsNullOrEmpty(term)) {
+
+                var request = _service.GetAll<Owner>();
+                var data = await request.Select(e => e.FullName).ToListAsync();
+                return Json(data);
+            }
+
+            return null;
+        }
     }
 }

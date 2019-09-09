@@ -1,0 +1,82 @@
+﻿@model EquipmentManagementSystem.Domain.Data.EquipmentViewModel
+
+@using EquipmentManagementSystem
+
+@using EquipmentManagementSystem.Data
+@inject Localizer Localizer
+
+@{
+    ViewData["Title"] = "Delete";
+
+}
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        function submit(e) {
+
+            var dialog = document.getElementById("confirmDialog");
+            dialog.title = "Delete Equipment";
+            ConfirmClick(e, Delete);
+        };
+
+        function Delete() {
+
+            var form = $('#form');
+            form.submit;
+
+        }
+
+        function callBack(success) {
+
+            if (success) {
+
+                window.location = "@Url.Action("Index")";
+            }
+        };
+
+    </script>
+}
+
+<h2>Delete</h2>
+
+@using (Html.BeginForm("Delete", "Home", FormMethod.Post, new { id = "form" })) {
+    @Html.AntiForgeryToken()
+    <h3></h3>
+    <div>
+        <div>
+            @Html.HiddenFor(model => model.Equipment.ID)
+            @Html.HiddenFor(model => model.Equipment.Serial)
+        </div>
+        <table>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Model"]:  </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.Model)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Serial"]: </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.Serial)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Location"]: </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.Location)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Owner"]: </p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.OwnerName)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Notes"]: </p></td>
+                <td>@Html.DisplayFor(model => model.Equipment.Notes, new { @class = "NotesField" })</td>
+            </tr>
+        </table>
+    </div>
+    <div id="additionalInformation"></div>
+    <div class="SubmitDiv">
+        @Html.HiddenFor(model => model.Equipment.ID)
+        <!--<input type="button" value="Delete" onclick="submit()"/>-->
+        <input type="submit" value="@Localizer["Delete"]" />
+        <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Home")'" />
+    </div>
+}

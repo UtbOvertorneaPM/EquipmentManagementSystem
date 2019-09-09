@@ -9,6 +9,7 @@ namespace EquipmentManagementSystem.Domain.Service {
     public interface IGenericService {
 
         Task<int> Count<T>() where T : class;
+        Task<int> Count<T>(Expression<Func<T, bool>> predicate) where T : class;
         Task Create<T>(T entity) where T : class;
         IQueryable<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class;
         IQueryable<T> Get<T>(Expression<Func<T, bool>> predicate) where T : class;
