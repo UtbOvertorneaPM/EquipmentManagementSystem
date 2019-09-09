@@ -121,6 +121,7 @@
             $.get(tableView,
                 function (data) {
                     var partial = document.getElementById('partialTable');
+                    
                     partial.innerHTML = data;
                     ReloadTable();
                 }

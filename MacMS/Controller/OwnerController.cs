@@ -188,7 +188,10 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
 
-                await _service.Remove(viewModel.Owner);
+                if (await _service.Remove(viewModel.Owner) is false) {
+
+                    return View(viewModel);
+                }                
 
                 return RedirectToAction(nameof(Index));
             }

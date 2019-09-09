@@ -1,6 +1,7 @@
-﻿@using EquipmentManagementSystem.Domain.Data.Models
+﻿@using EquipmentManagementSystem.Domain.Data
+@using EquipmentManagementSystem.Domain.Data.Models
 @using EquipmentManagementSystem.Domain.Service
-@model PagedList<Owner>
+@model PagedList<OwnerViewModel>
 @inject Localizer Localizer
 
 @{
@@ -15,6 +16,12 @@
 
 
         $('document').ready(function () {
+
+            ReloadTable();
+        });
+
+
+        function ReloadTable() {
 
             var curPage = @Model.Page == -1 ? 0 : @Model.Page;
 
@@ -71,7 +78,7 @@
                 }
 
             }
-        });
+        };
 
         $('a.sortLink').click(function (e) {
 
@@ -189,21 +196,20 @@
     </script>
 }
 
+@if (@Model.TotalPages > 1) {
+
+    <p>Displaying: @Model.PageEntries - @Model.PageEnd of @Model.TotalEntries entries</p>
+
+    <div style="float:left" id="pageList">
+        <div style="float:left" id="startList"></div>
+        <div style="float:left" id="curList"></div>
+        <div style="float:left" id="endList"></div>
+    </div>
+}
+
 <table class="ownerTable NoPaddingMargin" id="table">
     <thead>
-        <tr id="pageListRow">
-
-            @if (@Model.TotalPages > 1) {
-
-            <p>Displaying: @Model.PageEntries - @Model.PageEnd of @Model.TotalEntries entries</p>
-
-                <div style="float:left" id="pageList">
-                    <div style="float:left" id="startList"></div>
-                    <div style="float:left" id="curList"></div>
-                    <div style="float:left" id="endList"></div>
-                </div>
-            }
-        </tr>
+        <tr id="pageListRow"></tr>
         <tr id="selectionRow">
             <th id="selectionButtons" style="display:none">
                 Selection
@@ -214,13 +220,13 @@
         </tr>
         <tr>
             <th>
-                <a href="#" class="sortLink" id="Created">
+                <a href="" class="sortLink" id="Created">
                     @Localizer["Created Date"]
                 </a>
             </th>
             <th>
-                <a href="#" class="sortLink" id="Date">
-                    @Localizer["Date"]
+                <a href="" class="sortLink" id="Date">
+                    @Localizer["Last Edited"]
                 </a>
             </th>
             <th>
@@ -240,29 +246,29 @@
         </tr>
     </thead>
     @foreach (var item in Model) {
-    <tr id="toprow" class="ParentRow">
-        <td>
-            @Html.DisplayFor(modelItem => item.Added)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastEdited)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Mail)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address)
-        </td>
-        <td class="Actions">
-            @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
-            @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
-        </td>
-    </tr>
+        <tr id="toprow" class="ParentRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.Added)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.LastEdited)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.Mail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.Address)
+            </td>
+            <td class="Actions">
+                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.Owner.ID, culture = ViewData["Language"] }) |
+                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.Owner.ID, culture = ViewData["Language"] })
+            </td>
+        </tr>
     }
 </table>

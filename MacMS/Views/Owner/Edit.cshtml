@@ -53,7 +53,11 @@
 
 @using (Html.BeginForm("Edit", "Owner", FormMethod.Post, new { id = "form" })) {
     @Html.AntiForgeryToken()
-
+    @Html.HiddenFor(model => model.Equipment)
+    @Html.HiddenFor(model => model.Owner.ID)
+    @Html.HiddenFor(model => model.Owner.FirstName)
+    @Html.HiddenFor(model => model.Owner.LastName)
+    @Html.HiddenFor(model => model.Owner.SSN)
     <div>
         <table>
             <tr>
@@ -95,7 +99,7 @@
                         @foreach (var item in Model.Equipment) {
                             <li>
                                 <p class="CategoryText">@item.Serial</p>
-                                <p class="CategoryText">@item.Model)</p>
+                                <p class="CategoryText">@item.Model</p>
                             </li>
                         }
                     </ul>
@@ -105,7 +109,7 @@
     </div>
 
     <div class="SubmitDiv">
-        <input type="button" value="@Localizer["Edit"]" id="confirmButton" />
+        <input type="submit" value="@Localizer["Edit"]" />
         <input type="button" value="@Localizer["Back"]" onclick="history.go(-1); return false;" />
     </div>
 }
