@@ -11,7 +11,8 @@ $("table").click(function (event) {
 
         event.stopPropagation();
 
-        var $start = $(event.target);
+        if (event.ctrlKey == false) {
+            var $start = $(event.target);
 
             var $target = $(event.target).closest('tr').next('tr');
 
@@ -28,6 +29,8 @@ $("table").click(function (event) {
                     $target.slideToggle("fast");
                 }
             }
+        }
+
         
     }
 

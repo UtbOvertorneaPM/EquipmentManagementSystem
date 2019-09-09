@@ -233,14 +233,21 @@ namespace EquipmentManagementSystem.Controller {
         public async Task<IActionResult> DeleteSelection(string serial) {
 
             try {
+
+                var minSerialLength = 5;
+
                 var serials = serial.Trim().Replace("\n", " ").Split(" ");
+                serials = serials.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length > minSerialLength).Distinct().ToArray();
 
                 for (int i = 0; i < serials.Count(); i++) {
 
-                    await _service.Remove(await _service.FirstOrDefault<Equipment>(e => e.Serial == serials[i]).FirstOrDefaultAsync());
+                    if (string.IsNullOrWhiteSpace(serials[i]) is false) {
+
+                        await _service.Remove(await _service.FirstOrDefault<Equipment>(e => e.Serial == serials[i]).FirstOrDefaultAsync());
+                    }                    
                 }
 
-                return Json(true);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception) {
 

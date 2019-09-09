@@ -65,10 +65,13 @@ namespace EquipmentManagementSystem.Domain.Business {
             var data = Enumerable.Empty<Equipment>();
 
             if (string.IsNullOrEmpty(selection)) {
+
                 if (searchString == "Find model/date/owner...") {
+
                     data = await _service.GetAll<Equipment>().ToListAsync();
                 }
                 else {
+
                     data = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), searchString);
                 }                
             }
@@ -83,10 +86,8 @@ namespace EquipmentManagementSystem.Domain.Business {
 
             }
 
-
             file = await new ExportService<Equipment>().Export(data, exportType);
             return new FileStreamResult(new MemoryStream(file.Data), file.ContentType) { FileDownloadName = file.FileName };
-
         }
 
 
@@ -120,14 +121,12 @@ namespace EquipmentManagementSystem.Domain.Business {
                     data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), sortVariable);
                 }
 
-
                 foreach (var item in data) {
 
                     list.Add(new EquipmentViewModel() { Equipment = item });
                 }
 
                 pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), await _service.Count<Equipment>(), page, pageSize);
-
             }
             // Index request without modifiers
             else {
@@ -141,7 +140,6 @@ namespace EquipmentManagementSystem.Domain.Business {
 
                 pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), await _service.Count<Equipment>(), page, pageSize);
             }
-
 
             return pagedList;
         }
