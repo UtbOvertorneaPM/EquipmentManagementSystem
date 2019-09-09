@@ -16,7 +16,12 @@
 
         $('document').ready(function () {
 
-            GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
+            //GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
+
+            $('#Equipment_OwnerName').autocomplete({
+
+                source: '@Url.Action("AutoComplete", "Chromebook")'
+            });
 
             var nameInput = document.getElementById('Equipment_OwnerName');
 
@@ -181,8 +186,8 @@
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Owner"]: </p></td>
                 <td>
-                    <p class=" CategoryText">@Html.EditorFor(model => model.Owner.FullName)</p>
-                    <ul class="DropDownContent" id="ownerList"></ul>
+                    <p class=" CategoryText">@Html.EditorFor(model => model.Equipment.OwnerName)</p>
+                    <input type="button" onclick="RequestCreateOwnerModal()" value="Create new Owner" />
                     <div class="ModalForm" id="modal-placeholder"></div>
                 </td>
 

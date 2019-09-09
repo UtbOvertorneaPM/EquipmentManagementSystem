@@ -47,6 +47,7 @@
     <div>
         <div>
             @Html.HiddenFor(model => model.Equipment.ID)
+            @Html.HiddenFor(model => model.Equipment.Serial)
         </div>
         <table>
             <tr>
@@ -75,7 +76,7 @@
     <div class="SubmitDiv">
         @Html.HiddenFor(model => model.Equipment.ID)
         <!--<input type="button" value="Delete" onclick="submit()"/>-->
-        <input type="submit" value="" />
+        <input type="submit" value="@Localizer["Delete"]" />
         <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Chromebook")'" />
     </div>
 }

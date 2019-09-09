@@ -45,7 +45,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-            sortVariable = sortVariable == "Date" ? "Date_desc" : "Date";
+            sortVariable = sortVariable == "Date_desc" ? "Date" : "Date_desc";
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
 
@@ -139,17 +139,19 @@ namespace EquipmentManagementSystem.Controller {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EquipmentViewModel viewModel) {
 
-            viewModel.Equipment.OwnerID = viewModel.Owner.ID;
+            viewModel.Equipment.LastEdited = DateTime.Now;
 
-            if (ModelState.IsValid) {
+            if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
 
-                viewModel.Equipment.LastEdited = DateTime.Now;
-                await _service.Create(viewModel.Equipment);
+                await viewModel.AddOwner(_service, viewModel.Equipment.OwnerName);
+            }            
 
-                return RedirectToAction(nameof(Index));
+            if (await _service.Create(viewModel.Equipment) is false) {
+
+                return View(viewModel);
             }
 
-            return View(viewModel);
+            return RedirectToAction(nameof(Index));            
         }
 
 
@@ -177,21 +179,14 @@ namespace EquipmentManagementSystem.Controller {
         //public IActionResult Edit(Equipment equipment) {
         public async Task<IActionResult> Edit(EquipmentViewModel viewModel) {
 
-            try {
+            viewModel.Equipment.LastEdited = DateTime.Now;
 
-                viewModel.Equipment.LastEdited = DateTime.Now;
-
-                if (await _service.Update(viewModel.Equipment) is false) {
-
-                    return View(viewModel.Equipment);
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception e) {
+            if (await _service.Update(viewModel.Equipment) is false) {
 
                 return View(viewModel.Equipment);
             }
+
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -234,19 +229,7 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
 
-                var minSerialLength = 5;
-
-                var serials = serial.Trim().Replace("\n", " ").Split(" ");
-                serials = serials.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length > minSerialLength).Distinct().ToArray();
-
-                for (int i = 0; i < serials.Count(); i++) {
-
-                    if (string.IsNullOrWhiteSpace(serials[i]) is false) {
-
-                        await _service.Remove(await _service.FirstOrDefault<Equipment>(e => e.Serial == serials[i]).FirstOrDefaultAsync());
-                    }                    
-                }
-
+                await _service.DeleteSelection(serial);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception) {

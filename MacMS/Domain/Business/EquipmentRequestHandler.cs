@@ -35,12 +35,30 @@ namespace EquipmentManagementSystem.Domain.Business {
         public async Task<T> GetById<T>(int id) where T : Equipment  =>
             await _service.Get<T>(e => e.ID == id).FirstOrDefaultAsync();
 
-        public async Task Create<T>(T equipment) where T : class =>
-            await _service.Create(equipment);
+        public async Task<bool> Create<T>(T equipment) where T : class {
+
+            if (_validator.Validate<T>(equipment)) {
+
+                await _service.Create(equipment);
+                return true;
+            }
+
+            return false;
+        }
+            
             
 
-        public async Task Remove<T>(T equipment) where T : class =>
-            await _service.Remove(equipment);
+        public async Task<bool> Remove<T>(T equipment) where T : class {
+
+            if (_validator.Validate<T>(equipment)) {
+
+                await _service.Remove(equipment);
+                return true;
+            }
+
+            return false;
+        }
+            
 
         public async Task<bool> Update<T>(T equipment) where T : class {
 
@@ -146,6 +164,23 @@ namespace EquipmentManagementSystem.Domain.Business {
             }
 
             return pagedList;
+        }
+
+
+        public async Task DeleteSelection(string serial) {
+
+            var minSerialLength = 5;
+
+            var serials = serial.Trim().Replace("\n", " ").Split(" ");
+            serials = serials.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length > minSerialLength).Distinct().ToArray();
+
+            for (int i = 0; i < serials.Count(); i++) {
+
+                if (string.IsNullOrWhiteSpace(serials[i]) is false) {
+
+                    await _service.Remove(await _service.FirstOrDefault<Equipment>(e => e.Serial == serials[i]).FirstOrDefaultAsync());
+                }
+            }
         }
     }
 }

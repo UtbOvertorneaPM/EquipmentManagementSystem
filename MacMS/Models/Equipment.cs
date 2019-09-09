@@ -49,7 +49,7 @@ namespace EquipmentManagementSystem.Models {
         public Equipment() { }
 
 
-        public Equipment(string serial) {
+        public Equipment(string serial, EquipmentType type) {
 
         }
 
