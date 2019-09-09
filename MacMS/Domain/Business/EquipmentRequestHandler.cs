@@ -77,13 +77,17 @@ namespace EquipmentManagementSystem.Domain.Business {
             }
             else {
 
-                var serials = selection.Trim().Replace("\n", " ").Split(" ");
+                var minSerialLength = 5;
 
+                var serials = selection.Trim().Replace("\n", " ").Split(" ");
+                serials = serials.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length > minSerialLength).Distinct().ToArray();
+
+                List<Equipment> temp = new List<Equipment>();
                 for (int i = 0; i < serials.Count(); i++) {
 
-                    data.Concat(_service.Get<Equipment>(x => x.Serial == serials[i]));
+                    temp.Add(await _service.FirstOrDefault<Equipment>(x => x.Serial == serials[i]).FirstAsync());                    
                 }
-
+                data = temp;
             }
 
             file = await new ExportService<Equipment>().Export(data, exportType);

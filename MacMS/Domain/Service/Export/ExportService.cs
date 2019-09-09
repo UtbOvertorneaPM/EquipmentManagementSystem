@@ -15,7 +15,7 @@ namespace EquipmentManagementSystem.Domain.Service.Export {
         public async Task<ExportFile> Export(IEnumerable<T> data, ExportType exportType) {
 
             SetExporter(exportType);
-            return await exporter.FormatData(data, GetFileName(data.GetType().Name));
+            return await exporter.FormatData(data, GetFileName(data.First().GetType().Name));
         }
 
 
@@ -45,8 +45,6 @@ namespace EquipmentManagementSystem.Domain.Service.Export {
 
 
         private void SetExporter(ExportType exportType) {
-
-            IExporter exporter;
 
             switch (exportType) {
 
