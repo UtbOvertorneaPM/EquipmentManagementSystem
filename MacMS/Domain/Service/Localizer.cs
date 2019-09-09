@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace EquipmentManagementSystem.Data {
+namespace EquipmentManagementSystem.Domain.Service {
 
     public class Localizer {
 

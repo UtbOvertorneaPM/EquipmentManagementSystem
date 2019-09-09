@@ -63,13 +63,15 @@ namespace EquipmentManagementSystem.Controller {
                 searchString += "EquipType: Chromebook";
             }
 
-            return PartialView(await ((EquipmentRequestHandler)_service).IndexRequest<EquipmentViewModel>(new IndexRequestModel() {
-                SortVariable = sortVariable,
-                Page = page,
-                SearchString = searchString,
-                PageSize = pageSize,
-                Type = "Chromebook"
-            }));
+            return PartialView(await ((EquipmentRequestHandler)_service).IndexRequest<EquipmentViewModel>(
+                new IndexRequestModel() {
+                    SortVariable = sortVariable,
+                    Page = page,
+                    SearchString = searchString,
+                    PageSize = pageSize,
+                    Type = "Chromebook"
+                })
+            );
         }
 
 

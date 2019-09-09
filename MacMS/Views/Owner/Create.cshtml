@@ -1,5 +1,5 @@
-﻿@model EquipmentManagementSystem.Models.Owner
-
+﻿@model EquipmentManagementSystem.Domain.Data.Models.Owner
+@using EquipmentManagementSystem.Domain.Service
 @using EquipmentManagementSystem.Data
 @inject Localizer Localizer
 
@@ -38,7 +38,7 @@
 
 }
 
-    <h2>@Localizer["Create"] @Localizer["Owner"]</h2>
+<h2>@Localizer["Create"] @Localizer["Owner"]</h2>
 
 @using (Html.BeginForm("Create", "Owner", FormMethod.Post, new { id = "form" })) {
     @Html.AntiForgeryToken()

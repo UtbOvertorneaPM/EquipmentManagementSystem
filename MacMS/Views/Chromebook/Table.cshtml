@@ -1,7 +1,7 @@
-﻿@using EquipmentManagementSystem.Models
+﻿@using EquipmentManagementSystem.Domain.Data.Models
 @model PagedList<EquipmentViewModel>
 @using EquipmentManagementSystem.Domain.Data
-@using EquipmentManagementSystem.Data
+@using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
 @{
@@ -89,7 +89,7 @@
 
 
         $('document').ready(function () {
-            
+
             ReloadTable();
         });
 
@@ -151,7 +151,7 @@
 
             }
         };
-        
+
 
 
 

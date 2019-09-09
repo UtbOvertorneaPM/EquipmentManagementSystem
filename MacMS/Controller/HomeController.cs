@@ -11,12 +11,12 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using EquipmentManagementSystem.Domain.Business;
 using EquipmentManagementSystem.Domain.Service;
-using EquipmentManagementSystem.newData.Validation;
 using EquipmentManagementSystem.Domain.Data;
 using EquipmentManagementSystem.Domain.Service.Export;
 using Microsoft.EntityFrameworkCore;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
+using EquipmentManagementSystem.Domain.Data.Validation;
 
 namespace EquipmentManagementSystem.Controller {
 
@@ -52,7 +52,14 @@ namespace EquipmentManagementSystem.Controller {
             SetCultureCookie(culture, Response);
             SetLanguage(culture);
 
-            return PartialView(await _service.IndexRequest<EquipmentViewModel>(sortVariable, searchString, page, pageSize));
+            return PartialView(await _service.IndexRequest<EquipmentViewModel>(
+                new IndexRequestModel() {
+                    SortVariable = sortVariable,
+                    SearchString = searchString,
+                    Page = page,
+                    PageSize = pageSize
+                })
+           );
         }
 
 

@@ -1,8 +1,8 @@
-﻿@model Owner
+﻿@model EquipmentManagementSystem.Domain.Data.OwnerViewModel
 
 @using EquipmentManagementSystem.Models
 
-@using EquipmentManagementSystem.Data
+@using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
 @{
@@ -45,7 +45,7 @@
     </script>
 }
 
-    <h2>@Localizer["Delete"]</h2>
+<h2>@Localizer["Delete"]</h2>
 
 @using (Html.BeginForm("Delete", "Owner", FormMethod.Post, new { id = "form" })) {
     @Html.AntiForgeryToken()

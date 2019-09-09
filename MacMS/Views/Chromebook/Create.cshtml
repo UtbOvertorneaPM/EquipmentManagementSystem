@@ -2,12 +2,11 @@
 
 @using EquipmentManagementSystem
 
-@using EquipmentManagementSystem.Data
+@using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
-@{
-    ViewData["Title"] = Localizer["Create"] + " " + Localizer["Equipment"];
-    Layout = "~/Views/Shared/_Layout1.cshtml";
+@{ ViewData["Title"] = Localizer["Create"] + " " + Localizer["Equipment"];
+                Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
 @section scripts {
@@ -161,7 +160,7 @@
     </script>
 }
 
-    <h2>@Localizer["Create"]</h2>
+<h2>@Localizer["Create"]</h2>
 
 @using (Html.BeginForm("Create", "Chromebook", FormMethod.Post, new { id = "form", @class = "postAjax" })) {
 

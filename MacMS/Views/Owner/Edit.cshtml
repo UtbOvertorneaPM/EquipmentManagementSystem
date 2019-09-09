@@ -1,5 +1,5 @@
-﻿@model Owner
-
+﻿@model EquipmentManagementSystem.Domain.Data.OwnerViewModel
+@using EquipmentManagementSystem.Domain.Service
 @using EquipmentManagementSystem
 
 @using EquipmentManagementSystem.Models
@@ -49,7 +49,7 @@
     </script>
 }
 
-    <h2>@Localizer["Edit"]</h2>
+<h2>@Localizer["Edit"]</h2>
 
 @using (Html.BeginForm("Edit", "Owner", FormMethod.Post, new { id = "form" })) {
     @Html.AntiForgeryToken()

@@ -4,12 +4,11 @@
 
 @using EquipmentManagementSystem.Models
 
-@using EquipmentManagementSystem.Data
+@using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
-@{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout1.cshtml";
+@{ ViewData["Title"] = "Edit";
+                Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
 @section scripts {
@@ -156,7 +155,7 @@
     </script>
 }
 
-    <h2>@Localizer["Edit"]</h2>
+<h2>@Localizer["Edit"]</h2>
 
 @using (Html.BeginForm("Edit", "Chromebook", FormMethod.Post, new { id = "form" })) {
 
@@ -193,12 +192,10 @@
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["FullName"] </p></td>
                 <td>
-                    <p class=" CategoryText">@Html.EditorFor(model => model.Equipment.OwnerName)</p>   
+                    <p class=" CategoryText">@Html.EditorFor(model => model.Equipment.OwnerName)</p>
                     <input type="button" onclick="RequestCreateOwnerModal()" value="Create new Owner" />
                 </td>
-                <td>
-                    
-                </td>
+                <td></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Notes"]</p></td>
@@ -209,7 +206,7 @@
         <div class="ModalForm" id="modal-placeholder"></div>
     </div>
     <div class="SubmitDiv">
-        <input type="submit" value="@Localizer["Edit"]"/>
+        <input type="submit" value="@Localizer["Edit"]" />
         <input type="button" value="@Localizer["Back"]" onclick="location.href='@Url.Action("Index", "Chromebook")'" />
     </div>
 }

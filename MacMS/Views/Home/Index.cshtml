@@ -1,5 +1,5 @@
-﻿@using EquipmentManagementSystem.Models
-@using EquipmentManagementSystem.Data
+﻿@using EquipmentManagementSystem.Domain.Data.Models
+@using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
 @{
@@ -27,7 +27,7 @@
                     partial.replaceWith(data);
                 }
             );
-            
+
         });
 
 
@@ -73,7 +73,7 @@
 
                 var list = document.getElementById("searchCategories");
                 list.style.display = "block";
-            }            
+            }
         });
 
 
@@ -205,30 +205,30 @@
 <h2>@Localizer["Equipment"]</h2>
 
 
-    <div>
-        @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
-        <input id="submitSearch" type="button" value="@Localizer["Search"]"/>
+<div>
+    @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
+    <input id="submitSearch" type="button" value="@Localizer["Search"]" />
 
-        <div id="searchCategories" hidden>
-            <ul class="CategoryList">
-                <li>
-                    <input class="CategoryButton" type="button" id="categoryDate" value="LastEdited" />
-                </li>
-                <li>
-                    <input class="CategoryButton" type="button" id="categoryModel" value="Model" />
-                </li>
-                <li>
-                    <input class="CategoryButton" type="button" id="categorySerial" value="Serial" />
-                </li>
-                <li>
-                    <input class="CategoryButton" type="button" id="categoryOwner" value="OwnerName" />
-                </li>
-                <li>
-                    <input class="CategoryButton" type="button" id="categoryType" value="EquipType" />
-                </li>
-            </ul>
-        </div>
+    <div id="searchCategories" hidden>
+        <ul class="CategoryList">
+            <li>
+                <input class="CategoryButton" type="button" id="categoryDate" value="LastEdited" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryModel" value="Model" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categorySerial" value="Serial" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryOwner" value="OwnerName" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryType" value="EquipType" />
+            </li>
+        </ul>
     </div>
+</div>
 <p>
     <a href="#" onclick="importHandler()" id="importButton">@Localizer["Import"]</a>
 </p>

@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 
-@using EquipmentManagementSystem.Data
+@using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
 <html>
@@ -20,7 +20,7 @@
     <script>
         // Prevents doubleclicking from selecting text in table
         $('document').ready(function () {
-            
+
             var table = document.getElementById('table');
             table.addEventListener('mousedown', function (event) {
 

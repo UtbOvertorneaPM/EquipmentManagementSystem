@@ -56,12 +56,14 @@ namespace EquipmentManagementSystem.Controller {
             SetCultureCookie(culture, Response);
             SetLanguage(culture);
 
-            return PartialView(await ((OwnerRequestHandler)_service).IndexRequest<OwnerViewModel>(new IndexRequestModel() { 
-                SortVariable = sortVariable,
-                Page = page,
-                SearchString = searchString,
-                PageSize = pageSize
-            }));
+            return PartialView(await ((OwnerRequestHandler)_service).IndexRequest<OwnerViewModel>(
+                new IndexRequestModel() { 
+                    SortVariable = sortVariable,
+                    Page = page,
+                    SearchString = searchString,
+                    PageSize = pageSize
+                })
+            );
         }
 
 
@@ -87,21 +89,21 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="owner"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostModal(OwnerViewModel viewModel) {
+        public async Task<IActionResult> PostModal(Owner owner) {
 
             try {
 
-                viewModel.Owner.Added = DateTime.Now;
-                if (await _service.Create(viewModel.Owner) is false) {
+                owner.Added = DateTime.Now;
+                if (await _service.Create(owner) is false) {
 
-                    return View(viewModel);
+                    return View(owner);
                 }
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception) {
 
-                return View(viewModel);
+                return View(owner);
             }
 
         }
@@ -133,8 +135,10 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Owner/Edit/5
         public async Task<IActionResult> Edit(int id) {
 
-            var viewModel = new OwnerViewModel();
-            viewModel.Owner = await _service.Get<Owner>(o => o.ID == id).FirstAsync();
+            var viewModel = new OwnerViewModel {
+
+                Owner = await _service.Get<Owner>(o => o.ID == id).FirstAsync()
+            };
             viewModel.Equipment = await _service.Get<Equipment>(e => e.OwnerName == viewModel.Owner.FullName).ToListAsync();
 
             return View(viewModel);
@@ -167,8 +171,10 @@ namespace EquipmentManagementSystem.Controller {
         [HttpGet]
         public async Task<IActionResult> Delete(int id) {
 
-            var viewModel = new OwnerViewModel();
-            viewModel.Owner = await _service.Get<Owner>(o => o.ID == id).FirstAsync();
+            var viewModel = new OwnerViewModel {
+
+                Owner = await _service.Get<Owner>(o => o.ID == id).FirstAsync()
+            };
             viewModel.Equipment = await _service.Get<Equipment>(e => e.OwnerName == viewModel.Owner.FullName).ToListAsync();
 
             return View(viewModel);

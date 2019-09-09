@@ -1,4 +1,5 @@
 ﻿using EquipmentManagementSystem.Data;
+using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 namespace EquipmentManagementSystem.Controller {
 
 
-    //[Authorize("Administrators")]
+    [Authorize("Administrators")]
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller, IDisposable {
 
 

@@ -2,7 +2,7 @@
 
 @using EquipmentManagementSystem
 
-@using EquipmentManagementSystem.Data
+@using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
 @{
@@ -159,7 +159,7 @@
     </script>
 }
 
-    <h2>@Localizer["Create"]</h2>
+<h2>@Localizer["Create"]</h2>
 
 @using (Html.BeginForm("Create", "Home", FormMethod.Post, new { id = "form", @class = "postAjax" })) {
 

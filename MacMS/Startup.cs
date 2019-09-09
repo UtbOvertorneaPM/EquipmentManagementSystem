@@ -21,6 +21,8 @@ using Newtonsoft.Json;
 using EquipmentManagementSystem.Models;
 using EquipmentManagementSystem.Data;
 using EquipmentManagementSystem.Business.Data;
+using EquipmentManagementSystem.Domain.Data.DbAccess;
+using EquipmentManagementSystem.Domain.Service;
 
 namespace EquipmentManagementSystem {
 
@@ -68,7 +70,7 @@ namespace EquipmentManagementSystem {
 #endif
 
             roles = roles.Replace("\\", @"\");
-            /*
+            
             services.AddAuthorization(options => {
                 options.AddPolicy("Administrators", policy => {
                     policy.Requirements.Add(new RoleRequirement(roles.Split(" ")));
@@ -77,7 +79,7 @@ namespace EquipmentManagementSystem {
             });
 
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
-            */
+            
             // Sets Localization to use SharedResource.sv-SE.resx
             services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
 
