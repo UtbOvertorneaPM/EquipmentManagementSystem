@@ -44,12 +44,12 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-            sortVariable = sortVariable == "Date_desc" ? "Date" : "Date_desc";
+            ViewData["CurrenSort"] = sortVariable == "Date_desc" ? "Date" : "Date_desc";
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
 
             SetSearchString(ref searchString);
-            SetCultureCookie(culture, Response);
+            SetCultureCookie(culture, page.ToString(), searchString, sortVariable, Response);
             SetLanguage(culture);
 
             return PartialView(await _service.IndexRequest<EquipmentViewModel>(
@@ -251,7 +251,7 @@ namespace EquipmentManagementSystem.Controller {
             if (!string.IsNullOrEmpty(term)) {
 
                 var request = _service.GetAll<Owner>();
-                var data = await request.Select(e => e.FullName.Contains(term)).ToListAsync();
+                var data = await request.Where(e => e.FullName.Contains(term)).Select(o => o.FullName).ToListAsync();
                 return Json(data);
             }
 

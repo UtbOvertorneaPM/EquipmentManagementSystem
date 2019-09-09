@@ -52,7 +52,7 @@ namespace EquipmentManagementSystem.Controller {
             ViewData["Page"] = page;
 
             SetSearchString(ref searchString);
-            SetCultureCookie(culture, Response);
+            SetCultureCookie(culture, page.ToString(), searchString, sortVariable, Response);
             SetLanguage(culture);
 
             if (searchString == "Find model / date / owner...") {
@@ -261,7 +261,7 @@ namespace EquipmentManagementSystem.Controller {
             if (!string.IsNullOrEmpty(term)) {
 
                 var request = _service.GetAll<Owner>();
-                var data = await request.Select(e => e.FullName.Contains(term)).ToListAsync();
+                var data = await request.Where(e => e.FullName.Contains(term)).Select(o => o.FullName).ToListAsync();
                 return Json(data);
             }
 

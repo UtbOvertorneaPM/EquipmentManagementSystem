@@ -11,7 +11,7 @@
 @if (@Model.TotalPages > 1) {
 
     <p>Displaying: @Model.PageEntries - @Model.PageEnd of @Model.TotalEntries entries</p>
-
+    <p id="CurPage" hidden>@Model.Page</p>
     <p>Total entries: @Model.TotalEntries</p>
     <div style="float:left" id="pageList">
         <div style="float:left" id="startList"></div>
@@ -95,7 +95,7 @@
 
         function ReloadTable() {
 
-            var curPage = @Model.Page == -1 ? 0 : @Model.Page;
+            var curPage = document.getElementById("CurPage").textContent;
 
             var count = @Model.TotalPages;
             var lastPos = @Model.TotalPages - 1;
@@ -108,7 +108,7 @@
             startList.innerHTML = '';
             endList.innerHTML = '';
             curList.innerHTML = '';
-
+            
             for (var i = (curPage - 2); i < (curPage + 3); i++) {
 
                 if (i < 1) {
@@ -119,6 +119,7 @@
                 }
             }
 
+            
             for (var i = 0; i < posList.length; i++) {
 
                 var a = document.createElement('a');

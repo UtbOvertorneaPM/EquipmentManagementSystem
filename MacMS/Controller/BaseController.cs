@@ -61,6 +61,11 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="culture"></param>
         public void SetLanguage(string culture) => ViewData["Language"] = string.IsNullOrEmpty(culture) ? "en-GB" : culture;
 
+
+        public void SetPage(string page) => ViewData["Page"] = string.IsNullOrEmpty(page) ? 0 : int.Parse(page);
+
+        public void SetSorting(string sort) => ViewData["CurrentSort"] = string.IsNullOrEmpty(sort) ? "Date_desc" : sort;
+
         
         // GET: Home    
         /// <summary>
@@ -79,7 +84,7 @@ namespace EquipmentManagementSystem.Controller {
 
             SetSearchString(ref searchString);
 
-            SetCultureCookie(culture, Response);
+            SetCultureCookie(culture, page.ToString(), searchString, sortVariable, Response);
 
             SetLanguage(culture);
 
@@ -106,13 +111,26 @@ namespace EquipmentManagementSystem.Controller {
         }
 
 
-        public void SetCultureCookie(string culture, HttpResponse Response) {
+        public void SetCultureCookie(string culture, string page, string searchString, string sortVariable, HttpResponse Response) {
 
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
             );
+
+            if (string.IsNullOrEmpty(sortVariable) is false) {
+                Response.Cookies.Append(
+                "CurrentSort", sortVariable);
+            }
+            
+            if (string.IsNullOrEmpty(page) is false) {
+                Response.Cookies.Append("Page", page);
+            }
+
+            if (string.IsNullOrEmpty(searchString) is false) {
+                Response.Cookies.Append("SearchString", searchString);
+            }
         }
 
     }

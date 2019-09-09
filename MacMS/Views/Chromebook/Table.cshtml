@@ -13,6 +13,7 @@
     <p>Displaying: @Model.PageEntries - @Model.PageEnd of @Model.TotalEntries entries</p>
 
     <p>Total entries: @Model.TotalEntries</p>
+    <p id="CurPage" hidden>@Model.Page</p>
     <div style="float:left" id="pageList">
         <div style="float:left" id="startList"></div>
         <div style="float:left" id="curList"></div>
@@ -95,7 +96,7 @@
 
         function ReloadTable() {
 
-            var curPage = @Model.Page == -1 ? 0 : @Model.Page;
+            var curPage = document.getElementById("CurPage").textContent;
 
             var count = @Model.TotalPages;
             var lastPos = @Model.TotalPages - 1;

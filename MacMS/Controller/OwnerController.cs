@@ -53,7 +53,7 @@ namespace EquipmentManagementSystem.Controller {
             ViewData["Page"] = page;
 
             SetSearchString(ref searchString);
-            SetCultureCookie(culture, Response);
+            SetCultureCookie(culture, page.ToString(), searchString, sortVariable, Response);
             SetLanguage(culture);
 
             return PartialView(await ((OwnerRequestHandler)_service).IndexRequest<OwnerViewModel>(
