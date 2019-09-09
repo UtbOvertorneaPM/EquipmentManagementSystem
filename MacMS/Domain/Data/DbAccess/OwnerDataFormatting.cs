@@ -1,5 +1,4 @@
 ﻿using EquipmentManagementSystem.Domain.Data.Models;
-using EquipmentManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Domain.Data.DbAccess {
 
-    public static class EquipmentDataFormatting {
 
-        public static IEnumerable<Equipment> Sort<TKey>(IEnumerable<Equipment> query, string sortVariable) {
+    public class OwnerDataFormatting {
+
+
+        public static IEnumerable<Owner> Sort<TKey>(IEnumerable<Owner> query, string sortVariable) {
 
             switch (sortVariable) {
                 case "Date_desc":
@@ -20,10 +21,10 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
                     return query.OrderBy(e => e.LastEdited);
 
                 case "Owner_desc":
-                    return query.OrderByDescending(e => e.OwnerName);
+                    return query.OrderByDescending(e => e.FullName);
 
                 case "Owner":
-                    return query.OrderBy(e => e.OwnerName);
+                    return query.OrderBy(e => e.FullName);
 
                 default:
                     return null;
@@ -31,10 +32,10 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
         }
 
 
-        public async static Task<List<Equipment>> Search(IQueryable<Equipment> data, string searchString) {
+        public async static Task<List<Owner>> Search(IQueryable<Owner> data, string searchString) {
 
             var queryValues = searchString.Split(",");
-            var returnData = new List<Equipment>();
+            var returnData = new List<Owner>();
 
             for (int i = 0; i < queryValues.Length; i++) {
 
@@ -53,39 +54,38 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
                             for (int j = 0; j < dates.Count(); j++) {
 
                                 returnData.AddRange(await (from x in data
-                                                  where x.LastEdited.ToString().Contains(dates[j])
-                                                  select x).ToListAsync());
+                                                           where x.LastEdited.ToString().Contains(dates[j])
+                                                           select x).ToListAsync());
                             }
 
                             break;
 
-                        case "Model":
+                        case "FullName":
 
                             returnData.AddRange(from x in data
-                                              where x.Model.Contains(query[1])
-                                              
-                                              select x);
+                                                where x.FullName.Contains(query[1])
+
+                                                select x);
                             break;
-                        case "Serial":
+                        case "SSN":
 
                             returnData.AddRange(await (from x in data
-                                              where x.Serial.Contains(query[1])
-                                              select x).ToListAsync());
+                                                       where x.SSN.Contains(query[1])
+                                                       select x).ToListAsync());
                             break;
 
-                        case "Owner":
+                        case "Mail":
 
-                            returnData.AddRange(await(from x in data
-                                              where x.OwnerName.Contains(query[1])
-                                              select x).ToListAsync());
+                            returnData.AddRange(await (from x in data
+                                                       where x.Mail.Contains(query[1])
+                                                       select x).ToListAsync());
                             break;
 
-                        case "EquipType":
+                        case "Address":
 
-                            Enum.TryParse<Equipment.EquipmentType>(query[1], out var eqpVal);
-                            returnData.AddRange(await(from x in data
-                                              where x.EquipType == eqpVal
-                                              select x).ToListAsync());
+                            returnData.AddRange(await (from x in data
+                                                       where x.Address.Contains(query[1])
+                                                       select x).ToListAsync());
                             break;
 
                         default:
@@ -100,11 +100,11 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
                     }
                     else {
                         returnData.Concat(from x in data
-                                          where x.OwnerName.Contains(query[1]) ||
-                                          x.Model.Contains(query[1]) ||
-                                          x.Serial.Contains(query[1]) ||
-                                          x.Notes.Contains(query[1]) ||
-                                          x.Location.Contains(query[1])
+                                          where x.LastEdited.ToString().Contains(query[1]) ||
+                                          x.FullName.Contains(query[1]) ||
+                                          x.SSN.Contains(query[1]) ||
+                                          x.Mail.Contains(query[1]) ||
+                                          x.Address.Contains(query[1])
                                           select x);
                     }
                 }
@@ -112,5 +112,7 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
 
             return await Task.Run(() => returnData.Distinct().ToList());
         }
+
+
     }
 }

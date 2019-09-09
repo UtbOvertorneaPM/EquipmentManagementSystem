@@ -13,14 +13,15 @@ using Microsoft.AspNetCore.Http;
 using EquipmentManagementSystem.Domain.Business;
 using EquipmentManagementSystem.Domain.Data;
 using System.Diagnostics;
+using EquipmentManagementSystem.Domain.Data.Models;
 
-namespace EquipmentManagementSystem {
+namespace EquipmentManagementSystem.Domain.Data {
 
 
     public class DataMigrations {
 
 
-        public async Task ImportMacServiceJson(EquipmentRequestHandler service, IFormFile file) {
+        public async Task ImportMacServiceJson(IRequestHandler service, IFormFile file) {
 
             List<Equipment> equip = new List<Equipment>();
             var owners = new List<Owner>();
@@ -93,7 +94,7 @@ namespace EquipmentManagementSystem {
         }
 
 
-        public async Task InsertRandomData(EquipmentRequestHandler service) {
+        public async Task InsertRandomData(IRequestHandler service) {
 
             if (Debugger.IsAttached) {
 

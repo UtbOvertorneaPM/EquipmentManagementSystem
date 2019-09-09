@@ -18,7 +18,7 @@ namespace EquipmentManagementSystem.Domain.Data {
 
         public EquipmentViewModel() { }
 
-        public async Task AddOwner(EquipmentRequestHandler service, string name) {
+        public async Task AddOwner(IRequestHandler service, string name) {
 
             Owner = await service.Get<Owner>(o => o.FullName == name).FirstOrDefaultAsync();
         }

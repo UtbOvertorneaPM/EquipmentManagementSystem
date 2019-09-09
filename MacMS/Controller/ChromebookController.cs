@@ -2,11 +2,13 @@
 using EquipmentManagementSystem.Data.Export;
 using EquipmentManagementSystem.Domain.Business;
 using EquipmentManagementSystem.Domain.Data;
+using EquipmentManagementSystem.Domain.Data.DbAccess;
+using EquipmentManagementSystem.Domain.Data.Models;
+using EquipmentManagementSystem.Domain.Data.Validation;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
 using EquipmentManagementSystem.Models;
-using EquipmentManagementSystem.newData;
-using EquipmentManagementSystem.newData.Validation;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,7 +26,7 @@ namespace EquipmentManagementSystem.Controller {
 
     public class ChromebookController : BaseController {
 
-        private EquipmentRequestHandler _service;
+        private IRequestHandler _service;
         private int pageSize = 25;
 
         public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
@@ -61,7 +63,13 @@ namespace EquipmentManagementSystem.Controller {
                 searchString += "EquipType: Chromebook";
             }
 
-            return PartialView(await _service.IndexRequest<EquipmentViewModel>(sortVariable, searchString, page, pageSize, "Chromebook"));
+            return PartialView(await ((EquipmentRequestHandler)_service).IndexRequest<EquipmentViewModel>(new IndexRequestModel() {
+                SortVariable = sortVariable,
+                Page = page,
+                SearchString = searchString,
+                PageSize = pageSize,
+                Type = "Chromebook"
+            }));
         }
 
 
@@ -106,7 +114,7 @@ namespace EquipmentManagementSystem.Controller {
 
                 for (int i = 0; i < data.Count; i++) {
 
-                    await _service.Create<Equipment>(data[i]);
+                    await _service.Create(data[i]);
                 }
             }
             catch (Exception) {
@@ -114,9 +122,7 @@ namespace EquipmentManagementSystem.Controller {
                 throw;
             }
 
-
-            return Json(true);
-            
+            return Json(true);            
         }
 
         
@@ -168,9 +174,9 @@ namespace EquipmentManagementSystem.Controller {
         public async Task<IActionResult> Edit(int id) {
 
             ViewData["IDCheck"] = false;
-            var viewModel = new EquipmentViewModel();
-
-            viewModel.Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync();
+            var viewModel = new EquipmentViewModel {
+                Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync()
+            };
 
             if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
 
@@ -201,9 +207,9 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Home/Delete/5
         public async Task<IActionResult> Delete(int id) {
 
-            var viewModel = new EquipmentViewModel();
-
-            viewModel.Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync();
+            var viewModel = new EquipmentViewModel {
+                Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync()
+            };
 
             if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
 

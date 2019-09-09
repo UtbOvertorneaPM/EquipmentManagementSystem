@@ -2,10 +2,10 @@
 using EquipmentManagementSystem.Domain.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
+using EquipmentManagementSystem.Domain.Data.Validation;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
 using EquipmentManagementSystem.Models;
-using EquipmentManagementSystem.newData.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,10 +18,11 @@ using static EquipmentManagementSystem.Domain.Data.Models.Equipment;
 
 namespace EquipmentManagementSystem.Domain.Business {
 
-    public class EquipmentRequestHandler {
+    public class EquipmentRequestHandler : IRequestHandler {
 
         private IGenericService _service;
         private IValidator _validator;
+
 
         public EquipmentRequestHandler(IGenericService service, IValidator validator) {
 
@@ -29,14 +30,18 @@ namespace EquipmentManagementSystem.Domain.Business {
             _validator = validator;
         }
 
+
         public IQueryable<T> GetAll<T>() where T : class =>
             _service.GetAll<T>();
+
 
         public IQueryable<T> Get<T>(Expression<Func<T, bool>> predicate) where T : class =>
             _service.Get(predicate);
 
+
         public async Task<T> GetById<T>(int id) where T : Equipment  =>
             await _service.Get<T>(e => e.ID == id).FirstOrDefaultAsync();
+
 
         public async Task<bool> Create<T>(T equipment) where T : class {
 
@@ -47,8 +52,7 @@ namespace EquipmentManagementSystem.Domain.Business {
             }
 
             return false;
-        }
-            
+        }        
             
 
         public async Task<bool> Remove<T>(T equipment) where T : class {
@@ -77,7 +81,6 @@ namespace EquipmentManagementSystem.Domain.Business {
 
         public IQueryable<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class =>
             _service.FirstOrDefault(predicate);
-
 
 
         public async Task<FileStreamResult> Export(string searchString, string selection, ExportType exportType) {
@@ -116,17 +119,15 @@ namespace EquipmentManagementSystem.Domain.Business {
         }
 
 
-
-
-        public async Task<PagedList<EquipmentViewModel>> IndexRequest<T>(string sortVariable, string searchString, int page, int pageSize, string type = null) where T : class {
+        public async Task<PagedList<EquipmentViewModel>> IndexRequest<T>(IndexRequestModel request) where T : class {
 
             var pagedList = new PagedList<EquipmentViewModel>();
             var list = new List<EquipmentViewModel>();
             int count;
 
-            if (string.IsNullOrEmpty(type) is false) {
+            if (string.IsNullOrEmpty(request.Type) is false) {
 
-                Enum.TryParse(type, out EquipmentType choiceType);
+                Enum.TryParse(request.Type, out EquipmentType choiceType);
                 count = await _service.Count<Equipment>(x => x.EquipType == choiceType);
             }
             else {
@@ -140,22 +141,22 @@ namespace EquipmentManagementSystem.Domain.Business {
             var searched = false;
 
             // Search
-            if (!string.IsNullOrEmpty(searchString)) {
+            if (!string.IsNullOrEmpty(request.SearchString)) {
 
-                query = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), searchString);
+                query = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), request.SearchString);
                 searched = true;
             }
 
             // Sort
-            if (!string.IsNullOrEmpty(sortVariable)) {
+            if (!string.IsNullOrEmpty(request.SortVariable)) {
 
                 if (searched) {
 
-                    data = EquipmentDataFormatting.Sort<Equipment>(query, sortVariable);
+                    data = EquipmentDataFormatting.Sort<Equipment>(query, request.SortVariable);
                 }
                 else {
 
-                    data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), sortVariable);
+                    data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), request.SortVariable);
                 }
 
                 foreach (var item in data) {
@@ -163,7 +164,7 @@ namespace EquipmentManagementSystem.Domain.Business {
                     list.Add(new EquipmentViewModel() { Equipment = item });
                 }
 
-                pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), count, page, pageSize);
+                pagedList.Initialize(list.Skip(request.Page * request.PageSize).Take(request.PageSize), request, count);
             }
             // Index request without modifiers
             else {
@@ -175,7 +176,7 @@ namespace EquipmentManagementSystem.Domain.Business {
                     list.Add(new EquipmentViewModel() { Equipment = item });
                 }
 
-                pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), count, page, pageSize);
+                pagedList.Initialize(list.Skip(request.Page * request.PageSize).Take(request.PageSize), request, count);
             }
 
             return pagedList;
@@ -197,5 +198,7 @@ namespace EquipmentManagementSystem.Domain.Business {
                 }
             }
         }
+
+
     }
 }

@@ -13,19 +13,28 @@ using Microsoft.AspNetCore.Localization;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Authorization;
-
+using EquipmentManagementSystem.Domain.Data.DbAccess;
+using EquipmentManagementSystem.Domain.Data.Models;
+using OwnerManagementSystem.Domain.Business;
+using EquipmentManagementSystem.Domain.Data.Validation;
+using EquipmentManagementSystem.Domain.Service;
+using EquipmentManagementSystem.Domain.Business;
+using EquipmentManagementSystem.Domain.Data;
+using Microsoft.EntityFrameworkCore;
+using EquipmentManagementSystem.Domain.Service.Export;
 
 namespace EquipmentManagementSystem.Controller {
 
 
-    public class OwnerController : BaseController  { 
-            
-        OwnerHandler repo;
+    public class OwnerController : BaseController  {
+
+        private IRequestHandler _service;
+        private int pageSize = 25;
 
 
         public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
-            repo = new OwnerHandler(ctx);
+            _service = new OwnerRequestHandler(new GenericService(ctx), new OwnerValidator());
         }
 
 
@@ -37,61 +46,29 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="culture"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public PartialViewResult Table(string sortVariable, string searchString, string culture, int page = 0) {
+        public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-            throw new NotImplementedException();
-            /*
-            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
+            sortVariable = sortVariable == "Date_desc" ? "Date" : "Date_desc";
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
 
             SetSearchString(ref searchString);
-
             SetCultureCookie(culture, Response);
-
             SetLanguage(culture);
 
-            var data = Enumerable.Empty<Owner>();
-            var pageSize = repo.PageSize;
-
-            var pagedList = new PagedList<Owner>();
-
-            // Search then sort
-            if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(sortVariable)) {
-
-                data = repo.SearchSort(searchString, sortVariable);
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
-            }
-            // Search
-            else if (!string.IsNullOrEmpty(searchString)) {
-
-                data = repo.Search(searchString);
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), data.Count(), page, pageSize);
-            }
-            // Sort
-            else if (!string.IsNullOrEmpty(sortVariable)) {
-
-                data = repo.Sort(sortVariable, repo.GetAll());
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
-
-            }
-            // Index request without modifiers
-            else {
-
-                data = repo.Sort("Date_desc", repo.GetAll());
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), repo.Count<Equipment>(), page, pageSize);
-            }
-
-            return PartialView(pagedList);
-            */
-            
+            return PartialView(await ((OwnerRequestHandler)_service).IndexRequest<OwnerViewModel>(new IndexRequestModel() { 
+                SortVariable = sortVariable,
+                Page = page,
+                SearchString = searchString,
+                PageSize = pageSize
+            }));
         }
 
 
         // GET: Owner/Create
         public IActionResult Create() {
 
-            return View();
+            return View(new OwnerViewModel());
         }
 
 
@@ -101,9 +78,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public IActionResult CreateModal() {
 
-            throw new NotImplementedException();
-            //var owner = new Owner();
-            //return PartialView("_OwnerModalPartial", owner);
+            return PartialView("_OwnerModalPartial", new Owner());
         }
 
         /// <summary>
@@ -112,21 +87,21 @@ namespace EquipmentManagementSystem.Controller {
         /// <param name="owner"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult PostModal(Owner owner) {
+        public async Task<IActionResult> PostModal(OwnerViewModel viewModel) {
 
             try {
 
-                owner.Added = DateTime.Now;
-                if (ModelState.IsValid && repo.Insert<Owner>(owner)) {
+                viewModel.Owner.Added = DateTime.Now;
+                if (await _service.Create(viewModel.Owner) is false) {
 
-                    return Json(true);
+                    return View(viewModel);
                 }
 
-                return Json(false);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception) {
 
-                return null;
+                return View(viewModel);
             }
 
         }
@@ -135,98 +110,92 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Owner/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Owner owner) {
+        public async Task<IActionResult> Create(OwnerViewModel viewModel) {
 
             try {
-                owner.LastEdited = DateTime.Now;
-                owner.Added = DateTime.Now;
+                viewModel.Owner.LastEdited = DateTime.Now;
+                viewModel.Owner.Added = DateTime.Now;
 
-                if (ModelState.IsValid && repo.Insert<Owner>(owner)) {
+                if (await _service.Create(viewModel.Owner) is false) {
 
-                    return Json(true);
+                    return View(viewModel);
                 }
 
-                return Json(false);
+                return RedirectToAction(nameof(Index));
             }
             catch {
 
-                return Json(null);
+                return View(viewModel);
             }
         }
 
 
         // GET: Owner/Edit/5
-        public IActionResult Edit(int id) {
+        public async Task<IActionResult> Edit(int id) {
 
-            var owner = repo.Get(id);
-            owner.Equipment = repo.GetEquipment(owner);
+            var viewModel = new OwnerViewModel();
+            viewModel.Owner = await _service.Get<Owner>(o => o.ID == id).FirstAsync();
+            viewModel.Equipment = await _service.Get<Equipment>(e => e.OwnerName == viewModel.Owner.FullName).ToListAsync();
 
-            return View(owner);
+            return View(viewModel);
         }
 
 
         // POST: Owner/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Owner owner) {
+        public async Task<IActionResult> Edit(OwnerViewModel viewModel) {
 
-            try {
-                
-                if (ModelState.IsValid) {
+            viewModel.Owner.LastEdited = DateTime.Now;
 
-                    repo.Update(owner);
-                    owner.LastEdited = DateTime.Now;
+            if (await _service.Update(viewModel.Owner) is false) {
 
-                    return Json(true);
-                }
-
-                return Json(false);
+                return View(viewModel);
             }
-            catch {
 
-                return Json(null);
+            foreach (var equipment in viewModel.Equipment) {
+
+                equipment.OwnerName = viewModel.Owner.FullName;
+                await _service.Update(equipment);
             }
+
+            return RedirectToAction(nameof(Index));
         }
 
 
         // GET: Owner/Delete/5
         [HttpGet]
-        public IActionResult Delete(int id) {
+        public async Task<IActionResult> Delete(int id) {
 
-            return View(repo.Get(id));
+            var viewModel = new OwnerViewModel();
+            viewModel.Owner = await _service.Get<Owner>(o => o.ID == id).FirstAsync();
+            viewModel.Equipment = await _service.Get<Equipment>(e => e.OwnerName == viewModel.Owner.FullName).ToListAsync();
+
+            return View(viewModel);
         }
 
 
         // POST: Owner/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection) {
-
-            return View();
-        }
-
-
-        [HttpPost]
-        public IActionResult DeleteSelection(List<string> names) {
+        public async Task<IActionResult> Delete(EquipmentViewModel viewModel) {
 
             try {
 
-                for (int i = 0; i < names.Count; i++) {
+                await _service.Remove(viewModel.Owner);
 
-                    var id = repo.context.Set<Owner>().FirstOrDefault(e => names[i] == e.FullName).ID;
-                    repo.Delete<Owner>(id);
-                }
-
-                return Json(true);
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception) {
+            catch {
 
-                return Json(null);
+                return View(viewModel);
             }
         }
 
 
-        public IActionResult Import(string source, IFormFile file, bool IsEquipment = false) {
+        public async Task<IActionResult> Import(string source, IFormFile file, bool IsEquipment = false) {
+
+            var data = new List<Equipment>();
 
             var migration = new DataMigrations();
             try {
@@ -238,26 +207,34 @@ namespace EquipmentManagementSystem.Controller {
                         }
 
                         // Used to import Macservice data
-                        //migration.InsertMacServiceJson(new EquipmentHandler(repo.context), repo, file);
+                        await migration.ImportMacServiceJson(_service, file);
                         break;
 
                     case "Backup":
 
+                        //Restore from .json Export
                         if (file is null || file.Length == 0 || !string.Equals(file.ContentType, "application/json", StringComparison.OrdinalIgnoreCase)) {
                             throw new Exception("No appropriate file selected!");
                         }
 
-                        //migration.InsertBackupJson(file, IsEquipment, new EquipmentHandler(repo.context), repo);
+                        await migration.InsertBackupJson<Owner>(file, IsEquipment);
                         break;
 
                     case "Random":
 
-                        //migration.InsertRandomData(new EquipmentHandler(repo.context), repo);
-                        break;
+                        //Random for testing
+                        await migration.InsertRandomData(_service);
+
+                        return Json(true);
 
                     default:
 
                         return Json(false);
+                }
+
+                for (int i = 0; i < data.Count; i++) {
+
+                    await _service.Create(data[i]);
                 }
             }
             catch (Exception) {
@@ -265,34 +242,7 @@ namespace EquipmentManagementSystem.Controller {
                 throw;
             }
 
-
             return Json(true);
-        }
-
-
-        /// <summary>
-        /// AJAX get list of owners
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public JsonResult GetOwnerList() {
-
-            var owners = repo.GetAll().Distinct().ToList();
-            var dict = new Dictionary<int, string>();
-
-            for (int i = 0; i < owners.Count; i++) {
-
-                dict.Add(owners[i].ID, owners[i].FullName);
-            }
-
-            return Json(dict);
-        }
-
-
-        [HttpGet]
-        public JsonResult GetOwner(int id) {
-
-            return Json(repo.Get(id, false));
         }
 
 
@@ -300,25 +250,21 @@ namespace EquipmentManagementSystem.Controller {
         [HttpGet]
         public async Task<IActionResult> Export(string exportType, string searchString, string selection = null) {
 
-            throw new NotImplementedException();
-            //var file = await new ExportHandler().Export(repo.context, typeof(Owner), searchString, exportType, selection);
-            //var stream = new MemoryStream(file.Data);
-            //stream.Position = 0;
-
-            //return File(stream, file.ContentType, file.FileName);
+            Enum.TryParse(exportType, out ExportType exportTypes);
+            return await _service.Export(searchString, selection, exportTypes);
         }
 
 
         [HttpPost]
-        public IActionResult DeleteSelection(string mail) {
+        public async Task<IActionResult> DeleteSelection(string mail) {
 
             try {
                 var mails = mail.Trim().Replace("\n", " ").Split(" ");
 
                 for (int i = 0; i < mails.Count(); i++) {
 
-                    var id = repo.context.Set<Owner>().FirstOrDefault(o => mails[i] == o.Mail).ID;
-                    repo.Delete<Owner>(id);
+                    var owner = _service.FirstOrDefault<Owner>(o => mails[i] == o.Mail);
+                    await _service.Remove(owner);
                 }
 
                 return Json(true);

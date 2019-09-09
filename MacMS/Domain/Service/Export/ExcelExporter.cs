@@ -1,4 +1,5 @@
-﻿    using EquipmentManagementSystem.Models;
+﻿using EquipmentManagementSystem.Domain.Data.Models;
+using EquipmentManagementSystem.Models;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -157,14 +158,14 @@ namespace EquipmentManagementSystem.Data.Export {
 
         private List<string> GetEquipmentPropertyNames(Equipment.EquipmentType type, Equipment equipment) {
 
-            var prop = new List<string>();
+            var prop = new List<string> {
+                "LastEdited",
+                "Model",
+                "Serial",
 
-            prop.Add("LastEdited");
-            prop.Add("Model");
-            prop.Add("Serial");
-
-            prop.Add("OwnerName");
-            prop.Add("Location");
+                "OwnerName",
+                "Location"
+            };
 
             switch (type) {
 

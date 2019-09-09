@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace EquipmentManagementSystem.newData.Validation {
+namespace EquipmentManagementSystem.Domain.Data.Validation {
 
 
     public interface IValidator {

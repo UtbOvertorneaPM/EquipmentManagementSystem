@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EquipmentManagementSystem.Domain.Business;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,13 +21,13 @@ namespace EquipmentManagementSystem.Domain.Data.Models {
 
         }
 
-        public void Initialize(IEnumerable<T> list, int count, int page, int pageSize) {
+        public void Initialize(IEnumerable<T> list, IndexRequestModel request, int count) {
 
-            Page = page;
+            Page = request.Page;
             TotalEntries = count;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            TotalPages = (int)Math.Ceiling(count / (double)request.PageSize);
 
-            PageEntries = page * pageSize + 1;
+            PageEntries = Page * request.PageSize + 1;
             PageEnd = (PageEntries + list.Count() - 1);
 
             if (list.Count() > 0) {

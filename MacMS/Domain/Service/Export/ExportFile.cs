@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EquipmentManagementSystem.Data {
+namespace EquipmentManagementSystem.Domain.Service.Export {
 
     public class ExportFile {
 
