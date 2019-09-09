@@ -154,6 +154,21 @@
 
         };
 
+        function RequestCreateOwnerModal() {
+
+                 var phElement = $('#modal-placeholder');
+
+                $.get("@Url.Action("CreateModal", "Owner", new { culture = ViewData["Language"] })").done(function (data2) {
+
+                    phElement.html(data2);
+                    phElement.find('.modal').modal('show');
+                });
+
+                var x = document.getElementById("modal-placeholder");
+                x.style.display = "block";
+
+        };
+
         $("#Serial").keydown(function (e) { if (e.which == 13) e.preventDefault(); });
 
     </script>

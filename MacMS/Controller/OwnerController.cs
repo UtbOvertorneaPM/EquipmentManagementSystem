@@ -96,14 +96,14 @@ namespace EquipmentManagementSystem.Controller {
                 owner.Added = DateTime.Now;
                 if (await _service.Create(owner) is false) {
 
-                    return View(owner);
+                    return Json(owner);
                 }
 
-                return View();
+                return Json(true);
             }
             catch (Exception) {
 
-                return View(owner);
+                return Json(owner);
             }
 
         }
