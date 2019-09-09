@@ -1,4 +1,4 @@
-﻿@model EquipmentManagementSystem.Models.Equipment
+﻿@model EquipmentManagementSystem.Domain.Data.EquipmentViewModel
 
 @using EquipmentManagementSystem
 
@@ -32,14 +32,14 @@
             p.classList = "CategoryText Bold";
             input.classList = "CategoryText";
 
-            switch("@Html.ValueFor(model => model.EquipType)") {
+            switch("@Html.ValueFor(model => model.Equipment.EquipType)") {
 
                 case "Mobil":
 
                     input.type = "text";
                     input.id = "MobileNumber";
                     p.appendChild(document.createTextNode("@Localizer["Mobile Number"]"));
-                    input.textContent = "@Html.DisplayFor(model => model.MobileNumber)";
+                    input.textContent = "@Html.DisplayFor(model => model.Equipment.MobileNumber)";
                     break;
 
                 case "Skrivare":
@@ -47,7 +47,7 @@
                     input.type = "text";
                     input.id = "IP";
                     p.appendChild(document.createTextNode("@Localizer["IP"]"));
-                    input.textContent = "@Html.DisplayFor(model => model.IP)";
+                    input.textContent = "@Html.DisplayFor(model => model.Equipment.IP)";
                     break;
 
                 case "Router":
@@ -56,7 +56,7 @@
                     input.type = "number";
                     input.id = "Ports";
                     p.appendChild(document.createTextNode("@Localizer["Ports"]"));
-                    input.value = "@Html.DisplayFor(model => model.Ports)";
+                    input.value = "@Html.DisplayFor(model => model.Equipment.Ports)";
                     break;
 
                 case "Projektor":
@@ -64,7 +64,7 @@
                     input.type = "text";
                     input.id = "Resolution";
                     p.appendChild(document.createTextNode("@Localizer["Resolution"]"));
-                    input.value = "@Html.DisplayFor(model => model.Resolution)";
+                    input.value = "@Html.DisplayFor(model => model.Equipment.Resolution)";
                     break;
 
                 default:
@@ -77,7 +77,7 @@
             row.appendChild(td);
             row.appendChild(td2);
 
-            var bool = document.getElementById('IDCheck');
+            var bool = document.getElementById('Equipment_IDCheck');
             bool.value = nameInput.value.trim() ? true : false;
         });
 
@@ -97,8 +97,8 @@
             event.preventDefault();
             var form = $('#form');
 
-            var ownerID = document.getElementById("Owner_ID");
-            var ownerName = document.getElementById("Owner_FullName");
+            var ownerID = document.getElementById("Equipment_OwnerID");
+            var ownerName = document.getElementById("Equipment_OwnerName");
 
             if (ownerName.value.length < 1) {
                 ownerID.value = -1;
@@ -164,31 +164,31 @@
     <h3></h3>
     <div>
         <div>
-            @Html.HiddenFor(model => model.ID)
-            @Html.HiddenFor(model => model.IDCheck)
-            @Html.HiddenFor(model => model.Owner.ID)
+            @Html.HiddenFor(model => model.Equipment.ID)
+            @Html.HiddenFor(model => model.Equipment.IDCheck)
+            @Html.HiddenFor(model => model.Equipment.OwnerID)
         </div>
         <table>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Model"]</p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Model)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Model)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Serial"] </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial) @Html.ValidationMessage("Equipment.Serial", "", new { @class = "text-danger" })</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Serial) @Html.ValidationMessage("Equipment.Serial", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Equip Type"] </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.EquipType)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.EquipType)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Location"] </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Location)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Location)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["FullName"] </p></td>
                 <td>
-                    <p class=" CategoryText">@Html.EditorFor(model => model.Owner.FullName)</p>   
+                    <p class=" CategoryText">@Html.EditorFor(model => model.Equipment.OwnerName)</p>   
                     <input type="button" onclick="RequestCreateOwnerModal()" value="Create new Owner" />
                 </td>
                 <td>
@@ -197,14 +197,13 @@
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Notes"]</p></td>
-                <td>@Html.TextAreaFor(model => model.Notes, new { @class = "NotesField" })</td>
+                <td>@Html.TextAreaFor(model => model.Equipment.Notes, new { @class = "NotesField" })</td>
             </tr>
             <tr id="AdditionalInformation"></tr>
         </table>
         <div class="ModalForm" id="modal-placeholder"></div>
     </div>
     <div class="SubmitDiv">
-        <!--<input type="button" value="@Localizer["Edit"]" id="confirmButton" />-->
         <input type="submit" value="@Localizer["Edit"]"/>
         <input type="button" value="@Localizer["Back"]" onclick="location.href='@Url.Action("Index", "Chromebook")'" />
     </div>

@@ -27,14 +27,6 @@ namespace EquipmentManagementSystem.Controller {
         private EquipmentRequestHandler _service;
         private int pageSize = 25;
 
-        /*
-        public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
-
-            ctx.Database.EnsureCreated();
-            _service = new EquipmentRequestHandler<T>(new GenericService(ctx));
-        }
-        */
-
         public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
@@ -61,13 +53,12 @@ namespace EquipmentManagementSystem.Controller {
             SetCultureCookie(culture, Response);
             SetLanguage(culture);
 
-            return PartialView(await _service.IndexRequest<Equipment>(sortVariable, searchString, page, pageSize));
+            return PartialView(await _service.IndexRequest<EquipmentViewModel>(sortVariable, searchString, page, pageSize));
         }
 
 
         public async Task<IActionResult> Import(string source, IFormFile file, bool IsEquipment = true) {
 
-            //throw new NotImplementedException();
             var data = new List<Equipment>();
 
             var migration = new DataMigrations();
@@ -80,7 +71,7 @@ namespace EquipmentManagementSystem.Controller {
                         }
 
                         // Used to import Macservice data
-                        data = (await migration.InsertMacServiceJson(file)).ToList();
+                        await migration.ImportMacServiceJson(_service, file);
                         break;
 
                     case "Backup":
@@ -96,8 +87,9 @@ namespace EquipmentManagementSystem.Controller {
                     case "Random":
 
                         //Random for testing
-                        data = migration.InsertRandomData();
-                        break;
+                        await migration.InsertRandomData(_service);
+
+                        return Json(true);
 
                     default:
 
@@ -138,24 +130,26 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Home/Create
         public IActionResult Create() {
 
-            return View(new Equipment());
+            return View(new EquipmentViewModel());
         }
 
 
         // POST: Home/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Equipment equipment) {
+        public async Task<IActionResult> Create(EquipmentViewModel viewModel) {
+
+            viewModel.Equipment.OwnerID = viewModel.Owner.ID;
 
             if (ModelState.IsValid) {
 
-                equipment.LastEdited = DateTime.Now;
-                await _service.Create(equipment);
+                viewModel.Equipment.LastEdited = DateTime.Now;
+                await _service.Create(viewModel.Equipment);
 
-                return Json(true);
+                return RedirectToAction(nameof(Index));
             }
 
-            return Json(false);
+            return View(viewModel);
         }
 
 
@@ -164,12 +158,16 @@ namespace EquipmentManagementSystem.Controller {
         public async Task<IActionResult> Edit(int id) {
 
             ViewData["IDCheck"] = false;
+            var viewModel = new EquipmentViewModel();
 
-            return View(await _service
-                .FirstOrDefault<Equipment>(e => e.ID == id)
-                .AddIncludes(DataIncludes.Owner)
-                .FirstOrDefaultAsync()
-                );
+            viewModel.Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
+
+                await viewModel.AddOwner(_service, viewModel.Equipment.OwnerName);
+            }
+            
+            return View(viewModel);
         }
 
 
@@ -177,23 +175,22 @@ namespace EquipmentManagementSystem.Controller {
         [HttpPost]
         [ValidateAntiForgeryToken]
         //public IActionResult Edit(Equipment equipment) {
-        public async Task<IActionResult> Edit(Equipment equipment) {
+        public async Task<IActionResult> Edit(EquipmentViewModel viewModel) {
 
             try {
 
-                equipment.LastEdited = DateTime.Now;
-                //equipment.Owner = await _service.GetById<Owner>(equipment.Owner.ID);
+                viewModel.Equipment.LastEdited = DateTime.Now;
 
-                if (await _service.Update(equipment) is false) {
+                if (await _service.Update(viewModel.Equipment) is false) {
 
-                    return View(equipment);
+                    return View(viewModel.Equipment);
                 }
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e) {
 
-                return View(equipment);
+                return View(viewModel.Equipment);
             }
         }
 
@@ -201,23 +198,33 @@ namespace EquipmentManagementSystem.Controller {
         // GET: Home/Delete/5
         public async Task<IActionResult> Delete(int id) {
 
-            return View(await _service.GetById<Equipment>(id));
+            var viewModel = new EquipmentViewModel();
+
+            viewModel.Equipment = await _service.FirstOrDefault<Equipment>(e => e.ID == id).FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
+
+                await viewModel.AddOwner(_service, viewModel.Equipment.OwnerName);
+            }
+
+            return View(viewModel);
         }
 
 
         // POST: Home/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Equipment equipment, IFormCollection collection) {
+        public async Task<IActionResult> Delete(EquipmentViewModel viewModel) {
 
             try {
 
-                await _service.Remove(equipment);
-                return Json(true);
+                await _service.Remove(viewModel.Equipment);
+
+                return RedirectToAction(nameof(Index));
             }
             catch {
 
-                return Json(null);
+                return View(viewModel);
             }
         }
 
@@ -248,7 +255,8 @@ namespace EquipmentManagementSystem.Controller {
             if (!string.IsNullOrEmpty(term)) {
 
                 var request = _service.GetAll<Owner>();
-                return Json(await request.Select(e => e.FullName).ToListAsync());
+                var data = await request.Select(e => e.FullName).ToListAsync();
+                return Json(data);
             }
 
             return null;

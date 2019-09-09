@@ -19,10 +19,10 @@ namespace EquipmentManagementSystem.Domain.Business {
                     return query.OrderBy(e => e.LastEdited);
 
                 case "Owner_desc":
-                    return query.OrderByDescending(e => e.Owner.LastName);
+                    return query.OrderByDescending(e => e.OwnerName);
 
                 case "Owner":
-                    return query.OrderBy(e => e.Owner.LastName);
+                    return query.OrderBy(e => e.OwnerName);
 
                 default:
                     return null;
@@ -77,7 +77,7 @@ namespace EquipmentManagementSystem.Domain.Business {
                         case "Owner":
 
                             returnData.AddRange(await(from x in data
-                                              where x.Owner.FullName.Contains(query[1])
+                                              where x.OwnerName.Contains(query[1])
                                               && x.EquipType == Equipment.EquipmentType.Chromebook
                                               select x).ToListAsync());
                             break;
@@ -102,7 +102,7 @@ namespace EquipmentManagementSystem.Domain.Business {
                     }
                     else {
                         returnData.Concat(from x in data
-                                          where x.Owner.FullName.Contains(query[1]) ||
+                                          where x.OwnerName.Contains(query[1]) ||
                                           x.Model.Contains(query[1]) ||
                                           x.Serial.Contains(query[1]) ||
                                           x.Notes.Contains(query[1]) ||

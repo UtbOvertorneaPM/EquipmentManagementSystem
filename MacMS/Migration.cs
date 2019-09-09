@@ -10,6 +10,9 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using EquipmentManagementSystem.Domain.Business;
+using EquipmentManagementSystem.Domain.Data;
+using System.Diagnostics;
 
 namespace EquipmentManagementSystem {
 
@@ -17,37 +20,59 @@ namespace EquipmentManagementSystem {
     public class DataMigrations {
 
 
-        public async Task<IEnumerable<Equipment>> InsertMacServiceJson(IFormFile file) {
+        public async Task ImportMacServiceJson(EquipmentRequestHandler service, IFormFile file) {
 
             List<Mac> macs = new List<Mac>();
             List<Equipment> equip = new List<Equipment>();
-            var owner = new List<Owner>();
+            var owners = new List<Owner>();
             var dateToday = DateTime.Now;
 
             string json = GetFileAsJson(file);
 
-            if (file.FileName.Contains("vit")) {
+            var root = await Task.Run(() => JsonConvert.DeserializeObject<List<MacServiceModel.Rootobject>>(json));
 
-                equip = await Task.Run(() => JsonConvert.DeserializeObject<List<Equipment>>(json));
 
-                for (int i = 0; i < equip.Count; i++) {
+            for (int i = 0; i < root.Count; i++) {
 
-                    equip[i].EquipType = Equipment.EquipmentType.Mac;
+                var macOwner = root[i].Owner;
+                var owner = new Owner();
+
+                owner.FirstName = macOwner.FirstName;
+                owner.LastName = macOwner.LastName;
+                owner.SSN = macOwner.SSN;
+                owner.Mail = macOwner.Mail;
+                owner.Address = macOwner.Address;
+                owner.TelNr = macOwner.TelNr;
+
+                if (!string.IsNullOrEmpty(owner.FirstName)) {
+
+                    owners.Add(owner);
                 }
+
+                var equipment = new Equipment();
+
+                var mac = root[i];
+                equipment.Serial = mac.Serial;
+                equipment.Model = mac.Model;
+                equipment.LastEdited = mac.Added;
+                equipment.OwnerName = owner.FirstName + " " + owner.LastName;
+                equipment.Notes = mac.Notes;
+
+                equip.Add(equipment);
             }
-            else {
-                macs = JsonConvert.DeserializeObject<List<Mac>>(json);
 
-                for (int i = 0; i < macs.Count; i++) {
+            for (int i = 0; i < equip.Count; i++) {
 
-                    equip.Add(macs[i]);
-                    equip[equip.Count - 1].EquipType = Equipment.EquipmentType.Mac;
-                }
+                await service.Create<Equipment>(equip[i]);
+            }
 
+            for (int i = 0; i < owners.Count; i++) {
+
+                await service.Create<Owner>(owners[i]);
             }
 
 
-            return equip;
+            return;
         }
 
 
@@ -68,56 +93,70 @@ namespace EquipmentManagementSystem {
             return data;
         }
 
-        
-        public List<Equipment> InsertRandomData() {
 
-            var usersToAdd = 500;
-            var equipmentToAdd = 500;
+        public async Task InsertRandomData(EquipmentRequestHandler service) {
 
-            const string chars = "abcdefghijklmnopqrstuvxyzw";
-            const string numbers = "123456789";
+            if (Debugger.IsAttached) {
 
-            var random = new Random();
+                var usersToAdd = 500;
+                var equipmentToAdd = 500;
 
-            var owners = new List<Owner>();
-            var equipment = new List<Equipment>();
+                const string chars = "abcdefghijklmnopqrstuvxyzw";
+                const string numbers = "123456789";
 
-            for (int i = 0; i < usersToAdd; i++) {
+                var random = new Random();
 
-                var owner = new Owner {
-                    FirstName = new string(Enumerable.Repeat(chars, 10)
-                    .Select(s => s[random.Next(s.Length)]).ToArray()),
+                var owners = new List<Owner>();
+                var equipment = new List<Equipment>();
 
-                    LastName = new string(Enumerable.Repeat(chars, 10)
-                    .Select(s => s[random.Next(s.Length)]).ToArray()),
-                    Added = DateTime.Now,
-                    LastEdited = DateTime.Now
-                };
+                for (int i = 0; i < usersToAdd; i++) {
 
-                owners.Add(owner);
+                    var owner = new Owner {
+                        FirstName = new string(Enumerable.Repeat(chars, 10)
+                        .Select(s => s[random.Next(s.Length)]).ToArray()),
+
+                        LastName = new string(Enumerable.Repeat(chars, 10)
+                        .Select(s => s[random.Next(s.Length)]).ToArray()),
+                        Added = DateTime.Now,
+                        LastEdited = DateTime.Now
+                    };
+
+                    owners.Add(owner);
+                }
+
+                for (int i = 0; i < equipmentToAdd; i++) {
+
+                    var eqp = new Equipment {
+                        Serial = new string(Enumerable.Repeat(numbers, 15)
+                        .Select(s => s[random.Next(s.Length)]).ToArray()),
+
+                        Model = new string(new string(Enumerable.Repeat(chars, 10)
+                        .Select(s => s[random.Next(s.Length)]).ToArray()) +
+                        new string(Enumerable.Repeat(numbers, 8)
+                        .Select(s => s[random.Next(s.Length)]).ToArray())),
+
+                        LastEdited = DateTime.Now,
+                        EquipType = Equipment.EquipmentType.Laptop,
+                    };
+
+                    equipment.Add(eqp);
+                }
+
+                for (int i = 0; i < equipment.Count; i++) {
+
+                    await service.Create<Equipment>(equipment[i]);
+                }
+
+                for (int i = 0; i < owners.Count; i++) {
+
+                    await service.Create<Owner>(owners[i]);
+                }
+
+                return;
             }
 
-            for (int i = 0; i < equipmentToAdd; i++) {
-
-                var eqp = new Equipment {
-                    Serial = new string(Enumerable.Repeat(numbers, 15)
-                    .Select(s => s[random.Next(s.Length)]).ToArray()),
-
-                    Model = new string(new string(Enumerable.Repeat(chars, 10)
-                    .Select(s => s[random.Next(s.Length)]).ToArray()) +
-                    new string(Enumerable.Repeat(numbers, 8)
-                    .Select(s => s[random.Next(s.Length)]).ToArray())),
-
-                    LastEdited = DateTime.Now,
-                    EquipType = Equipment.EquipmentType.Laptop,
-                    Owner = owners[i]
-                };
-
-                equipment.Add(eqp);
-            }
-
-            return equipment;
-            
+            throw new Exception("This feature is only available in debug");
+          
         }
 
         

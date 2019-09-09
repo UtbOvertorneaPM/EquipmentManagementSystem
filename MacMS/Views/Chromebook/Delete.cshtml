@@ -1,4 +1,4 @@
-﻿@model EquipmentManagementSystem.Models.Equipment
+﻿@model EquipmentManagementSystem.Domain.Data.EquipmentViewModel
 
 @using EquipmentManagementSystem
 
@@ -7,27 +7,25 @@
 
 @{
     ViewData["Title"] = "Delete";
-    Layout = "~/Views/Shared/_Layout1.cshtml";
+
 }
 
 @section scripts {
 
     <script type="text/javascript">
 
-        $('form').on("submit", function (e) {
+        function submit(e) {
 
             var dialog = document.getElementById("confirmDialog");
             dialog.title = "Delete Equipment";
             ConfirmClick(e, Delete);
-        });
+        };
 
         function Delete() {
 
             var form = $('#form');
+            form.submit;
 
-            $.getScript("ajaxPost.js", function (data) {
-                PostForm(form, callBack);
-            });
         }
 
         function callBack(success) {
@@ -48,34 +46,36 @@
     <h3></h3>
     <div>
         <div>
-            @Html.HiddenFor(model => model.ID)
+            @Html.HiddenFor(model => model.Equipment.ID)
         </div>
         <table>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Model"]:  </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.Model)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.Model)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Serial"]: </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.Serial)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.Serial)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Location"]: </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.Location)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.Location)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Owner"]: </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.FullName)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Equipment.OwnerName)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Notes"]: </p></td>
-                <td>@Html.DisplayFor(model => model.Notes, new { @class = "NotesField" })</td>
+                <td>@Html.DisplayFor(model => model.Equipment.Notes, new { @class = "NotesField" })</td>
             </tr>
         </table>
     </div>
     <div id="additionalInformation"></div>
     <div class="SubmitDiv">
-        <input type="submit" value="Delete" />
+        @Html.HiddenFor(model => model.Equipment.ID)
+        <!--<input type="button" value="Delete" onclick="submit()"/>-->
+        <input type="submit" value="" />
         <input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Chromebook")'" />
     </div>
 }

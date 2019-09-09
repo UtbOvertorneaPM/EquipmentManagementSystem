@@ -23,9 +23,6 @@ namespace EquipmentManagementSystem.Domain.Service {
             return _context.Set<T>().Where(predicate);
         }
 
-        public async Task<T> GetById<T>(int id) where T : class {
-            return await _context.Set<T>().FindAsync();
-        }
 
         public IQueryable<T> FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : class {
 
@@ -36,7 +33,6 @@ namespace EquipmentManagementSystem.Domain.Service {
 
             return _context.Set<T>().AsQueryable();
         }
-
 
         public async Task Create<T>(T entity) where T : class {
 

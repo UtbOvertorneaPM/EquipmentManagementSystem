@@ -1,4 +1,4 @@
-﻿@model EquipmentManagementSystem.Models.Equipment
+﻿@model EquipmentManagementSystem.Domain.Data.EquipmentViewModel
 
 @using EquipmentManagementSystem
 
@@ -18,9 +18,9 @@
 
             GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
 
-            var nameInput = document.getElementById('Owner_FullName');
+            var nameInput = document.getElementById('Equipment_OwnerName');
 
-            var bool = document.getElementById('IDCheck');
+            var bool = document.getElementById('Equipment_IDCheck');
             bool.value = nameInput.value.trim() ? true : false;
 
             var ownerID = document.getElementById("Owner_ID");
@@ -49,7 +49,7 @@
                     input.type = "text";
                     input.id = "MobileNumber";
                     p.appendChild(document.createTextNode("@Localizer["MobileNumber"]"));
-                    input.textContent = "@Html.DisplayFor(model => model.MobileNumber)";
+                    input.textContent = "@Html.DisplayFor(model => model.Equipment.MobileNumber)";
                     break;
 
                 case "Skrivare":
@@ -57,7 +57,7 @@
                     input.type = "text";
                     input.id = "IP";
                     p.appendChild(document.createTextNode("@Localizer["IP"]"));
-                    input.textContent = "@Html.DisplayFor(model => model.IP)";
+                    input.textContent = "@Html.DisplayFor(model => model.Equipment.IP)";
                     break;
 
                 case "Router":
@@ -66,7 +66,7 @@
                     input.type = "number";
                     input.id = "Ports";
                     p.appendChild(document.createTextNode("@Localizer["Ports"]"));
-                    input.value = "@Html.DisplayFor(model => model.MobileNumber)";
+                    input.value = "@Html.DisplayFor(model => model.Equipment.MobileNumber)";
                     break;
 
                 case "Projektor":
@@ -74,7 +74,7 @@
                     input.type = "text";
                     input.id = "Resolution";
                     p.appendChild(document.createTextNode("@Localizer["Resolution"]"));
-                    input.value = "@Html.DisplayFor(model => model.MobileNumber)";
+                    input.value = "@Html.DisplayFor(model => model.Equipment.MobileNumber)";
                     break;
 
                 default:
@@ -90,11 +90,11 @@
 
         $('#Owner_FullName').keyup(function () {
 
-            var nameInput = document.getElementById('Owner_FullName');
+            var nameInput = document.getElementById('Equipment_OwnerName');
 
             Search(nameInput, document.getElementById('ownerList'));
 
-            var bool = document.getElementById('IDCheck');
+            var bool = document.getElementById('Equipment_IDCheck');
             bool.value = nameInput.value.trim() ? true : false;
         });
 
@@ -108,16 +108,16 @@
 
             event.preventDefault();
 
-            var input = document.getElementById("Owner_FullName");
+            var input = document.getElementById("Equipment_OwnerName");
             input.value = event.target.textContent;
 
             var list = document.getElementById("ownerList");
             list.style.display = "none";
 
-            var bool = document.getElementById('IDCheck');
+            var bool = document.getElementById('Equipment_IDCheck');
             bool.value = false;
 
-            var ownerID = document.getElementById("Owner_ID");
+            var ownerID = document.getElementById("Equipment_OwnerID");
             ownerID.value = event.target.id;
         };
 
@@ -125,12 +125,7 @@
         $('#form').on("submit", function (event) {
 
             if (event.keyCode!=13) {
-                event.preventDefault();
-                var form = $('#form');
 
-                $.getScript("/js/ajaxPost.js", function (data) {
-                    PostForm(form, callBackUser);
-                });
             }
         });
 
@@ -168,20 +163,20 @@
     @Html.AntiForgeryToken()
     <h3></h3>
     <div>
-        @Html.HiddenFor(model => model.IDCheck)
+        @Html.HiddenFor(model => model.Equipment.IDCheck)
         @Html.HiddenFor(model => model.Owner.ID)
         <table>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Model"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Model)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Model)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Serial"]: </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Serial) @Html.ValidationMessage("Equipment.Serial", "", new { @class = "text-danger" })</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Serial) @Html.ValidationMessage("Equipment.Serial", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Location"]: </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Location)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Location)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Owner"]: </p></td>
@@ -194,11 +189,11 @@
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Notes"]: </p></td>
-                <td>@Html.TextAreaFor(model => model.Notes, new { @class = "NotesField" })</td>
+                <td>@Html.TextAreaFor(model => model.Equipment.Notes, new { @class = "NotesField" })</td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["EquipType"]</p></td>
-                <td><select asp-for="EquipType" id="typeSelect" asp-items="Html.GetEnumSelectList<EquipmentManagementSystem.Models.Equipment.EquipmentType>()"></select></td>
+                <td><select asp-for="Equipment.EquipType" id="typeSelect" asp-items="Html.GetEnumSelectList<EquipmentManagementSystem.Models.Equipment.EquipmentType>()"></select></td>
             </tr>
             <tr id="AdditionalInformation"></tr>
         </table>

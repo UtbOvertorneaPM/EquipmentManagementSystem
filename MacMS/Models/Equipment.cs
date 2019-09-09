@@ -21,7 +21,6 @@ namespace EquipmentManagementSystem.Models {
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime LastEdited { get; set; }
 
-
         [NotMapped]
         public bool? IDCheck { get; set; }
 
@@ -37,11 +36,7 @@ namespace EquipmentManagementSystem.Models {
 
         public int? OwnerID { get; set; }
 
-        [Display(Name = "Owner")]        
-        public Owner Owner { get; set; }
-
-        [NotMapped]
-        public string OwnerName { get { return Owner.FullName; } }
+        public string OwnerName { get; set; }
 
         [Display(Name = "Location")]
         public string Location { get; set; }

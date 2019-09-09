@@ -1,5 +1,6 @@
 ﻿@using EquipmentManagementSystem.Models
-@model PagedList<Equipment>
+@model PagedList<EquipmentViewModel>
+@using EquipmentManagementSystem.Domain.Data
 @using EquipmentManagementSystem.Data
 @inject Localizer Localizer
 
@@ -56,28 +57,28 @@
     @foreach (var item in Model) {
         <tr id="toprow" class="ParentRow">
             <td>
-                @Html.DisplayFor(modelItem => item.LastEdited)
+                @Html.DisplayFor(modelItem => item.Equipment.LastEdited)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Model)
+                @Html.DisplayFor(modelItem => item.Equipment.Model)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Serial)
+                @Html.DisplayFor(modelItem => item.Equipment.Serial)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.FullName)
+                @Html.DisplayFor(modelItem => item.Equipment.OwnerName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EquipType)
+                @Html.DisplayFor(modelItem => item.Equipment.EquipType)
             </td>
             <td class="Actions">
-                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
-                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
+                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.Equipment.ID, culture = ViewData["Language"] }) |
+                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.Equipment.ID, culture = ViewData["Language"] })
             </td>
         </tr>
 
         <tr class="ChildRow">
-            <td colspan="5">@Html.DisplayFor(modelItem => item.Notes)</td>
+            <td colspan="5">@Html.DisplayFor(modelItem => item.Equipment.Notes)</td>
         </tr>
     }
 </table>

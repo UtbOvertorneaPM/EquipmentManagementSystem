@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using EquipmentManagementSystem.Data;
 using System.Collections;
+using EquipmentManagementSystem.Domain.Data;
 
 namespace EquipmentManagementSystem.Models {
 
@@ -38,6 +39,7 @@ namespace EquipmentManagementSystem.Models {
         [JsonIgnore]
         [Display(Name = "Equipment")]
         public virtual ICollection<Equipment> Equipment { get; set; }
+
 
         [Display(Name = "FullName")]
         public string FullName {

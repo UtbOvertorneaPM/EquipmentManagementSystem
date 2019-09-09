@@ -1,4 +1,5 @@
 ﻿using EquipmentManagementSystem.Data;
+using EquipmentManagementSystem.Domain.Data;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
 using EquipmentManagementSystem.Models;
@@ -31,11 +32,11 @@ namespace EquipmentManagementSystem.Domain.Business {
         public IQueryable<T> Get<T>(Expression<Func<T, bool>> predicate) where T : class =>
             _service.Get(predicate);
 
-        public async Task<T> GetById<T>(int id) where T : class  =>
-            await _service.GetById<T>(id);
+        public async Task<T> GetById<T>(int id) where T : Equipment  =>
+            await _service.Get<T>(e => e.ID == id).FirstOrDefaultAsync();
 
         public async Task Create<T>(T equipment) where T : class =>
-            await _service.Create<T>(equipment);
+            await _service.Create(equipment);
             
 
         public async Task Remove<T>(T equipment) where T : class =>
@@ -65,7 +66,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
             if (string.IsNullOrEmpty(selection)) {
                 if (searchString == "Find model/date/owner...") {
-                    data = await _service.GetAll<Equipment>().AddIncludes(DataIncludes.Owner).ToListAsync();
+                    data = await _service.GetAll<Equipment>().ToListAsync();
                 }
                 else {
                     data = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), searchString);
@@ -77,7 +78,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
                 for (int i = 0; i < serials.Count(); i++) {
 
-                    data.Concat(_service.Get<Equipment>(x => x.Serial == serials[i]).AddIncludes(DataIncludes.Owner));
+                    data.Concat(_service.Get<Equipment>(x => x.Serial == serials[i]));
                 }
 
             }
@@ -91,9 +92,10 @@ namespace EquipmentManagementSystem.Domain.Business {
 
 
 
-        public async Task<PagedList<Equipment>> IndexRequest<T>(string sortVariable, string searchString, int page, int pageSize) where T : class {
+        public async Task<PagedList<EquipmentViewModel>> IndexRequest<T>(string sortVariable, string searchString, int page, int pageSize) where T : class {
 
-            var pagedList = new PagedList<Equipment>();
+            var pagedList = new PagedList<EquipmentViewModel>();
+            var list = new List<EquipmentViewModel>();
 
             var data = Enumerable.Empty<Equipment>();
             var query = Enumerable.Empty<Equipment>();
@@ -102,7 +104,7 @@ namespace EquipmentManagementSystem.Domain.Business {
             // Search
             if (!string.IsNullOrEmpty(searchString)) {
 
-                query = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>().AddIncludes(DataIncludes.Owner), searchString);
+                query = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), searchString);
                 searched = true;
             }
 
@@ -115,17 +117,29 @@ namespace EquipmentManagementSystem.Domain.Business {
                 }
                 else {
 
-                    data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>().AddIncludes(DataIncludes.Owner), sortVariable);
+                    data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), sortVariable);
                 }
-                
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), await _service.Count<T>(), page, pageSize);
+
+
+                foreach (var item in data) {
+
+                    list.Add(new EquipmentViewModel() { Equipment = item });
+                }
+
+                pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), await _service.Count<Equipment>(), page, pageSize);
 
             }
             // Index request without modifiers
             else {
 
-                data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>().AddIncludes(DataIncludes.Owner), "Date_desc");
-                pagedList.Initialize(data.Skip(page * pageSize).Take(pageSize), await _service.Count<T>(), page, pageSize);
+                data = EquipmentDataFormatting.Sort<Equipment>(_service.GetAll<Equipment>(), "Date_desc");
+
+                foreach (var item in data) {
+
+                    list.Add(new EquipmentViewModel() { Equipment = item });
+                }
+
+                pagedList.Initialize(list.Skip(page * pageSize).Take(pageSize), await _service.Count<Equipment>(), page, pageSize);
             }
 
 

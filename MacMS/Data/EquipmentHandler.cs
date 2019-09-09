@@ -22,11 +22,11 @@ namespace EquipmentManagementSystem.Data {
 
 
         public IQueryable<Equipment> GetAll() {
-            return context.Set<Equipment>().Include(o => o.Owner);
+            return context.Set<Equipment>();
         }
 
         public Equipment Get(int id, bool owner = true) {
-            return context.Set<Equipment>().Where(e => e.ID == id).Include(o => o.Owner).FirstOrDefault();
+            return context.Set<Equipment>().Where(e => e.ID == id).FirstOrDefault();
         }
 
 

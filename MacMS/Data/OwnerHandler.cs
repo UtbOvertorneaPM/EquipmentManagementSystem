@@ -225,7 +225,7 @@ namespace EquipmentManagementSystem.Data {
 
         public List<Equipment> GetEquipment(Owner owner) {
 
-            var test = context.Set<Equipment>().Where(e => e.Owner == owner).ToList();
+            var test = context.Set<Equipment>().ToList();
             return test;
         }
 

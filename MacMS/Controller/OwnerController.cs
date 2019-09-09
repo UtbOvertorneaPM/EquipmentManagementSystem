@@ -202,25 +202,7 @@ namespace EquipmentManagementSystem.Controller {
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, IFormCollection collection) {
 
-            try {
-                var owner = repo.Get(id);
-
-                if (owner.Equipment != null) {
-
-                    foreach (Equipment item in owner.Equipment) {
-                        item.Owner = null;
-                        item.OwnerID = null;
-                    }
-                }
-
-                repo.Delete<Owner>(id);
-
-                return Json(true);
-            }
-            catch {
-
-                return Json(null);
-            }
+            return View();
         }
 
 

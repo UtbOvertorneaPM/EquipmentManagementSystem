@@ -24,12 +24,12 @@ namespace EquipmentManagementSystem.newData {
 
         public async Task<IEnumerable<Equipment>> GetAll() {
 
-            return await _context.Set<Equipment>().Include(e => e.Owner).ToListAsync();
+            return await _context.Set<Equipment>().ToListAsync();
         }
 
         public IQueryable<Equipment> GetAllAsQueryable() {
 
-            return _context.Set<Equipment>().Include(e => e.Owner).AsQueryable();
+            return _context.Set<Equipment>().AsQueryable();
         }
 
 
@@ -48,9 +48,9 @@ namespace EquipmentManagementSystem.newData {
                      return await query.OrderBy(e => e.LastEdited).ToListAsync();
 
                 case "Owner_desc":
-                    return await query.OrderByDescending(e => e.Owner.LastName).ToListAsync();
+                    return await query.OrderByDescending(e => e.OwnerName).ToListAsync();
                 case "Owner":
-                    return await query.OrderBy(e => e.Owner.LastName).ToListAsync();
+                    return await query.OrderBy(e => e.OwnerName).ToListAsync();
                 default:
                     return null;
             }
@@ -59,7 +59,7 @@ namespace EquipmentManagementSystem.newData {
 
         public async Task<Equipment> GetById(int id) {
 
-            return await _context.Equipment.Where(q => q.ID == id).Include(e => e.Owner).FirstAsync();
+            return await _context.Equipment.Where(q => q.ID == id).FirstAsync();
         }
 
 
@@ -149,9 +149,17 @@ namespace EquipmentManagementSystem.newData {
 
                         case "Owner":
 
-                            returnData.Concat(from x in data
-                                              where x.Owner.FullName.Contains(query[0])
-                                              select x);
+                            var ownedEquipment = (from x in _context.Set<Owner>()
+                                                 where x.FullName.Contains(query[0])
+                                                 select x.Equipment);
+
+                            var test = new List<Equipment>();
+
+                            foreach (var item in ownedEquipment) {
+                                test.AddRange(item.ToList());
+                            }
+
+                            returnData.Concat(test);
                             break;
 
                         case "EquipType":
@@ -169,8 +177,7 @@ namespace EquipmentManagementSystem.newData {
                 else if (!string.IsNullOrEmpty(query[0]) && !string.IsNullOrWhiteSpace(query[0])) {
 
                     returnData.Concat(from x in data
-                                      where x.Owner.FullName.Contains(query[0]) ||
-                                      x.Model.Contains(query[0]) ||
+                                      where x.Model.Contains(query[0]) ||
                                       x.Serial.Contains(query[0]) ||
                                       x.Notes.Contains(query[0]) ||
                                       x.Location.Contains(query[0])
