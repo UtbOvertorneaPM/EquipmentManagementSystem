@@ -99,7 +99,7 @@ namespace EquipmentManagementSystem.Controller {
                     return View(owner);
                 }
 
-                return RedirectToAction(nameof(Index));
+                return View();
             }
             catch (Exception) {
 

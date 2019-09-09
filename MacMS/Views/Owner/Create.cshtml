@@ -1,6 +1,6 @@
-﻿@model EquipmentManagementSystem.Domain.Data.Models.Owner
+﻿@model EquipmentManagementSystem.Domain.Data.OwnerViewModel
 @using EquipmentManagementSystem.Domain.Service
-@using EquipmentManagementSystem.Data
+@using EquipmentManagementSystem.Domain.Data.Models
 @inject Localizer Localizer
 
 @{
@@ -47,27 +47,27 @@
         <table>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["FirstName"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.FirstName) @Html.ValidationMessage("FirstName", "", new { @class = "text-danger" })</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Owner.FirstName) @Html.ValidationMessage("FirstName", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["LastName"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.LastName) @Html.ValidationMessage("LastName", "", new { @class = "text-danger" })</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Owner.LastName) @Html.ValidationMessage("LastName", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Mail"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Mail) @Html.ValidationMessage("Mail", "", new { @class = "text-danger" })</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Owner.Mail) @Html.ValidationMessage("Mail", "", new { @class = "text-danger" })</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Address"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.Address)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Owner.Address)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["TelNr"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.TelNr)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Owner.TelNr)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["SSN"]:  </p></td>
-                <td><p class="CategoryText">@Html.EditorFor(model => model.SSN)</p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Owner.SSN)</p></td>
             </tr>
         </table>
     </div>

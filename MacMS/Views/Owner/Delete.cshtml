@@ -51,32 +51,32 @@
     @Html.AntiForgeryToken()
     <div>
         <div>
-            @Html.HiddenFor(model => model.ID)
+            @Html.HiddenFor(model => model.Owner.ID)
         </div>
         <table>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["FirstName"]:  </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.FirstName)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.FirstName)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["LastName"]: </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.LastName)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.LastName)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["TelNr"]: </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.TelNr)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.TelNr)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Mail"]: </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.Mail)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.Mail)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["SSN"]: </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.SSN)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.SSN)</p></td>
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Address"]: </p></td>
-                <td><p class="CategoryText">@Html.DisplayFor(model => model.Address)</p></td>
+                <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.Address)</p></td>
             </tr>
         </table>
     </div>

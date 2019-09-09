@@ -1,6 +1,6 @@
 ﻿@model EquipmentManagementSystem.Domain.Data.EquipmentViewModel
 
-@using EquipmentManagementSystem
+@using EquipmentManagementSystem.Domain.Data.Models
 
 @using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
@@ -197,7 +197,7 @@
             </tr>
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["EquipType"]</p></td>
-                <td><select asp-for="Equipment.EquipType" id="typeSelect" asp-items="Html.GetEnumSelectList<EquipmentManagementSystem.Models.Equipment.EquipmentType>()"></select></td>
+                <td><select asp-for="Equipment.EquipType" id="typeSelect" asp-items="Html.GetEnumSelectList<EquipmentManagementSystem.Domain.Data.Models.Equipment.EquipmentType>()"></select></td>
             </tr>
             <tr id="AdditionalInformation"></tr>
         </table>
