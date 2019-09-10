@@ -111,7 +111,7 @@
         });
 
 
-        function PostTable(uri, searchString, currentSort) {
+        function PostTable(uri, searchString, currentSort, page) {
 
             var tableView = "@Html.Raw(Url.Action("Table", "Home", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
                 .replace("_Sort_", encodeURIComponent(currentSort))

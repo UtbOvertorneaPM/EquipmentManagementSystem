@@ -17,17 +17,17 @@ using System.Threading.Tasks;
 
 namespace OwnerManagementSystem.Domain.Business {
 
-    public class OwnerRequestHandler : IRequestHandler {
+    public class OwnerRequestHandler : EquipmentManagementSystem.Domain.Business.IRequestHandler {
 
 
         private IGenericService _service;
         private IValidator _validator;
 
 
-        public OwnerRequestHandler(IGenericService service, IValidator validator) {
+        public OwnerRequestHandler(IGenericService service) {
 
             _service = service;
-            _validator = validator;
+            _validator = new OwnerValidator(this);
         }
 
         public IQueryable<T> GetAll<T>() where T : class =>
@@ -44,7 +44,7 @@ namespace OwnerManagementSystem.Domain.Business {
 
         public async Task<bool> Create<T>(T Owner) where T : class {
 
-            if (_validator.Validate<T>(Owner)) {
+            if (await _validator.Validate<T>(Owner)) {
 
                 await _service.Create(Owner);
                 return true;
@@ -56,7 +56,7 @@ namespace OwnerManagementSystem.Domain.Business {
 
         public async Task<bool> Remove<T>(T Owner) where T : class {
 
-            if (_validator.Validate<T>(Owner)) {
+            if (await _validator.Validate<T>(Owner)) {
 
                 await _service.Remove(Owner);
                 return true;
@@ -68,7 +68,7 @@ namespace OwnerManagementSystem.Domain.Business {
 
         public async Task<bool> Update<T>(T Owner) where T : class {
 
-            if (_validator.Validate(Owner)) {
+            if (await _validator.Validate(Owner)) {
 
                 await _service.Update(Owner);
                 return true;

@@ -24,10 +24,10 @@ namespace EquipmentManagementSystem.Domain.Business {
         private IValidator _validator;
 
 
-        public EquipmentRequestHandler(IGenericService service, IValidator validator) {
+        public EquipmentRequestHandler(IGenericService service) {
 
             _service = service;
-            _validator = validator;
+            _validator = new EquipmentValidator(this);
         }
 
 
@@ -45,7 +45,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
         public async Task<bool> Create<T>(T equipment) where T : class {
 
-            if (_validator.Validate<T>(equipment)) {
+            if (await _validator.Validate<T>(equipment)) {
 
                 await _service.Create(equipment);
                 return true;
@@ -57,7 +57,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
         public async Task<bool> Remove<T>(T equipment) where T : class {
 
-            if (_validator.Validate<T>(equipment)) {
+            if (await _validator.Validate<T>(equipment)) {
 
                 await _service.Remove(equipment);
                 return true;
@@ -69,7 +69,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
         public async Task<bool> Update<T>(T equipment) where T : class {
 
-            if (_validator.Validate(equipment)) {
+            if (await _validator.Validate(equipment)) {
 
                 await _service.Update(equipment);
                 return true;

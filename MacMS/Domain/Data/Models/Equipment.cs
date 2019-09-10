@@ -15,7 +15,7 @@ namespace EquipmentManagementSystem.Domain.Data.Models {
     public class Equipment : IEqualityComparer {
 
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), JsonIgnore]
         public int ID { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]

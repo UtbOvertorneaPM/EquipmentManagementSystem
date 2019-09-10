@@ -35,14 +35,15 @@ namespace EquipmentManagementSystem.Domain.Data {
             for (int i = 0; i < root.Count; i++) {
 
                 var macOwner = root[i].Owner;
-                var owner = new Owner();
 
-                owner.FirstName = macOwner.FirstName;
-                owner.LastName = macOwner.LastName;
-                owner.SSN = macOwner.SSN;
-                owner.Mail = macOwner.Mail;
-                owner.Address = macOwner.Address;
-                owner.TelNr = macOwner.TelNr;
+                var owner = new Owner {
+                    FirstName = macOwner.FirstName,
+                    LastName = macOwner.LastName,
+                    SSN = macOwner.SSN,
+                    Mail = macOwner.Mail,
+                    Address = macOwner.Address,
+                    TelNr = macOwner.TelNr
+                };
 
                 if (!string.IsNullOrEmpty(owner.FirstName)) {
 
@@ -75,19 +76,109 @@ namespace EquipmentManagementSystem.Domain.Data {
             return;
         }
 
-
-        public async Task<IEnumerable<T>> InsertBackupJson<T>(IFormFile file, bool IsEquipment) where T : class{
+        public async Task LegacyImportJson(IRequestHandler _service, IFormFile file) {
 
             var json = GetFileAsJson(file);
-            var data = Enumerable.Empty<T>();
+            var data = await Task.Run(() => JsonConvert.DeserializeObject<List<LegacyEquipmentModel>>(json));
+
+            if (data is List<LegacyEquipmentModel> test) {
+
+                for (int i = 0; i < test.Count; i++) {
+
+                    try {
+                        if ((test[i].Owner is null) is false) {
+                            var legacyOwner = test[i].Owner;
+
+                            var owner = new Owner {
+                                FirstName = legacyOwner.FirstName,
+                                LastName = legacyOwner.LastName,
+                                LastEdited = legacyOwner.LastEdited,
+                                Added = legacyOwner.Added,
+                            };
+
+                            if ((legacyOwner.Mail is null) is false) {
+                                owner.Mail = string.IsNullOrEmpty(legacyOwner.Mail.ToString()) ? legacyOwner.Mail.ToString() : null;
+                            }
+                            if ((legacyOwner.Address is null) is false) {
+                                owner.Address = string.IsNullOrEmpty(legacyOwner.Address.ToString()) ? legacyOwner.Address.ToString() : null;
+                            }
+                            if ((legacyOwner.TelNr is null) is false) {
+                                owner.TelNr = string.IsNullOrEmpty(legacyOwner.TelNr.ToString()) ? legacyOwner.TelNr.ToString() : null;
+                            }
+                            if ((legacyOwner.SSN is null) is false) {
+                                owner.SSN = string.IsNullOrEmpty(legacyOwner.SSN.ToString()) ? legacyOwner.SSN.ToString() : null;
+                            }
+
+                            var eqp = new Equipment {
+                                Model = test[i].Model,
+                                Serial = test[i].Model,
+                                Notes = test[i].Notes,
+                                Location = test[i].Location,
+                                LastEdited = test[i].LastEdited,
+                                EquipType = (Equipment.EquipmentType)test[i].EquipType,
+                                OwnerName = owner.FullName
+                            };
+
+
+                            await _service.Create<Equipment>(eqp);
+                            await _service.Create<Owner>(owner);
+                        }
+                        else {
+
+                            var eqp = new Equipment {
+                                Model = test[i].Model,
+                                Serial = test[i].Model,
+                                Notes = test[i].Notes,
+                                Location = test[i].Location,
+                                LastEdited = test[i].LastEdited,
+                                EquipType = (Equipment.EquipmentType)test[i].EquipType
+                            };
+
+                            await _service.Create<Equipment>(eqp);
+
+                        }
+
+                    }
+                    catch (NullReferenceException) {
+
+                        throw;
+                    }
+
+                }
+            }
+
+            return;
+        }
+
+
+        public async Task<IEnumerable<T>> InsertBackupJson<T>(IFormFile file, bool IsEquipment) where T : class {
+
+            var json = GetFileAsJson(file);
+            var data = new List<T>();
 
             if (IsEquipment) {
 
                 data = await Task.Run(() => JsonConvert.DeserializeObject<List<T>>(json));
+                
+                if (data is List<Equipment> test) {
+
+                    for (int i = 0; i < data.Count(); i++) {
+                        test[i].ID = -1;
+                    }
+                }
+                
+
             }
             else {
 
                 data = await Task.Run(() => JsonConvert.DeserializeObject<List<T>>(json));
+
+                if (data is List<Owner> test) {
+
+                    for (int i = 0; i < data.Count(); i++) {
+                        test[i].ID = -1;
+                    }
+                }
             }
 
             return data;

@@ -29,8 +29,9 @@ namespace EquipmentManagementSystem.Controller {
         public HomeController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-            _service = new EquipmentRequestHandler(new GenericService(ctx), new EquipmentValidator());
 
+            var service = new GenericService(ctx);
+            _service = new EquipmentRequestHandler(service);
         }
 
 

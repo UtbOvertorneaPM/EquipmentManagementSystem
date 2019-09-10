@@ -32,8 +32,8 @@ namespace EquipmentManagementSystem.Controller {
         public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-            _service = new EquipmentRequestHandler(new GenericService(ctx), new EquipmentValidator());
 
+            _service = new EquipmentRequestHandler(new GenericService(ctx));
         }
       
 
@@ -100,6 +100,7 @@ namespace EquipmentManagementSystem.Controller {
                         }
 
                         data = (await migration.InsertBackupJson<Equipment>(file, IsEquipment)).ToList();
+                        
                         break;
 
                     case "Random":
@@ -109,6 +110,10 @@ namespace EquipmentManagementSystem.Controller {
 
                         return Json(true);
 
+                    case "LegacyJSON":
+
+                        await migration.LegacyImportJson(_service, file);
+                        return Json(true);
                     default:
 
                         return Json(false);

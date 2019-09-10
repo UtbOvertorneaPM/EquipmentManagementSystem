@@ -12,6 +12,8 @@
 
     <p>Displaying: @Model.PageEntries - @Model.PageEnd of @Model.TotalEntries entries</p>
     <p id="CurPage" hidden>@Model.Page</p>
+    <p id="SearchString" hidden>@Html.Display("SearchString")</p>
+    <p id="CurrentSort" hidden>@Html.Display("CurrenSort")</p>
     <p>Total entries: @Model.TotalEntries</p>
     <div style="float:left" id="pageList">
         <div style="float:left" id="startList"></div>
@@ -108,7 +110,7 @@
             startList.innerHTML = '';
             endList.innerHTML = '';
             curList.innerHTML = '';
-            
+
             for (var i = (curPage - 2); i < (curPage + 3); i++) {
 
                 if (i < 1) {
@@ -119,7 +121,7 @@
                 }
             }
 
-            
+
             for (var i = 0; i < posList.length; i++) {
 
                 var a = document.createElement('a');
@@ -158,7 +160,7 @@
 
         function PageClick(page) {
 
-            PostTable(page, "@ViewData["SearchString"]", "@ViewData["CurrentSort"]");
+            PostTable(page, "@ViewData["SearchString"]", document.getElementById("CurrentSort").textContent == "Date" ? "Date_desc" : "Date", document.getElementById("CurPage").textContent);
         };
 
         $('a.sortLink').click(function (e) {
@@ -169,18 +171,18 @@
 
 
         function Sort(value) {
-
+            //var sort = ;
             switch (value) {
 
                 case "Date":
-
-                    sortVariable = "@ViewData["CurrentSort"]" == "Date_desc" ? "Date_desc" : "Date";
+                    
+                    sortVariable = sort == "Date_desc" ? "Date_desc" : "Date";
                     PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
                     break;
 
                 case "Owner":
 
-                    sortVariable = "@ViewData["CurrentSort"]" == "Owner" ? "Owner" : "Owner_desc";
+                    sortVariable = sort == "Owner" ? "Owner" : "Owner_desc";
                     PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
                     break;
 

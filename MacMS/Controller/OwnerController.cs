@@ -34,7 +34,8 @@ namespace EquipmentManagementSystem.Controller {
 
         public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
-            _service = new OwnerRequestHandler(new GenericService(ctx), new OwnerValidator());
+            var service = new GenericService(ctx);
+            _service = new OwnerRequestHandler(service);
         }
 
 
