@@ -111,21 +111,7 @@
         });
 
 
-        function PostTable(uri, searchString, currentSort) {
 
-            var tableView = "@Html.Raw(Url.Action("Table", "Chromebook", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
-                .replace("_Sort_", encodeURIComponent(currentSort))
-                .replace("_Search_", encodeURIComponent(searchString))
-                .replace("_Page_", encodeURIComponent(uri));
-
-            $.get(tableView,
-                function (data) {
-                    var partial = document.getElementById('partialTable');
-                    partial.innerHTML = data;
-                    ReloadTable();
-                }
-            )
-        };
 
 
         var importHandler = function () {

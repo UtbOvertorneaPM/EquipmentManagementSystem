@@ -49,7 +49,7 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-            sortVariable = sortVariable == "Date_desc" ? "Date" : "Date_desc";
+            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
 
@@ -59,7 +59,7 @@ namespace EquipmentManagementSystem.Controller {
 
             return PartialView(await ((OwnerRequestHandler)_service).IndexRequest<OwnerViewModel>(
                 new IndexRequestModel() { 
-                    SortVariable = sortVariable,
+                    SortVariable = ViewData["CurrentSort"].ToString(),
                     Page = page,
                     SearchString = searchString,
                     PageSize = pageSize
@@ -192,7 +192,14 @@ namespace EquipmentManagementSystem.Controller {
                 if (await _service.Remove(viewModel.Owner) is false) {
 
                     return View(viewModel);
-                }                
+                }
+
+                var updateEqp = await _service.Get<Equipment>(e => e.OwnerName == viewModel.Owner.FullName).ToListAsync();
+                for (int i = 0; i < updateEqp.Count; i++) {
+
+                    updateEqp[i].OwnerName = null;
+                    await _service.Update(updateEqp[i]);
+                }
 
                 return RedirectToAction(nameof(Index));
             }

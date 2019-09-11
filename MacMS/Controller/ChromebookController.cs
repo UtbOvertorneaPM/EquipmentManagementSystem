@@ -47,10 +47,10 @@ namespace EquipmentManagementSystem.Controller {
         /// <returns></returns>
         public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
-            sortVariable = sortVariable == "Date_desc" ? "Date" : "Date_desc";
-            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
+            ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             ViewData["Page"] = page;
-
+            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
+            
             SetSearchString(ref searchString);
             SetCultureCookie(culture, page.ToString(), searchString, sortVariable, Response);
             SetLanguage(culture);
@@ -65,7 +65,7 @@ namespace EquipmentManagementSystem.Controller {
 
             return PartialView(await ((EquipmentRequestHandler)_service).IndexRequest<EquipmentViewModel>(
                 new IndexRequestModel() {
-                    SortVariable = sortVariable,
+                    SortVariable = ViewData["CurrentSort"].ToString(),
                     Page = page,
                     SearchString = searchString,
                     PageSize = pageSize,
@@ -74,7 +74,7 @@ namespace EquipmentManagementSystem.Controller {
             );
         }
 
-
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> Import(string source, IFormFile file, bool IsEquipment = true) {
 
             var data = new List<Equipment>();

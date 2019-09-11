@@ -27,7 +27,7 @@ namespace OwnerManagementSystem.Domain.Business {
         public OwnerRequestHandler(IGenericService service) {
 
             _service = service;
-            _validator = new OwnerValidator(this);
+            _validator = new Validator(this);
         }
 
         public IQueryable<T> GetAll<T>() where T : class =>

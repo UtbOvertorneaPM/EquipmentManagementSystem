@@ -27,7 +27,7 @@ namespace EquipmentManagementSystem.Domain.Business {
         public EquipmentRequestHandler(IGenericService service) {
 
             _service = service;
-            _validator = new EquipmentValidator(this);
+            _validator = new Validator(this);
         }
 
 

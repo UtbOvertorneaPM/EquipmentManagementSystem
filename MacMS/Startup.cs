@@ -136,7 +136,7 @@ namespace EquipmentManagementSystem {
 
             app.UseStaticFiles();
             app.UseRequestLocalization();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
 

@@ -104,9 +104,12 @@ namespace EquipmentManagementSystem.Controller {
 
                 searchString = ViewData["SearchString"].ToString();
             }
-            else {
+            else if (string.IsNullOrEmpty(searchString) is false){
 
                 ViewData["SearchString"] = searchString;
+            }
+            else {
+                ViewData["SearchString"] = "";
             }
         }
 

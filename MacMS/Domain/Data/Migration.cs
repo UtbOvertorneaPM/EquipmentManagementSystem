@@ -31,47 +31,57 @@ namespace EquipmentManagementSystem.Domain.Data {
 
             var root = await Task.Run(() => JsonConvert.DeserializeObject<List<MacServiceModel.Rootobject>>(json));
 
+            try {
+                for (int i = 0; i < root.Count; i++) {
 
-            for (int i = 0; i < root.Count; i++) {
+                    var macOwner = root[i].Owner;
 
-                var macOwner = root[i].Owner;
+                    var owner = new Owner {
+                        FirstName = macOwner.FirstName,
+                        LastName = macOwner.LastName,
+                        SSN = macOwner.SSN,
+                        Mail = macOwner.Mail,
+                        Address = macOwner.Address,
+                        TelNr = macOwner.TelNr,
+                        LastEdited = dateToday
+                    };
 
-                var owner = new Owner {
-                    FirstName = macOwner.FirstName,
-                    LastName = macOwner.LastName,
-                    SSN = macOwner.SSN,
-                    Mail = macOwner.Mail,
-                    Address = macOwner.Address,
-                    TelNr = macOwner.TelNr
-                };
+                    if (string.IsNullOrEmpty(owner.FirstName) is false) {
 
-                if (!string.IsNullOrEmpty(owner.FirstName)) {
+                        owners.Add(owner);
+                    }
 
-                    owners.Add(owner);
+                    var mac = root[i];
+
+                    var equipment = new Equipment {
+                        Serial = mac.Serial,
+                        Model = mac.Model,
+                        LastEdited = mac.Added,
+                        OwnerName = owner.FirstName + " " + owner.LastName,
+                        Notes = mac.Notes
+                    };
+
+                    equipment.LastEdited = dateToday;
+
+                    equip.Add(equipment);
                 }
 
-                var equipment = new Equipment();
+                for (int i = 0; i < equip.Count; i++) {
 
-                var mac = root[i];
-                equipment.Serial = mac.Serial;
-                equipment.Model = mac.Model;
-                equipment.LastEdited = mac.Added;
-                equipment.OwnerName = owner.FirstName + " " + owner.LastName;
-                equipment.Notes = mac.Notes;
+                    await service.Create<Equipment>(equip[i]);
+                }
 
-                equip.Add(equipment);
+                for (int i = 0; i < owners.Count; i++) {
+
+                    await service.Create<Owner>(owners[i]);
+                }
+
             }
+            catch (Exception) {
 
-            for (int i = 0; i < equip.Count; i++) {
-
-                await service.Create<Equipment>(equip[i]);
+                throw;
             }
-
-            for (int i = 0; i < owners.Count; i++) {
-
-                await service.Create<Owner>(owners[i]);
-            }
-
+            
 
             return;
         }
@@ -111,7 +121,7 @@ namespace EquipmentManagementSystem.Domain.Data {
 
                             var eqp = new Equipment {
                                 Model = test[i].Model,
-                                Serial = test[i].Model,
+                                Serial = test[i].Serial,
                                 Notes = test[i].Notes,
                                 Location = test[i].Location,
                                 LastEdited = test[i].LastEdited,
