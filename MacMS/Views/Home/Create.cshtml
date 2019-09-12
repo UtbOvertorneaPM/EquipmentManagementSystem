@@ -125,11 +125,11 @@
             ownerID.value = event.target.id;
         };
 
-
+        // Stops barcode reader from submitting when adding Model/Serial
         $('#form').on("submit", function (event) {
 
-            if (event.keyCode!=13) {
-
+            if (document.activeElement.id == "Equipment_Model" || document.activeElement.id == "Equipment_Serial") {
+                event.preventDefault();
             }
         });
 
