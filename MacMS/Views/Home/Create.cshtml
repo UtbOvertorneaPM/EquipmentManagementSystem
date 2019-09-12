@@ -5,8 +5,7 @@
 @using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
-@{
-    ViewData["Title"] = Localizer["Create"] + " " + Localizer["Equipment"];
+@{ ViewData["Title"] = Localizer["Create"] + " " + Localizer["Equipment"];
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
@@ -16,10 +15,11 @@
 
         $('document').ready(function () {
 
+            //GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
+
             $('#Equipment_OwnerName').autocomplete({
 
-                source: '@Url.Action("AutoComplete", "Chromebook")'
-                
+                source: '@Url.Action("AutoComplete", "Home")'
             });
 
             var nameInput = document.getElementById('Equipment_OwnerName');
@@ -133,42 +133,20 @@
             }
         });
 
-        function callBackUser(data) {
-
-            if (!data) {
-
-                var phElement = $('#modal-placeholder');
-
-                $.get("@Url.Action("CreateModal", "Owner", new { culture = ViewData["Language"] })").done(function (data2) {
-
-                    phElement.html(data2);
-                    phElement.find('.modal').modal('show');
-                });
-
-                var x = document.getElementById("modal-placeholder");
-                x.style.display = "block";
-            }
-            else {
-
-                window.location.href = "@Url.Action("Index", "Chromebook")";
-            }
-
-        };
 
         function RequestCreateOwnerModal() {
 
-                 var phElement = $('#modal-placeholder');
+            var phElement = $('#modal-placeholder');
 
-                $.get("@Url.Action("CreateModal", "Owner", new { culture = ViewData["Language"] })").done(function (data2) {
+                $.get("@Url.Action("CreateModal", "Owner")").done(function (data) {
 
-                    phElement.html(data2);
+                    phElement.html(data);
                     phElement.find('.modal').modal('show');
                 });
 
                 var x = document.getElementById("modal-placeholder");
                 x.style.display = "block";
-
-        };
+        }
 
         $("#Serial").keydown(function (e) { if (e.which == 13) e.preventDefault(); });
 

@@ -117,11 +117,11 @@
 
             var curPage = document.getElementById("CurPage").textContent;
 
-            $('a.sortLink').click(function (e) {
+                $('a.sortLink').click(function (e) {
 
-                e.preventDefault();
-                Sort(e.target.id.toString());
-            });
+                    e.preventDefault();
+                    Sort(e.target.id.toString());
+                });
 
             var lastPos = totalPages -1;
 
@@ -196,13 +196,13 @@
 
                 case "Date":
 
-                    sortVariable = curSort == "Date_desc" ? "Date_desc" : "Date";
+                    sortVariable = curSort == "Date_desc" ? "Date" : "Date_desc";
                     PostTable("@ViewData["Page"]", searchString, sortVariable.toString());
                     break;
 
                 case "Owner":
 
-                    sortVariable = curSort == "Owner" ? "Owner_desc" : "Owner";
+                    sortVariable = curSort == "Owner_desc" ? "Owner" : "Owner_desc";
                     PostTable("@ViewData["Page"]", searchString, sortVariable.toString());
                     break;
 

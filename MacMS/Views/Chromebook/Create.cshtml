@@ -133,27 +133,20 @@
             }
         });
 
-        function callBackUser(data) {
+        
+        function RequestCreateOwnerModal() {
 
-            if (!data) {
+            var phElement = $('#modal-placeholder');
 
-                var phElement = $('#modal-placeholder');
+                $.get("@Url.Action("CreateModal", "Owner")").done(function (data) {
 
-                $.get("@Url.Action("CreateModal", "Owner", new { culture = ViewData["Language"] })").done(function (data2) {
-
-                    phElement.html(data2);
+                    phElement.html(data);
                     phElement.find('.modal').modal('show');
                 });
 
                 var x = document.getElementById("modal-placeholder");
                 x.style.display = "block";
-            }
-            else {
-
-                window.location.href = "@Url.Action("Index", "Chromebook")";
-            }
-
-        };
+        }
 
         $("#Serial").keydown(function (e) { if (e.which == 13) e.preventDefault(); });
 

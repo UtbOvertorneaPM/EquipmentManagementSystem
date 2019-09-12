@@ -11,10 +11,11 @@
 @if (@Model.TotalPages > 1) {
 
     <p>Displaying: @Model.PageEntries - @Model.PageEnd of @Model.TotalEntries entries</p>
-    <p id="CurPage" hidden>@Model.Page</p>
-    <p id="SearchString" hidden>@Html.Display("SearchString")</p>
-    <p id="CurrentSort" hidden>@Html.Display("CurrenSort")</p>
+
     <p>Total entries: @Model.TotalEntries</p>
+    <p id="CurPage" hidden>@Model.Page</p>
+    <p id="CurrentSort" hidden>@ViewData["CurrentSort"].ToString()</p>
+    <p id="SearchString" hidden>@ViewData["SearchString"].ToString()</p>
     <div style="float:left" id="pageList">
         <div style="float:left" id="startList"></div>
         <div style="float:left" id="curList"></div>
@@ -92,17 +93,40 @@
 
         $('document').ready(function () {
 
-            ReloadTable();
+            ReloadTable(@Model.TotalPages);
         });
 
-        function ReloadTable() {
+        function PostTable(uri, searchString, currentSort) {
+
+            var tableView = "@Html.Raw(Url.Action("Table", "Home", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent(currentSort))
+                .replace("_Search_", encodeURIComponent(searchString))
+                .replace("_Page_", encodeURIComponent(uri));
+
+            $.get(tableView,
+                function (data) {
+                    var partial = document.getElementById('partialTable');
+                    partial.innerHTML = data;
+                    ReloadTable(@Model.TotalPages);
+                }
+            )
+        };
+
+
+        function ReloadTable(totalPages) {
 
             var curPage = document.getElementById("CurPage").textContent;
 
-            var count = @Model.TotalPages;
-            var lastPos = @Model.TotalPages - 1;
+                $('a.sortLink').click(function (e) {
+
+                    e.preventDefault();
+                    Sort(e.target.id.toString());
+                });
+
+            var lastPos = totalPages -1;
 
             var posList = [0, lastPos];
+
             var startList = document.getElementById('startList');
             var endList = document.getElementById('endList');
             var curList = document.getElementById('curList');
@@ -121,7 +145,6 @@
                 }
             }
 
-
             for (var i = 0; i < posList.length; i++) {
 
                 var a = document.createElement('a');
@@ -129,9 +152,10 @@
 
                 a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
 
+                //a.onclick = "PageClick(_test_)".replace("_test_", a.textContent);
+                //a.href = "";
                 a.href = "javascript:PageClick(_Obj_)"
                     .replace("_Obj_", a.textContent);
-
 
                 if (i == 0 && posList[i] != curPage) {
 
@@ -155,35 +179,31 @@
             }
         };
 
-
-
-
         function PageClick(page) {
 
-            PostTable(page, "@ViewData["SearchString"]", document.getElementById("CurrentSort").textContent == "Date" ? "Date_desc" : "Date", document.getElementById("CurPage").textContent);
+            let curSort = document.getElementById("CurrentSort") == null ? "" : document.getElementById("CurrentSort").textContent;
+            let searchString = document.getElementById("SearchString") == null ? "" : document.getElementById("SearchString").textContent;
+            PostTable(page, searchString, curSort);
         };
-
-        $('a.sortLink').click(function (e) {
-
-            e.preventDefault();
-            Sort(e.target.id.toString());
-        });
 
 
         function Sort(value) {
-            //var sort = ;
+
+            let curSort = document.getElementById("CurrentSort").textContent;
+            let searchString = document.getElementById("SearchString").textContent;
+
             switch (value) {
 
                 case "Date":
-                    
-                    sortVariable = sort == "Date_desc" ? "Date_desc" : "Date";
-                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+
+                    sortVariable = curSort == "Date_desc" ? "Date" : "Date_desc";
+                    PostTable("@ViewData["Page"]", searchString, sortVariable.toString());
                     break;
 
                 case "Owner":
 
-                    sortVariable = sort == "Owner" ? "Owner" : "Owner_desc";
-                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    sortVariable = curSort == "Owner_desc" ? "Owner" : "Owner_desc";
+                    PostTable("@ViewData["Page"]", searchString, sortVariable.toString());
                     break;
 
                 default:

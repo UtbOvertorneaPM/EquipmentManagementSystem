@@ -50,14 +50,14 @@ namespace EquipmentManagementSystem.Controller {
         public async Task<PartialViewResult> Table(string sortVariable, string searchString, string culture, int page = 0) {
 
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
-            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
             ViewData["Page"] = page;
-
+            culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
+            
             SetSearchString(ref searchString);
             SetCultureCookie(culture, page.ToString(), searchString, sortVariable, Response);
             SetLanguage(culture);
 
-            return PartialView(await ((OwnerRequestHandler)_service).IndexRequest<OwnerViewModel>(
+            return PartialView(await ((OwnerRequestHandler)_service).IndexRequest<Owner>(
                 new IndexRequestModel() { 
                     SortVariable = ViewData["CurrentSort"].ToString(),
                     Page = page,
@@ -185,7 +185,7 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Owner/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(EquipmentViewModel viewModel) {
+        public async Task<IActionResult> Delete(OwnerViewModel viewModel) {
 
             try {
 
@@ -194,11 +194,12 @@ namespace EquipmentManagementSystem.Controller {
                     return View(viewModel);
                 }
 
-                var updateEqp = await _service.Get<Equipment>(e => e.OwnerName == viewModel.Owner.FullName).ToListAsync();
-                for (int i = 0; i < updateEqp.Count; i++) {
+                foreach (Equipment equipment in await _service.Get<Equipment>(e => e.OwnerName == viewModel.Owner.FullName).ToListAsync()) {
 
-                    updateEqp[i].OwnerName = null;
-                    await _service.Update(updateEqp[i]);
+                    equipment.OwnerName = null;
+                    equipment.OwnerID = -1;
+
+                    await _service.Update(equipment);
                 }
 
                 return RedirectToAction(nameof(Index));

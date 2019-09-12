@@ -1,7 +1,7 @@
 ﻿@using EquipmentManagementSystem.Domain.Data
 @using EquipmentManagementSystem.Domain.Data.Models
 @using EquipmentManagementSystem.Domain.Service
-@model PagedList<OwnerViewModel>
+@model PagedList<Owner>
 @inject Localizer Localizer
 
 @{
@@ -20,6 +20,22 @@
             ReloadTable();
         });
 
+        function PostTable(uri, searchString, currentSort) {
+
+            var tableView = "@Html.Raw(Url.Action("Table", "Owner", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent(currentSort))
+                .replace("_Search_", encodeURIComponent(searchString))
+                .replace("_Page_", encodeURIComponent(uri));
+
+            $.get(tableView,
+                function (data) {
+                    var partial = document.getElementById('partialTable');
+                    partial.innerHTML = data;
+                    ReloadTable(@Model.TotalPages);
+                }
+            )
+        };
+
 
         function ReloadTable() {
 
@@ -27,6 +43,12 @@
 
             var count = @Model.TotalPages;
             var lastPos = @Model.TotalPages - 1;
+
+            $('a.sortLink').click(function (e) {
+
+                e.preventDefault();
+                Sort(e.target.id.toString());
+            });
 
             var posList = [0, lastPos];
             var startList = document.getElementById('startList');
@@ -80,11 +102,6 @@
             }
         };
 
-        $('a.sortLink').click(function (e) {
-
-            e.preventDefault();
-            Sort(e.target.id.toString());
-        });
 
         function PageClick(page) {
 
@@ -93,24 +110,27 @@
 
         function Sort(value) {
 
+            let curSort = document.getElementById("CurrentSort").textContent;
+            let searchString = document.getElementById("SearchString").textContent;
+
             switch (value) {
 
                 case "Created":
 
-                    sortVariable = "@ViewData["CurrentSort"]" == "Created_desc" ? "Created_desc" : "Created";
-                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    sortVariable = curSort == "Created_desc" ? "Created" : "Created_desc";
+                    PostTable("@ViewData["Page"]", searchString, sortVariable.toString());
                     break;
 
                 case "Date":
 
-                    sortVariable = "@ViewData["CurrentSort"]" == "Date_desc" ? "Date_desc" : "Date";
-                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    sortVariable = curSort == "Date_desc" ? "Date" : "Date_desc";
+                    PostTable("@ViewData["Page"]", searchString, sortVariable.toString());
                     break;
 
                 case "Owner":
 
-                    sortVariable = "@ViewData["CurrentSort"]" == "Owner" ? "Owner_desc" : "Owner"
-                    PostTable("@ViewData["Page"]", "@ViewData["SearchString"]", sortVariable.toString());
+                    sortVariable = curSort == "Owner_desc" ? "Owner" : "Owner_desc";
+                    PostTable("@ViewData["Page"]", searchString, sortVariable.toString());
                     break;
 
                 default:
@@ -200,6 +220,8 @@
 
     <p>Displaying: @Model.PageEntries - @Model.PageEnd of @Model.TotalEntries entries</p>
     <p id="CurPage" hidden>@Model.Page</p>
+    <p id="CurrentSort" hidden>@ViewData["CurrentSort"].ToString()</p>
+    <p id="SearchString" hidden>@ViewData["SearchString"].ToString()</p>
     <div style="float:left" id="pageList">
         <div style="float:left" id="startList"></div>
         <div style="float:left" id="curList"></div>
@@ -248,26 +270,26 @@
     @foreach (var item in Model) {
         <tr id="toprow" class="ParentRow">
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.Added)
+                @Html.DisplayFor(modelItem => item.Added)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.LastEdited)
+                @Html.DisplayFor(modelItem => item.LastEdited)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.FirstName)
+                @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.LastName)
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.Mail)
+                @Html.DisplayFor(modelItem => item.Mail)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.Address)
+                @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td class="Actions">
-                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.Owner.ID, culture = ViewData["Language"] }) |
-                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.Owner.ID, culture = ViewData["Language"] })
+                @Html.ActionLink(Localizer["Edit"], "Edit", new { id = item.ID, culture = ViewData["Language"] }) |
+                @Html.ActionLink(Localizer["Delete"], "Delete", new { id = item.ID, culture = ViewData["Language"] })
             </td>
         </tr>
     }

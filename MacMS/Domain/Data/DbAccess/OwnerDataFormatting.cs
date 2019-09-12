@@ -15,17 +15,20 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
 
             switch (sortVariable) {
                 case "Date_desc":
-                    return query.OrderByDescending(e => e.LastEdited);
+                    return query.OrderByDescending(o => o.LastEdited);
 
                 case "Date":
-                    return query.OrderBy(e => e.LastEdited);
+                    return query.OrderBy(o => o.LastEdited);
 
                 case "Owner_desc":
-                    return query.OrderByDescending(e => e.FullName);
+                    return query.OrderByDescending(o => o.FullName);
 
                 case "Owner":
-                    return query.OrderBy(e => e.FullName);
-
+                    return query.OrderBy(o => o.FullName);
+                case "Created_desc":
+                    return query.OrderByDescending(o => o.Added);
+                case "Created":
+                    return query.OrderBy(o => o.Added);
                 default:
                     return null;
             }

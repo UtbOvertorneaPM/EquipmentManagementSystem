@@ -119,10 +119,10 @@ namespace OwnerManagementSystem.Domain.Business {
         }
 
 
-        public async Task<PagedList<OwnerViewModel>> IndexRequest<T>(IndexRequestModel request) where T : class {
+        public async Task<PagedList<Owner>> IndexRequest<T>(IndexRequestModel request) where T : class {
 
-            var pagedList = new PagedList<OwnerViewModel>();
-            var list = new List<OwnerViewModel>();
+            var pagedList = new PagedList<Owner>();
+            var list = new List<Owner>();
             int count = await _service.Count<Owner>(); ;
 
 
@@ -151,7 +151,7 @@ namespace OwnerManagementSystem.Domain.Business {
 
                 foreach (var item in data) {
 
-                    list.Add(new OwnerViewModel() { Owner = item });
+                    list.Add(item);
                 }
 
                 pagedList.Initialize(list.Skip(request.Page * request.PageSize).Take(request.PageSize), request, count);
@@ -163,7 +163,7 @@ namespace OwnerManagementSystem.Domain.Business {
 
                 foreach (var item in data) {
 
-                    list.Add(new OwnerViewModel() { Owner = item });
+                    list.Add(item);
                 }
 
                 pagedList.Initialize(list.Skip(request.Page * request.PageSize).Take(request.PageSize), request, count);

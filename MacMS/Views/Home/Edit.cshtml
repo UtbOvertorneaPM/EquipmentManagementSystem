@@ -7,8 +7,7 @@
 @using EquipmentManagementSystem.Domain.Service
 @inject Localizer Localizer
 
-@{
-    ViewData["Title"] = "Edit";
+@{ ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
@@ -137,9 +136,11 @@
 
         function RequestCreateOwnerModal() {
 
-                $.get("@Url.Action("CreateModal", "Owner")").done(function (data2) {
+            var phElement = $('#modal-placeholder');
 
-                    phElement.html(data2);
+                $.get("@Url.Action("CreateModal", "Owner")").done(function (data) {
+
+                    phElement.html(data);
                     phElement.find('.modal').modal('show');
                 });
 
@@ -164,9 +165,6 @@
     <h3></h3>
     <div>
         <div>
-            @Html.HiddenFor(model => model.Equipment.ID)
-            @Html.HiddenFor(model => model.Equipment.IDCheck)
-            @Html.HiddenFor(model => model.Equipment.OwnerID)
             @Html.HiddenFor(model => model.Equipment.ID)
             @Html.HiddenFor(model => model.Equipment.IDCheck)
             @Html.HiddenFor(model => model.Equipment.OwnerID)

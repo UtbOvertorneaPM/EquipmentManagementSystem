@@ -38,11 +38,12 @@ namespace EquipmentManagementSystem.Domain.Data.Validation {
 
                     isValid = false;
                 }
-
+                /*
                 if (await _service.Get<Owner>(o => o.FullName == owner.FullName).CountAsync() > 0) {
 
                     isValid = false;
                 }
+                */
             }
 
             return isValid;

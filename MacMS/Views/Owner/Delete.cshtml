@@ -55,6 +55,7 @@
             @Html.HiddenFor(model => model.Owner.Address)
             @Html.HiddenFor(model => model.Owner.SSN)
             @Html.HiddenFor(model => model.Owner.TelNr)
+            @Html.HiddenFor(model => model.Equipment)
         </div>
         <table>
             <tr>
@@ -80,6 +81,19 @@
             <tr>
                 <td><p class="CategoryText Bold">@Localizer["Address"]: </p></td>
                 <td><p class="CategoryText">@Html.DisplayFor(model => model.Owner.Address)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Equipment"]: </p></td>
+                <td>
+                    <ul>
+                        @foreach (var item in Model.Equipment) {
+                            <li>
+                                <p class="CategoryText">@item.Serial</p>
+                                <p class="CategoryText">@item.Model</p>
+                            </li>
+                        }
+                    </ul>
+                </td>
             </tr>
         </table>
     </div>

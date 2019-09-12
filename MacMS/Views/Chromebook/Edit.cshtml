@@ -136,9 +136,11 @@
 
         function RequestCreateOwnerModal() {
 
-                $.get("@Url.Action("CreateModal", "Owner")").done(function (data2) {
+            var phElement = $('#modal-placeholder');
 
-                    phElement.html(data2);
+                $.get("@Url.Action("CreateModal", "Owner")").done(function (data) {
+
+                    phElement.html(data);
                     phElement.find('.modal').modal('show');
                 });
 
