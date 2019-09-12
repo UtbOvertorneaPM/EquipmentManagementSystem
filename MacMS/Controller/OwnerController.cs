@@ -158,9 +158,10 @@ namespace EquipmentManagementSystem.Controller {
                 return View(viewModel);
             }
 
-            foreach (var equipment in viewModel.Equipment) {
+            foreach (Equipment equipment in await _service.Get<Equipment>(e => e.OwnerName == viewModel.Owner.FullName).ToListAsync()) {
 
                 equipment.OwnerName = viewModel.Owner.FullName;
+
                 await _service.Update(equipment);
             }
 

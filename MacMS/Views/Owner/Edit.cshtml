@@ -53,11 +53,7 @@
 
 @using (Html.BeginForm("Edit", "Owner", FormMethod.Post, new { id = "form" })) {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.Equipment)
     @Html.HiddenFor(model => model.Owner.ID)
-    @Html.HiddenFor(model => model.Owner.FirstName)
-    @Html.HiddenFor(model => model.Owner.LastName)
-    @Html.HiddenFor(model => model.Owner.SSN)
     <div>
         <table>
             <tr>
