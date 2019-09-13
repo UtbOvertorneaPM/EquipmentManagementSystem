@@ -35,6 +35,111 @@
             window.location = str;
         };
 
+
+        $('document').ready(function () {
+
+            AddCategoryClickEvent();
+            document.getElementById("submitSearch")
+                .addEventListener(
+                "click",
+                PostTable("", document.getElementById("search").search.value, "")
+            );
+
+            $.get("@Url.Action("Table")",
+                function (data) {
+                    var partial = $('#partialTable');
+                    partial.replaceWith(data);
+                }
+            );
+
+        $('#search').focusin(function () {
+
+            $(this).attr('value', '');
+        });
+
+
+        $('#search').focusout(function () {
+
+            var input = document.getElementById('search');
+            if (input.value.length < 1) {
+                $(this).attr('value', '@Localizer["Find model/date/owner..."]');
+            }
+        });
+
+
+            $('#search').keyup(function (e) {
+
+                // on enter key press submit search
+                if (e.keyCode == 13) {
+
+                    var searchVal = e.target.value;
+                    PostTable("", searchVal, "");
+                }
+                else if (e.target.value.length < 1) {
+
+                    var list = document.getElementById("searchCategories");
+                    list.style.display = "none";
+                }
+                else {
+
+                    var searchVal = e.target.value;
+                    var values = searchVal.split(", ");
+
+                    document.getElementById("categoryDate").value = "LastEdited:" + values[values.length - 1];
+                    document.getElementById("categoryModel").value = "Model:" + values[values.length - 1];
+                    document.getElementById("categorySerial").value = "Serial:" + values[values.length - 1];
+                    document.getElementById("categoryOwner").value = "Owner:" + values[values.length - 1];
+                    document.getElementById("categoryType").value = "EquipType:" + values[values.length - 1];
+
+                    var list = document.getElementById("searchCategories");
+                    list.style.display = "block";
+                }
+            });
+
+        });
+
+
+
+
+
+        function AddCategoryClickEvent() {
+
+            let categories = document.getElementsByClassName("categoryButton");
+
+            for (var i = 0; i < categories.length; i++) {
+                categories[i].addEventListener("click", function (e) { CategoryClick(e); });
+            }
+        };
+
+
+
+        var importHandler = function () {
+
+            $.getScript("/js/ConfirmationDialogue.js", function () {
+                ConfirmClickGeneric(Import, '#importDialog');
+            });
+        };
+
+
+        function Import() {
+
+            SubmitImport("@Url.Action("Import")", "@Url.Action("Index")");
+        };
+
+
+        var exportHandler = function () {
+
+            $.getScript("/js/ConfirmationDialogue.js", function () {
+                ConfirmClickGeneric(Export, '#exportDialog');
+            });
+        };
+
+
+        function Export() {
+
+            SubmitExport("@Html.Raw(Url.Action("Export", new { exportType = "_exportType_", searchString = "_searchValue_", selection = "_selection_" }))");
+        };
+
     </script>
 </head>
 <body>

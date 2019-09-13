@@ -1,4 +1,5 @@
 ﻿$('#ParentRow > td').hover(function () {
+
     if ($(this).find("th").length > 0) return;
     $(this).addClass("gridRowHover");
 },
@@ -30,19 +31,96 @@ $("table").click(function (event) {
                 }
             }
         }
-
-        
     }
+});
+
+
+// replaces search value with category clicked
+function CategoryClick(e) {
+
+    var searchBox = document.getElementById("search");
+
+    if (searchBox.value.split(", ").length > 1) {
+
+        var values = searchBox.value.split(", ");
+        var oldVal = "";
+
+        for (var i = 0; i < values.length - 1; i++) {
+
+            oldVal += values[i];
+        }
+
+        searchBox.value = e.target.value + ", " + oldVal;
+    }
+    else {
+
+        searchBox.value = e.target.value + ", ";
+    }
+};
+
+
+function SubmitImport(requestUrl, callbackUrl) {
+
+    var element = document.getElementById('importSelect');
+    var importTypeVal = element.options[element.selectedIndex].text;
+
+    var file = document.getElementById('file');
+    var formData = new FormData();
+    var fileData = file.files[0];
+    formData.append('file', fileData);
+    formData.append('source', importTypeVal);
+
+    $.ajax({
+        url: requestUrl,
+        processData: false,
+        contentType: false,
+        data: formData,
+        type: "POST",
+        success: function (response) {
+
+            if (response) {
+                alert("Import succeded!");
+
+                window.location.href = callbackUrl;
+            }
+            else if (!response) {
+                alert("Import failed!");
+            }
+            else {
+                alert("Error!");
+            }
+        }
+    });
+};
+
+
+function SubmitExport(url) {
+
+    var element = document.getElementById('exportSelect');
+    var exportTypeVal = element.options[element.selectedIndex].text;
+    var searchVal = document.getElementById("search").value;
+
+    var rowItems = $(".SelectedRow");
+    var selection = "";
+
+    for (var i = 0; i < rowItems.length; i++) {
+
+        selection += rowItems[i].cells[2].innerHTML + " ";
+    }
+
+    var str = url
+        .replace("_exportType_", exportTypeVal)
+        .replace("_searchValue_", searchVal)
+        .replace("_selection_", selection);
+
+    window.location = str;
+};
+
+$('document').ready(function() {
+
 
 });
 
-$('document').ready(function () {
-
-    if ('@TempData["Success"]' == false) {
-
-        alert("Error! Form was not submitted successfully");
-    }
-});
 
 
 

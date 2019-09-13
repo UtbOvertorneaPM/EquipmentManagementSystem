@@ -96,12 +96,12 @@
             ReloadTable(@Model.TotalPages);
         });
 
-        function PostTable(uri, searchString, currentSort) {
+        function PostTable(page, searchString, currentSort) {
 
-            var tableView = "@Html.Raw(Url.Action("Table", "Chromebook", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+            var tableView = "@Html.Raw(Url.Action("Table", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
                 .replace("_Sort_", encodeURIComponent(currentSort))
                 .replace("_Search_", encodeURIComponent(searchString))
-                .replace("_Page_", encodeURIComponent(uri));
+                .replace("_Page_", encodeURIComponent(page));
 
             $.get(tableView,
                 function (data) {
