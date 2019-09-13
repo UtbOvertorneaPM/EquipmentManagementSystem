@@ -55,6 +55,9 @@
     <Content Update="wwwroot\js\ConfirmationDialogue.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\js\CRUD.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\js\getOwnerList.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

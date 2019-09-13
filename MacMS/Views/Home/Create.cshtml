@@ -15,27 +15,17 @@
 
         $('document').ready(function () {
 
-            //GetDropDown("@Url.Action("GetOwnerList", "Owner")", document);
-
             $('#Equipment_OwnerName').autocomplete({
 
-                source: '@Url.Action("AutoComplete", "Home")'
+                source: '@Url.Action("AutoComplete", "Chromebook")'
             });
-
-            var nameInput = document.getElementById('Equipment_OwnerName');
-
-            var bool = document.getElementById('Equipment_IDCheck');
-            bool.value = nameInput.value.trim() ? true : false;
-
-            var ownerID = document.getElementById("Owner_ID");
-            ownerID.value = -1;
         });
 
 
-        $('#typeSelect').change(function (event) {
+        $('#typeSelect').change(function () {
 
-            var row = document.getElementById('AdditionalInformation');
-            $('#AdditionalInformation').empty();
+            var row = document.getElementById('additionalInformation');
+            $('#additionalInformation').empty();
 
             var td = document.createElement('td');
             var td2 = document.createElement('td');
@@ -48,7 +38,7 @@
 
             switch (this[this.value].innerHTML) {
 
-                case "Mobil":
+                case "Mobile":
 
                     input.type = "text";
                     input.id = "MobileNumber";
@@ -56,7 +46,7 @@
                     input.textContent = "@Html.DisplayFor(model => model.Equipment.MobileNumber)";
                     break;
 
-                case "Skrivare":
+                case "Printer":
 
                     input.type = "text";
                     input.id = "IP";
@@ -70,15 +60,15 @@
                     input.type = "number";
                     input.id = "Ports";
                     p.appendChild(document.createTextNode("@Localizer["Ports"]"));
-                    input.value = "@Html.DisplayFor(model => model.Equipment.MobileNumber)";
+                    input.value = "@Html.DisplayFor(model => model.Equipment.Ports)";
                     break;
 
-                case "Projektor":
+                case "Projector":
 
                     input.type = "text";
                     input.id = "Resolution";
                     p.appendChild(document.createTextNode("@Localizer["Resolution"]"));
-                    input.value = "@Html.DisplayFor(model => model.Equipment.MobileNumber)";
+                    input.value = "@Html.DisplayFor(model => model.Equipment.Resolution)";
                     break;
 
                 default:
@@ -92,38 +82,6 @@
             row.appendChild(td2);
         });
 
-        $('#Owner_FullName').keyup(function () {
-
-            var nameInput = document.getElementById('Equipment_OwnerName');
-
-            Search(nameInput, document.getElementById('ownerList'));
-
-            var bool = document.getElementById('Equipment_IDCheck');
-            bool.value = nameInput.value.trim() ? true : false;
-        });
-
-        $('document').click(function () {
-
-            var list = document.getElementById("ownerList");
-            list.style.display = "none";
-        });
-
-        function ClickName(event) {
-
-            event.preventDefault();
-
-            var input = document.getElementById("Equipment_OwnerName");
-            input.value = event.target.textContent;
-
-            var list = document.getElementById("ownerList");
-            list.style.display = "none";
-
-            var bool = document.getElementById('Equipment_IDCheck');
-            bool.value = false;
-
-            var ownerID = document.getElementById("Equipment_OwnerID");
-            ownerID.value = event.target.id;
-        };
 
         // Stops barcode reader from submitting when adding Model/Serial
         $('#form').on("submit", function (event) {
@@ -132,24 +90,6 @@
                 event.preventDefault();
             }
         });
-
-
-        function RequestCreateOwnerModal() {
-
-            var phElement = $('#modal-placeholder');
-
-                $.get("@Url.Action("CreateModal", "Owner")").done(function (data) {
-
-                    phElement.html(data);
-                    phElement.find('.modal').modal('show');
-                });
-
-                var x = document.getElementById("modal-placeholder");
-                x.style.display = "block";
-        }
-
-        $("#Serial").keydown(function (e) { if (e.which == 13) e.preventDefault(); });
-
     </script>
 }
 
