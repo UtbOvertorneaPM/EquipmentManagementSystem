@@ -37,6 +37,9 @@
     <Content Update="prodSettings.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
+    <Content Update="Views\Shared\_Layout.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\css\CRUD.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -136,7 +136,7 @@
                 <td><p class="CategoryText Bold">@Localizer["FullName"] </p></td>
                 <td>
                     <p class=" CategoryText">@Html.EditorFor(model => model.Equipment.OwnerName)</p>
-                    <input type="button" onclick="RequestCreateOwnerModal()" value="Create new Owner" />
+                    <input type="button" onclick="RequestCreateOwnerModal('@Url.Action("CreateModal", "Owner")')" value="Create new Owner" />
                 </td>
                 <td></td>
             </tr>

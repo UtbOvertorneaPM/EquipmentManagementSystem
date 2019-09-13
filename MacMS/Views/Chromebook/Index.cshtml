@@ -9,21 +9,13 @@
 
 
 @section Scripts {
-
-
-    <script type="text/javascript">
-
-
-
-    </script>
 }
-
 <h2>Chromebook</h2>
 
 
 <div>
     @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
-    <input id="submitSearch" type="button" value="@Localizer["Search"]" />
+    <input id="submitSearch" type="button" value="Search"/>
 
     <div id="searchCategories" hidden>
         <ul class="CategoryList">
@@ -46,13 +38,11 @@
     </div>
 </div>
 <p>
-    <a href="#" onclick="importHandler()" id="importButton">@Localizer["Import"]</a>
+    <input type="button" onclick="importHandler()" id="importButton" value="@Localizer["Import"]"/>
 </p>
 
-
-
 <p>
-    @Html.ActionLink(Localizer["Create New"], "Create", new { culture = ViewData["Language"] })
+    <input type="button" onclick="location.href='@Url.Action("Create", new { culture = ViewData["Language"] })'" value="@Localizer["Create New"]"/>
 </p>
 
 <div id="partialTable"></div>

@@ -35,28 +35,7 @@ $("table").click(function (event) {
 });
 
 
-// replaces search value with category clicked
-function CategoryClick(e) {
 
-    var searchBox = document.getElementById("search");
-
-    if (searchBox.value.split(", ").length > 1) {
-
-        var values = searchBox.value.split(", ");
-        var oldVal = "";
-
-        for (var i = 0; i < values.length - 1; i++) {
-
-            oldVal += values[i];
-        }
-
-        searchBox.value = e.target.value + ", " + oldVal;
-    }
-    else {
-
-        searchBox.value = e.target.value + ", ";
-    }
-};
 
 
 function SubmitImport(requestUrl, callbackUrl) {
@@ -115,11 +94,6 @@ function SubmitExport(url) {
 
     window.location = str;
 };
-
-$('document').ready(function() {
-
-
-});
 
 
 

@@ -39,11 +39,6 @@
         $('document').ready(function () {
 
             AddCategoryClickEvent();
-            document.getElementById("submitSearch")
-                .addEventListener(
-                "click",
-                PostTable("", document.getElementById("search").search.value, "")
-            );
 
             $.get("@Url.Action("Table")",
                 function (data) {
@@ -52,19 +47,24 @@
                 }
             );
 
-        $('#search').focusin(function () {
+            $('#submitSearch').click(function (e) {
+                e.preventDefault();
+                PostTable("", document.getElementById("search").value, "");
+            });
 
-            $(this).attr('value', '');
-        });
+            $('#search').focusin(function () {
+
+                $(this).attr('value', '');
+            });
 
 
-        $('#search').focusout(function () {
+            $('#search').focusout(function () {
 
-            var input = document.getElementById('search');
-            if (input.value.length < 1) {
-                $(this).attr('value', '@Localizer["Find model/date/owner..."]');
-            }
-        });
+                var input = document.getElementById('search');
+                if (input.value.length < 1) {
+                    $(this).attr('value', '@Localizer["Find model/date/owner..."]');
+                }
+            });
 
 
             $('#search').keyup(function (e) {
@@ -99,15 +99,121 @@
         });
 
 
+        function PostTable(page, searchString, currentSort) {
 
+            var tableView = "@Html.Raw(Url.Action("Table", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent(currentSort))
+                .replace("_Search_", encodeURIComponent(searchString))
+                .replace("_Page_", encodeURIComponent(page));
+
+            $.get(tableView,
+                function (data) {
+                    var partial = document.getElementById('partialTable');
+                    partial.innerHTML = data;
+
+                    ReloadTable(data.TotalPages);
+                }
+            )
+        };
+
+
+        function ReloadTable(totalPages) {
+
+            var curPage = document.getElementById("CurPage").textContent;
+
+            $('a.sortLink').click(function (e) {
+
+                e.preventDefault();
+                Sort(e.target.id.toString());
+            });
+
+            var lastPos = totalPages - 1;
+
+            var posList = [0, lastPos];
+
+            var startList = document.getElementById('startList');
+            var endList = document.getElementById('endList');
+            var curList = document.getElementById('curList');
+
+            startList.innerHTML = '';
+            endList.innerHTML = '';
+            curList.innerHTML = '';
+
+            for (var i = (curPage - 2); i < (curPage + 3); i++) {
+
+                if (i < 1) {
+                    i++;
+                }
+                if (i > 0 && i < lastPos) {
+                    posList.push(i);
+                }
+            }
+
+            for (var i = 0; i < posList.length; i++) {
+
+                var a = document.createElement('a');
+                a.appendChild(document.createTextNode(posList[i]));
+
+                a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
+
+                a.href = "javascript:PageClick(_Obj_)"
+                    .replace("_Obj_", a.textContent);
+
+                if (i == 0 && posList[i] != curPage) {
+
+                    startList.appendChild(a);
+                }
+                else if (i == 1) {
+
+                    endList.appendChild(a);
+                }
+                else {
+
+                    if (posList[i] == curPage) {
+                        var text = document.createTextNode(posList[i]);
+                        curList.appendChild(text);
+                    }
+                    else {
+                        curList.appendChild(a);
+
+                    }
+                }
+
+            }
+        };
 
 
         function AddCategoryClickEvent() {
 
-            let categories = document.getElementsByClassName("categoryButton");
+            let categories = document.getElementsByClassName("CategoryButton");
 
             for (var i = 0; i < categories.length; i++) {
                 categories[i].addEventListener("click", function (e) { CategoryClick(e); });
+            }
+        };
+
+
+        // replaces search value with category clicked
+        function CategoryClick(e) {
+
+            //alert(e);
+            var searchBox = document.getElementById("search");
+
+            if (searchBox.value.split(", ").length > 1) {
+
+                var values = searchBox.value.split(", ");
+                var oldVal = "";
+
+                for (var i = 0; i < values.length - 1; i++) {
+
+                    oldVal += values[i];
+                }
+
+                searchBox.value = e.target.value + ", " + oldVal;
+            }
+            else {
+
+                searchBox.value = e.target.value + ", ";
             }
         };
 
