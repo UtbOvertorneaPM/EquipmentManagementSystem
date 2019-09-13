@@ -10,32 +10,6 @@
 
 @section scripts {
 
-    <script type="text/javascript">
-
-    $('#form').on("submit", function (event) {
-
-        event.preventDefault();
-        var form = $('#form');
-
-        $.getScript("/js/ajaxPost.js", function(data) {
-            PostForm(form, callBackUser);
-        });
-
-    });
-
-    function callBackUser(data) {
-
-        if (!data) {
-            alert("@Localizer["Owner"] @Localizer["already exists"]");
-            }
-        else {
-
-        window.location.href = "@Url.Action("Index", "Owner")";
-        }
-
-    };
-    </script>
-
 }
 
 <h2>@Localizer["Create"] @Localizer["Owner"]</h2>
