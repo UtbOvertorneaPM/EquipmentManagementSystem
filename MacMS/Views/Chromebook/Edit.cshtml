@@ -15,12 +15,18 @@
 
     <script type="text/javascript">
 
+        $('document').ready(function () {
+
             $('#Equipment_OwnerName').autocomplete({
 
                 source: '@Url.Action("AutoComplete", "Chromebook")'
             });
 
-        $('document').ready(function () {
+            DisplayAdditional();
+        });
+
+
+        function DisplayAdditional() {
 
             var row = document.getElementById('AdditionalInformation');
             var td = document.createElement('td');
@@ -78,16 +84,8 @@
 
             var bool = document.getElementById('Equipment_IDCheck');
             bool.value = nameInput.value.trim() ? true : false;
-        });
+        };
 
-
-        $('#confirmButton').click(function (e) {
-
-            var dialog = document.getElementById("confirmDialog");
-            dialog.title = "Edit " + "@Localizer["Equipment"]";
-
-            ConfirmClick(e, submitted);
-        });
 
         // Stops barcode reader from submitting when adding Model/Serial
         $('#form').on("submit", function (event) {
@@ -96,69 +94,6 @@
                 event.preventDefault();
             }
         });
-
-        function submitted() {
-
-            event.preventDefault();
-            var form = $('#form');
-
-            var ownerID = document.getElementById("Equipment_OwnerID");
-            var ownerName = document.getElementById("Equipment_OwnerName");
-
-            if (ownerName.value.length < 1) {
-                ownerID.value = -1;
-            }
-
-            $.getScript("/js/ajaxPost.js", function (data) {
-                PostForm(form, callBackUser);
-            });
-        };
-
-
-        function callBackUser(success) {
-
-            if (!success) {
-
-                $("#confirmDialog").dialog("close");
-
-                var phElement = $('#modal-placeholder');
-
-                $.get("@Url.Action("CreateModal", "Owner")").done(function (data2) {
-
-                    phElement.html(data2);
-                    phElement.find('.modal').modal('show');
-                });
-
-                var x = document.getElementById("modal-placeholder");
-                x.style.display = "block";
-            }
-            else if (success) {
-
-                window.location = "@Url.Action("Index")";
-            }
-
-        };
-
-
-        function RequestCreateOwnerModal() {
-
-            var phElement = $('#modal-placeholder');
-
-                $.get("@Url.Action("CreateModal", "Owner")").done(function (data) {
-
-                    phElement.html(data);
-                    phElement.find('.modal').modal('show');
-                });
-
-                var x = document.getElementById("modal-placeholder");
-                x.style.display = "block";
-        }
-
-
-
-        // Prevents enter press from submitting form when in Serial editor, for barcode readers
-        $("#Serial").keydown(function (e) { if (e.which == 13) e.preventDefault(); });
-
 
     </script>
 }
@@ -201,7 +136,7 @@
                 <td><p class="CategoryText Bold">@Localizer["FullName"] </p></td>
                 <td>
                     <p class=" CategoryText">@Html.EditorFor(model => model.Equipment.OwnerName)</p>
-                    <input type="button" onclick="RequestCreateOwnerModal()" value="Create new Owner" />
+                    <input type="button" onclick="RequestCreateOwnerModal('@Url.Action("CreateModal", "Owner")')" value="Create new Owner" />
                 </td>
                 <td></td>
             </tr>
