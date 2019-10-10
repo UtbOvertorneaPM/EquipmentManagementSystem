@@ -1,0 +1,51 @@
+﻿@using EquipmentManagementSystem.Models
+@using EquipmentManagementSystem.Domain.Service
+@inject Localizer Localizer
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Mac";
+}
+
+
+@section Scripts {
+}
+<h2>Mac</h2>
+
+
+<div>
+    @Html.TextBox("SearchString", Localizer["Find model/date/owner..."], new { id = "search", @class = "Search" })
+    <input id="submitSearch" type="button" value="Search"/>
+
+    <div id="searchCategories" hidden>
+        <ul class="CategoryList">
+            <li>
+                <input class="CategoryButton" type="button" id="categoryDate" value="LastEdited" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryModel" value="Model" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categorySerial" value="Serial" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryOwner" value="OwnerName" />
+            </li>
+            <li>
+                <input class="CategoryButton" type="button" id="categoryType" value="EquipType" />
+            </li>
+        </ul>
+    </div>
+</div>
+<p>
+    <input type="button" onclick="importHandler()" id="importButton" value="@Localizer["Import"]"/>
+</p>
+
+<p>
+    <input type="button" onclick="location.href='@Url.Action("Create", new { culture = ViewData["Language"] })'" value="@Localizer["Create New"]"/>
+</p>
+
+<div id="partialTable"></div>
+
+
+

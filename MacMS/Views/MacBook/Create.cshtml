@@ -1,0 +1,145 @@
+﻿@model EquipmentManagementSystem.Domain.Data.EquipmentViewModel
+
+@using EquipmentManagementSystem.Domain.Data.Models
+
+@using EquipmentManagementSystem.Domain.Service
+@inject Localizer Localizer
+
+@{ ViewData["Title"] = Localizer["Create"] + " " + Localizer["Equipment"];
+                Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $('document').ready(function () {
+
+            $('#Equipment_OwnerName').autocomplete({
+
+                source: '@Url.Action("AutoComplete", "Chromebook")'
+            });
+        });
+
+
+        $('#typeSelect').change(function () {
+
+            var row = document.getElementById('additionalInformation');
+            $('#additionalInformation').empty();
+
+            var td = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var p = document.createElement('p');
+            var input = document.createElement('input');
+
+            p.classList = "CategoryText Bold";
+            input.classList = "CategoryText";
+
+            switch (this[this.value].innerHTML) {
+
+                case "Mobile":
+
+                    input.type = "text";
+                    input.id = "MobileNumber";
+                    p.appendChild(document.createTextNode("@Localizer["MobileNumber"]"));
+                    input.textContent = "@Html.DisplayFor(model => model.Equipment.MobileNumber)";
+                    break;
+
+                case "Printer":
+
+                    input.type = "text";
+                    input.id = "IP";
+                    p.appendChild(document.createTextNode("@Localizer["IP"]"));
+                    input.textContent = "@Html.DisplayFor(model => model.Equipment.IP)";
+                    break;
+
+                case "Router":
+                case "Switch":
+
+                    input.type = "number";
+                    input.id = "Ports";
+                    p.appendChild(document.createTextNode("@Localizer["Ports"]"));
+                    input.value = "@Html.DisplayFor(model => model.Equipment.Ports)";
+                    break;
+
+                case "Projector":
+
+                    input.type = "text";
+                    input.id = "Resolution";
+                    p.appendChild(document.createTextNode("@Localizer["Resolution"]"));
+                    input.value = "@Html.DisplayFor(model => model.Equipment.Resolution)";
+                    break;
+
+                default:
+                    return;
+            }
+
+            td.appendChild(p);
+            td2.appendChild(input);
+
+            row.appendChild(td);
+            row.appendChild(td2);
+        });
+
+
+        // Stops barcode reader from submitting when adding Model/Serial
+        $('#form').on("submit", function (event) {
+            
+            if (document.activeElement.id == "Equipment_Model" || document.activeElement.id == "Equipment_Serial") {
+                event.preventDefault();
+            }
+        });
+    </script>
+}
+
+<h2>@Localizer["Create"]</h2>
+
+@using (Html.BeginForm("Create", "MacBook", FormMethod.Post, new { id = "form", @class = "postAjax" })) {
+
+    @Html.AntiForgeryToken()
+    <h3></h3>
+    <div>
+        @Html.HiddenFor(model => model.Equipment.IDCheck)
+        @Html.HiddenFor(model => model.Owner.ID)
+        <table>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Model"]:  </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Model)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Serial"]: </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Serial) @Html.ValidationMessage("Equipment.Serial", "", new { @class = "text-danger" })</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Location"]: </p></td>
+                <td><p class="CategoryText">@Html.EditorFor(model => model.Equipment.Location)</p></td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Owner"]: </p></td>
+                <td>
+                    <p class=" CategoryText">@Html.EditorFor(model => model.Equipment.OwnerName)</p>
+                    <input type="button" onclick="RequestCreateOwnerModal('@Url.Action("CreateModal", "Owner")')" value="Create new Owner" />
+                    <div class="ModalForm" id="modal-placeholder"></div>
+                </td>
+
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["Notes"]: </p></td>
+                <td>@Html.TextAreaFor(model => model.Equipment.Notes, new { @class = "NotesField" })</td>
+            </tr>
+            <tr>
+                <td><p class="CategoryText Bold">@Localizer["EquipType"]</p></td>
+                <td><select asp-for="Equipment.EquipType" id="typeSelect" asp-items="Html.GetEnumSelectList<EquipmentManagementSystem.Domain.Data.Models.Equipment.EquipmentType>()"></select></td>
+            </tr>
+            <tr id="AdditionalInformation"></tr>
+        </table>
+    </div>
+    <div id="additionalInformation"></div>
+    <div class="SubmitDiv">
+        <input type="submit" value="@Localizer["Create"]" id="test" />
+        <input type="button" value="@Localizer["Back"]" onclick="location.href='@Url.Action("Index", new { culture = ViewData["Language"] })'" />
+    </div>
+}
+
+

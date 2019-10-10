@@ -1,22 +1,17 @@
-﻿using EquipmentManagementSystem.Data;
-using EquipmentManagementSystem.Data.Export;
-using EquipmentManagementSystem.Domain.Business;
+﻿using EquipmentManagementSystem.Domain.Business;
 using EquipmentManagementSystem.Domain.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
-using EquipmentManagementSystem.Domain.Data.Validation;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
-using EquipmentManagementSystem.Models;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
-using System.IO;
+
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,18 +19,17 @@ namespace EquipmentManagementSystem.Controller {
 
 
 
-    public class ChromebookController : BaseController {
+    public class MacBookController : BaseController {
 
         private IRequestHandler _service;
         private int _pageSize = 25;
 
-        public ChromebookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
+        public MacBookController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
             ctx.Database.EnsureCreated();
-
             _service = new EquipmentRequestHandler(new GenericService(ctx));
         }
-      
+
 
         /// <summary>
         /// JQuery Table update route
@@ -50,17 +44,17 @@ namespace EquipmentManagementSystem.Controller {
             ViewData["CurrentSort"] = string.IsNullOrEmpty(sortVariable) ? "Date_desc" : sortVariable;
             ViewData["Page"] = page;
             culture = ViewData.ContainsKey("Language") ? ViewData["Language"].ToString() : culture;
-            
+
             SetSearchString(ref searchString);
             SetCultureCookie(culture, page.ToString(), searchString, sortVariable, Response);
             SetLanguage(culture);
 
             if (searchString == "Find model / date / owner...") {
 
-                searchString = "EquipType:Chromebook";
+                searchString = "Model:Mac";
             }
             else {
-                searchString += "EquipType: Chromebook";
+                searchString += "Model:Mac";
             }
 
             return PartialView(await ((EquipmentRequestHandler)_service).IndexRequest<EquipmentViewModel>(
@@ -68,8 +62,7 @@ namespace EquipmentManagementSystem.Controller {
                     SortVariable = ViewData["CurrentSort"].ToString(),
                     Page = page,
                     SearchString = searchString,
-                    PageSize = _pageSize,
-                    Type = "Chromebook"
+                    PageSize = _pageSize
                 })
             );
         }
@@ -100,7 +93,7 @@ namespace EquipmentManagementSystem.Controller {
                         }
 
                         data = (await migration.InsertBackupJson<Equipment>(file, IsEquipment)).ToList();
-                        
+
                         break;
 
                     case "Random":
@@ -129,10 +122,10 @@ namespace EquipmentManagementSystem.Controller {
                 throw;
             }
 
-            return Json(true);            
+            return Json(true);
         }
 
-        
+
         /// <summary>
         /// Exports current table data
         /// </summary>
@@ -165,14 +158,14 @@ namespace EquipmentManagementSystem.Controller {
             if (string.IsNullOrEmpty(viewModel.Equipment.OwnerName) is false) {
 
                 await viewModel.AddOwner(_service, viewModel.Equipment.OwnerName);
-            }            
+            }
 
             if (await _service.Create(viewModel.Equipment) is false) {
 
                 return View(viewModel);
             }
 
-            return RedirectToAction(nameof(Index));            
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -189,7 +182,7 @@ namespace EquipmentManagementSystem.Controller {
 
                 await viewModel.AddOwner(_service, viewModel.Equipment.OwnerName);
             }
-            
+
             return View(viewModel);
         }
 
@@ -272,7 +265,7 @@ namespace EquipmentManagementSystem.Controller {
 
             return null;
         }
-        
+
 
     }
 }
