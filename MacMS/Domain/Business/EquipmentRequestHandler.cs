@@ -133,8 +133,7 @@ namespace EquipmentManagementSystem.Domain.Business {
             else {
 
                 count = await _service.Count<Equipment>();
-            }
-            
+            }            
 
             var data = Enumerable.Empty<Equipment>();
             var query = Enumerable.Empty<Equipment>();

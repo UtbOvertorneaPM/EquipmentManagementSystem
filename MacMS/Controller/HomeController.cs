@@ -183,7 +183,6 @@ namespace EquipmentManagementSystem.Controller {
         // POST: Home/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public IActionResult Edit(Equipment equipment) {
         public async Task<IActionResult> Edit(EquipmentViewModel viewModel) {
 
             viewModel.Equipment.LastEdited = DateTime.Now;

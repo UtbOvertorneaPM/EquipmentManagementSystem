@@ -31,7 +31,7 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
         }
 
 
-        public async static Task<List<Equipment>> Search(IQueryable<Equipment> data, string searchString) {
+        public async static Task<IEnumerable<Equipment>> Search(IQueryable<Equipment> data, string searchString) {
 
             var queryValues = searchString.Split(",");
             var returnData = new List<Equipment>();
@@ -40,7 +40,7 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
 
                 var query = queryValues[i].Split(":");
 
-                if (query.Length > 1) {
+                if (query.Count() > 1) {
 
                     switch (query[0]) {
 
@@ -99,12 +99,12 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
                         return await data.ToListAsync();
                     }
                     else {
-                        returnData.Concat(from x in data
-                                          where x.OwnerName.Contains(query[1]) ||
-                                          x.Model.Contains(query[1]) ||
-                                          x.Serial.Contains(query[1]) ||
-                                          x.Notes.Contains(query[1]) ||
-                                          x.Location.Contains(query[1])
+                        returnData.AddRange(from x in data
+                                          where x.OwnerName.Contains(query[0]) ||
+                                          x.Model.Contains(query[0]) ||
+                                          x.Serial.Contains(query[0]) ||
+                                          x.Notes.Contains(query[0]) ||
+                                          x.Location.Contains(query[0])
                                           select x);
                     }
                 }
