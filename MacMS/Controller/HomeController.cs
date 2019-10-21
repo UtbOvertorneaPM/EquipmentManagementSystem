@@ -24,7 +24,7 @@ namespace EquipmentManagementSystem.Controller {
     public class HomeController : BaseController {
 
         private EquipmentRequestHandler _service;
-        private int pageSize = 25;
+        private int _pageSize = 25;
 
         public HomeController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
@@ -58,7 +58,7 @@ namespace EquipmentManagementSystem.Controller {
                     SortVariable = ViewData["CurrentSort"].ToString(),
                     SearchString = searchString,
                     Page = page,
-                    PageSize = pageSize
+                    PageSize = _pageSize
                 })
            );
         }
@@ -236,13 +236,14 @@ namespace EquipmentManagementSystem.Controller {
 
             try {
 
-                await _service.DeleteSelection(serial);
-                return RedirectToAction(nameof(Index));
+                await _service.DeleteSelection(serial);                
             }
             catch (Exception) {
 
                 return Json(null);
             }
+
+            return RedirectToAction(nameof(Index));
         }
 
 

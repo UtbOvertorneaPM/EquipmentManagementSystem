@@ -101,10 +101,10 @@ namespace EquipmentManagementSystem.Domain.Business {
             }
             else {
 
-                var minSerialLength = 5;
+                var minSerialLength = 4;
 
                 var serials = selection.Trim().Replace("\n", " ").Split(" ");
-                serials = serials.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length > minSerialLength).Distinct().ToArray();
+                serials = serials.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length >= minSerialLength).Distinct().ToArray();
 
                 List<Equipment> temp = new List<Equipment>();
                 for (int i = 0; i < serials.Count(); i++) {
@@ -186,10 +186,10 @@ namespace EquipmentManagementSystem.Domain.Business {
 
         public async Task DeleteSelection(string serial) {
 
-            var minSerialLength = 5;
+            var minSerialLength = 4;
 
             var serials = serial.Trim().Replace("\n", " ").Split(" ");
-            serials = serials.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length > minSerialLength).Distinct().ToArray();
+            serials = serials.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length >= minSerialLength).Distinct().ToArray();
 
             for (int i = 0; i < serials.Count(); i++) {
 
