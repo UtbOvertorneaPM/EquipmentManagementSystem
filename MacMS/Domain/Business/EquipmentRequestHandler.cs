@@ -144,6 +144,7 @@ namespace EquipmentManagementSystem.Domain.Business {
             if (!string.IsNullOrEmpty(request.SearchString)) {
 
                 query = await EquipmentDataFormatting.Search(_service.GetAll<Equipment>(), request.SearchString);
+                count = query.Count();
                 searched = true;
             }
 

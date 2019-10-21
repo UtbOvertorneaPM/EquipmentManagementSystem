@@ -259,7 +259,7 @@ namespace EquipmentManagementSystem.Controller {
             if (!string.IsNullOrEmpty(term)) {
 
                 var request = _service.GetAll<Owner>();
-                var data = await request.Where(e => e.FullName.Contains(term)).Select(o => o.FullName).ToListAsync();
+                var data = await request.Where(e => e.FullName.Contains(term, StringComparison.InvariantCultureIgnoreCase)).Select(o => o.FullName).ToListAsync();
                 return Json(data);
             }
 

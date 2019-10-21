@@ -54,6 +54,86 @@
         };
 
 
+      
+        function PostTable(uri, searchString, currentSort) {
+
+            var tableView = "@Html.Raw(Url.Action("Table", new { sortVariable = "_Sort_", searchString = "_Search_", page = "_Page_" }))"
+                .replace("_Sort_", encodeURIComponent(currentSort))
+                .replace("_Search_", encodeURIComponent(searchString))
+                .replace("_Page_", encodeURIComponent(uri));
+
+
+            $('#partialTable').load(tableView);
+            ReloadTable(@Model.TotalPages);
+        };
+
+
+        function ReloadTable(totalPages) {
+
+            var curPage = document.getElementById("CurPage").textContent;
+
+                $('a.sortLink').click(function (e) {
+
+                    e.preventDefault();
+                    Sort(e.target.id.toString());
+                });
+
+            var lastPos = totalPages -1;
+
+            var posList = [0, lastPos];
+
+            var startList = document.getElementById('startList');
+            var endList = document.getElementById('endList');
+            var curList = document.getElementById('curList');
+
+            startList.innerHTML = '';
+            endList.innerHTML = '';
+            curList.innerHTML = '';
+
+            for (var i = (curPage - 2); i < (curPage + 3); i++) {
+
+                if (i < 1) {
+                    i++;
+                }
+                if (i > 0 && i < lastPos) {
+                    posList.push(i);
+                }
+            }
+
+            for (var i = 0; i < posList.length; i++) {
+
+                var a = document.createElement('a');
+                a.appendChild(document.createTextNode(posList[i]));
+
+                a.classList = posList[i] == curPage ? "CurPage" : "PageLink";
+
+                //a.onclick = "PageClick(_test_)".replace("_test_", a.textContent);
+                //a.href = "";
+                a.href = "javascript:PageClick(_Obj_)"
+                    .replace("_Obj_", a.textContent);
+
+                if (i == 0 && posList[i] != curPage) {
+
+                    startList.appendChild(a);
+                }
+                else if (i == 1) {
+
+                    endList.appendChild(a);
+                }
+                else {
+
+                    if (posList[i] == curPage) {
+                        var text = document.createTextNode(posList[i]);
+                        curList.appendChild(text);
+                    }
+                    else {
+                        curList.appendChild(a);
+                    }
+                }
+
+            }
+        };
+
         function PageClick(page) {
 
             let curSort = document.getElementById("CurrentSort") == null ? "" : document.getElementById("CurrentSort").textContent;
@@ -134,7 +214,7 @@
                 serial[i] = row.cells[1].innerHTML;
             }
 
-            $.post("@Url.Action("DeleteSelection", "Chromebook", new { serial = "_serials_" })"
+            $.post("@Url.Action("DeleteSelection", "Home", new { serial = "_serials_" })"
                 .replace("_serials_", encodeURIComponent(serial)), function (response) {
 
                     switch (response) {
