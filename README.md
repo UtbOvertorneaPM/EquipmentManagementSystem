@@ -12,6 +12,8 @@ An ASP Core MVC project for managing IT equipment and user information
 
 > [Install and Configure IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.0#iis-configuration)
 
+> Enable Windows Authentication
+
 # Installing
 
 1. Create a MySQL db, with two tables(Equipment & Owners).
