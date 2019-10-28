@@ -45,7 +45,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
         public async Task<bool> Create<T>(T equipment) where T : class {
 
-            if (await _validator.Validate<T>(equipment)) {
+            if (await _validator.Validate(equipment)) {
 
                 await _service.Create(equipment);
                 return true;
@@ -57,7 +57,7 @@ namespace EquipmentManagementSystem.Domain.Business {
 
         public async Task<bool> Remove<T>(T equipment) where T : class {
 
-            if (await _validator.Validate<T>(equipment)) {
+            if (await _validator.Validate(equipment)) {
 
                 await _service.Remove(equipment);
                 return true;

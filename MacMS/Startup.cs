@@ -54,7 +54,8 @@ namespace EquipmentManagementSystem {
 #if DEBUG
             path = @"C:\Users\peter\source\repos\prodSettings.json";
 #elif RELEASE
-            path = @"C:\EMS\prodSettings.json";
+
+            path = $"{Configuration.GetValue<string>(WebHostDefaults.ContentRootKey)}" + @"\prodSettings.json";
 #endif
 
             var credentials = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText(path)).Credentials;
