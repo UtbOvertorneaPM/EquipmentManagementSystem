@@ -1,6 +1,6 @@
 # Equipment Management System
 
-An ASP Core MVC project for managing IT equipment and user information
+Searchable database with web GUI for managing IT equipment and user information
 
 ## Getting Started
 
