@@ -30,7 +30,7 @@ Searchable database with web GUI for managing IT equipment and user information
 }
   ```
 
- 3. Create add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
+ 3. Add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
  
  4. Edit folder permission so that IIS has full control over application folder.
 
