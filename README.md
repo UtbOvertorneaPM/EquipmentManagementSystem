@@ -16,7 +16,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 1. Create a MySQL db, with two tables `Equipment` and `Owners`.
 
-2. Create a `prodSettings.json` file in the root, with the format:
+2. Edit `prodSettings.json` file in the root, with the neccessary data:
   ```
   {
   "Credentials": {
