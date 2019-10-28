@@ -12,11 +12,9 @@ An ASP Core MVC project for managing IT equipment and user information
 
 # Installing
 
-1. 
-  Create a MySQL db named EquipmentManagementSystem, with two tables(Equipment & Owners).
+1. Create a MySQL db named EquipmentManagementSystem, with two tables(Equipment & Owners).
 
-2. 
-  Create a prodSettings.json file in the root, with the format:
+2. Create a prodSettings.json file in the root, with the format:
   ```
   {
   "Credentials": {
