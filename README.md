@@ -10,6 +10,8 @@ An ASP Core MVC project for managing IT equipment and user information
 
 > [MySQL](https://dev.mysql.com/downloads/installer/)
 
+> [Install and Configure IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.0#iis-configuration)
+
 # Installing
 
 1. Create a MySQL db, with two tables(Equipment & Owners).
