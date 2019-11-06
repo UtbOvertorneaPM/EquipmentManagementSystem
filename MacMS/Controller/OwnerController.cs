@@ -23,7 +23,7 @@ using EquipmentManagementSystem.Domain.Data;
 using Microsoft.EntityFrameworkCore;
 using EquipmentManagementSystem.Domain.Service.Export;
 
-namespace EquipmentManagementSystem.Controller {
+namespace EquipmentManagementSystem.Controllers {
 
 
     public class OwnerController : BaseController  {

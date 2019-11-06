@@ -23,6 +23,7 @@ using EquipmentManagementSystem.Data;
 using EquipmentManagementSystem.Business.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Service;
+using EquipmentManagementSystem.Domain.Service.Authorization;
 
 namespace EquipmentManagementSystem {
 
@@ -72,12 +73,7 @@ namespace EquipmentManagementSystem {
 
             roles = roles.Replace("\\", @"\");
             
-            services.AddAuthorization(options => {
-                options.AddPolicy("Administrators", policy => {
-                    policy.Requirements.Add(new RoleRequirement(roles.Split(" ")));
-                    policy.AddAuthenticationSchemes("Windows");
-                });
-            });
+
 
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
             
@@ -118,12 +114,28 @@ namespace EquipmentManagementSystem {
             services.AddMvcCore().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
             services.AddMvcCore().AddRazorViewEngine();
 
-            services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
-            services.AddSingleton<Localizer>();
+            //services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
+            //services.AddSingleton<IAuthorizationHandler, UserAuthenticationHandler>();
+            services.AddTransient<IAuthorizationHandler, UserAuthenticationHandler>();
 
             // Sets database to MySQL, and connects it to database using ManagementContext
             services.AddDbContextPool<ManagementContext>(
                 options => options.UseMySQL(connection));
+
+            services.AddAuthorization(options => {
+                options.AddPolicy("Administrators", policy => {
+                    policy.Requirements.Add(
+                        new UserRequirement(services
+                            .BuildServiceProvider()
+                            .GetService<ManagementContext>()
+                            .Users
+                            .ToArrayAsync()
+                            .Result));
+                });
+                
+            });
+
+            services.AddSingleton<Localizer>();
         }
 
 
@@ -144,7 +156,7 @@ namespace EquipmentManagementSystem {
             app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Login}/{id?}");
             });
         }
 

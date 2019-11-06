@@ -20,7 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EquipmentManagementSystem.Controller {
+namespace EquipmentManagementSystem.Controllers {
 
 
 

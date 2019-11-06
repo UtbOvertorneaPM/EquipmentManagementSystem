@@ -21,6 +21,7 @@ namespace EquipmentManagementSystem.Domain.Data.DbAccess {
 
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<Owner> Owners { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 

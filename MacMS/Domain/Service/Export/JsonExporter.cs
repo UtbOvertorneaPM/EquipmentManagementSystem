@@ -14,7 +14,7 @@ namespace EquipmentManagementSystem.Data.Export {
         public async Task<ExportFile> FormatData<T>(IEnumerable<T> data, string fileName) {
 
             var json = await Task.Run(() => JsonConvert.SerializeObject(data, Formatting.Indented));
-            var file = new ExportFile(await Task.Run(() => Encoding.ASCII.GetBytes(json)));
+            var file = new ExportFile(await Task.Run(() => Encoding.UTF8.GetBytes(json)));
             SetFileInfo(file, fileName);
 
             return file;

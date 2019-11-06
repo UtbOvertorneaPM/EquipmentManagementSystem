@@ -18,7 +18,7 @@ using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
 using EquipmentManagementSystem.Domain.Data.Validation;
 
-namespace EquipmentManagementSystem.Controller {
+namespace EquipmentManagementSystem.Controllers {
 
 
     public class HomeController : BaseController {
