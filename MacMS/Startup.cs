@@ -30,7 +30,6 @@ namespace EquipmentManagementSystem {
 
     public class Startup {
 
-
         public IConfiguration Configuration { get; }
 
 
@@ -61,19 +60,6 @@ namespace EquipmentManagementSystem {
 
             var credentials = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText(path)).Credentials;
             var connection = $"Server={credentials.Server};port=3306;Database={credentials.DbName};user={credentials.User};password={credentials.Password}";
-
-            var roles = "";
-
-            // Sets up roles that have access using policy
-#if DEBUG
-            roles = credentials.DebugDomain;
-#elif RELEASE
-            roles = credentials.Domain;
-#endif
-
-            roles = roles.Replace("\\", @"\");
-            
-
 
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
             
