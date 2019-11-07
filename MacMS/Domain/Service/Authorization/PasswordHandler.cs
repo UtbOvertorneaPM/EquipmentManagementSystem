@@ -15,7 +15,7 @@ namespace EquipmentManagementSystem.Domain.Service.Authorization {
 
             using (var algorithm = new Rfc2898DeriveBytes(password, Convert.FromBase64String(passwordInfo[0]), 1000, HashAlgorithmName.SHA512)) {
 
-                var keyToCheck = algorithm.GetBytes(64);
+                var keyToCheck = algorithm.GetBytes(512);
 
                 return keyToCheck.SequenceEqual(Convert.FromBase64String(passwordInfo[1]));
             }
