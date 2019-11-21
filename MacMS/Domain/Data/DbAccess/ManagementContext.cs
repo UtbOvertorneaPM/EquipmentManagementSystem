@@ -1,11 +1,6 @@
 ﻿
 using EquipmentManagementSystem.Domain.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.EntityFrameworkCore.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 
 namespace EquipmentManagementSystem.Domain.Data.DbAccess {

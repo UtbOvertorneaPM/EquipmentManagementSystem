@@ -1,8 +1,6 @@
 ﻿using EquipmentManagementSystem.Domain.Data.DbAccess;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Domain.Service.Authorization {
@@ -14,7 +12,6 @@ namespace EquipmentManagementSystem.Domain.Service.Authorization {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, UserRequirement requirement) {
 
 
-            
             context.Succeed(requirement);
 
             return Task.CompletedTask;

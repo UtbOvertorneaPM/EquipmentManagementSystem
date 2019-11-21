@@ -1,5 +1,5 @@
 ﻿using EquipmentManagementSystem.Domain.Data.Models;
-using EquipmentManagementSystem.Models;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

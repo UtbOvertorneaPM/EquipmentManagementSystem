@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Reflection;
@@ -18,8 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Newtonsoft.Json;
-using EquipmentManagementSystem.Models;
-using EquipmentManagementSystem.Data;
 using EquipmentManagementSystem.Business.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Service;
@@ -61,6 +58,7 @@ namespace EquipmentManagementSystem {
             var credentials = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText(path)).Credentials;
             var connection = $"Server={credentials.Server};port=3306;Database={credentials.DbName};user={credentials.User};password={credentials.Password}";
 
+
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
             
             // Sets Localization to use SharedResource.sv-SE.resx
@@ -100,8 +98,6 @@ namespace EquipmentManagementSystem {
             services.AddMvcCore().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
             services.AddMvcCore().AddRazorViewEngine();
 
-            //services.AddSingleton<IAuthorizationHandler, RoleAuthentication>();
-            //services.AddSingleton<IAuthorizationHandler, UserAuthenticationHandler>();
             services.AddTransient<IAuthorizationHandler, UserAuthenticationHandler>();
 
             // Sets database to MySQL, and connects it to database using ManagementContext

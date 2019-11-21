@@ -1,11 +1,6 @@
-﻿using EquipmentManagementSystem.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EquipmentManagementSystem.Domain.Data.Models;
-using EquipmentManagementSystem.Domain.Service;
-using Microsoft.EntityFrameworkCore;
+
 using EquipmentManagementSystem.Domain.Business;
 
 namespace EquipmentManagementSystem.Domain.Data.Validation {

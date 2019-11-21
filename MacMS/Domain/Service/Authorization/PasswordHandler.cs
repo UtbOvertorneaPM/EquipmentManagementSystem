@@ -1,9 +1,9 @@
 ﻿using EquipmentManagementSystem.Domain.Data.DbAccess;
 using System;
-using System.Collections.Generic;
+
 using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
+
 
 namespace EquipmentManagementSystem.Domain.Service.Authorization {
 

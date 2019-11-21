@@ -4,14 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-using EquipmentManagementSystem.Models;
-using EquipmentManagementSystem.Data;
 using Newtonsoft.Json;
-using System.Threading;
-using System.Text;
+
 using Microsoft.AspNetCore.Http;
 using EquipmentManagementSystem.Domain.Business;
-using EquipmentManagementSystem.Domain.Data;
+
 using System.Diagnostics;
 using EquipmentManagementSystem.Domain.Data.Models;
 

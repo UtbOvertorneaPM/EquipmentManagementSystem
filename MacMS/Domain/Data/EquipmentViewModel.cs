@@ -1,11 +1,8 @@
 ﻿using EquipmentManagementSystem.Domain.Business;
 using EquipmentManagementSystem.Domain.Data.Models;
-using EquipmentManagementSystem.Domain.Service;
-using Microsoft.AspNetCore.Mvc.Rendering;
+
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Threading.Tasks;
 
 namespace EquipmentManagementSystem.Domain.Data {

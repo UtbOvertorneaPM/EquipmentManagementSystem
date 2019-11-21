@@ -1,11 +1,11 @@
-﻿using EquipmentManagementSystem.Data;
+﻿
 using EquipmentManagementSystem.Domain.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
 using EquipmentManagementSystem.Domain.Data.Validation;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
-using EquipmentManagementSystem.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+
 using static EquipmentManagementSystem.Domain.Data.Models.Equipment;
 
 namespace EquipmentManagementSystem.Domain.Business {

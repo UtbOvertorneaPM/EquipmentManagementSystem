@@ -1,12 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using EquipmentManagementSystem.Models;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using EquipmentManagementSystem.Domain.Business;
@@ -16,7 +14,6 @@ using EquipmentManagementSystem.Domain.Service.Export;
 using Microsoft.EntityFrameworkCore;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
-using EquipmentManagementSystem.Domain.Data.Validation;
 
 namespace EquipmentManagementSystem.Controllers {
 

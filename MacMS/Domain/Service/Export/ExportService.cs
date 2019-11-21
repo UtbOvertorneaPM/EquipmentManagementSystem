@@ -1,6 +1,5 @@
-﻿using EquipmentManagementSystem.Data;
-using EquipmentManagementSystem.Data.Export;
-using EquipmentManagementSystem.Models;
+﻿using EquipmentManagementSystem.Data.Export;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

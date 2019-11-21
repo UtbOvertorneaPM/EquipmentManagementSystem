@@ -1,22 +1,18 @@
-﻿using EquipmentManagementSystem.Data;
-using EquipmentManagementSystem.Data.Export;
-using EquipmentManagementSystem.Domain.Business;
+﻿using EquipmentManagementSystem.Domain.Business;
 using EquipmentManagementSystem.Domain.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
-using EquipmentManagementSystem.Domain.Data.Validation;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Export;
-using EquipmentManagementSystem.Models;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
-using System.IO;
+
 using System.Linq;
 using System.Threading.Tasks;
 

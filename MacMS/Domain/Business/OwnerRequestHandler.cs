@@ -1,6 +1,6 @@
-﻿using EquipmentManagementSystem.Data;
+﻿
 using EquipmentManagementSystem.Domain.Business;
-using EquipmentManagementSystem.Domain.Data;
+
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
 using EquipmentManagementSystem.Domain.Data.Validation;

@@ -5,18 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using EquipmentManagementSystem.Data;
-using EquipmentManagementSystem.Models;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Localization;
-using System.IO;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Authorization;
+
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Data.Models;
 using OwnerManagementSystem.Domain.Business;
-using EquipmentManagementSystem.Domain.Data.Validation;
+
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Business;
 using EquipmentManagementSystem.Domain.Data;
