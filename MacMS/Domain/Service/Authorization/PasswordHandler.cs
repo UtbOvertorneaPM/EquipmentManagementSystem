@@ -1,4 +1,5 @@
 ﻿using EquipmentManagementSystem.Domain.Data.DbAccess;
+using EquipmentManagementSystem.Domain.Data.Models;
 using System;
 
 using System.Linq;
@@ -13,7 +14,7 @@ namespace EquipmentManagementSystem.Domain.Service.Authorization {
 
             var passwordInfo = user.password.Split(".");
 
-            using (var algorithm = new Rfc2898DeriveBytes(password, Convert.FromBase64String(passwordInfo[0]), 1000, HashAlgorithmName.SHA512)) {
+            using (var algorithm = new Rfc2898DeriveBytes(password, Convert.FromBase64String(passwordInfo[0]), 12000, HashAlgorithmName.SHA512)) {
 
                 var keyToCheck = algorithm.GetBytes(512);
 

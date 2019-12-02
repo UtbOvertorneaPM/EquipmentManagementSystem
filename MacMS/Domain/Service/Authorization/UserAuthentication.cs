@@ -1,4 +1,5 @@
 ﻿using EquipmentManagementSystem.Domain.Data.DbAccess;
+using EquipmentManagementSystem.Domain.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 
 using System.Threading.Tasks;

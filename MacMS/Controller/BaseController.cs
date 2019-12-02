@@ -1,6 +1,6 @@
 ﻿
 using EquipmentManagementSystem.Domain.Service;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -13,7 +13,7 @@ using System;
 namespace EquipmentManagementSystem.Controllers {
 
 
-    [Authorize("Administrators")]
+    [Authorize]
     public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller, IDisposable {
 
 

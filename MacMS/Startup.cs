@@ -21,6 +21,7 @@ using EquipmentManagementSystem.Business.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Service;
 using EquipmentManagementSystem.Domain.Service.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace EquipmentManagementSystem {
 
@@ -39,14 +40,9 @@ namespace EquipmentManagementSystem {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
 
-            
-            services.Configure<CookiePolicyOptions>(options => {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => false;
-                options.MinimumSameSitePolicy = SameSiteMode.Strict;
-            });
+            services.AddControllersWithViews();           
 
-            // Gets connectionstring and crendentials
+            // Gets connectionstring
             var path = "";
 #if DEBUG
             path = @"C:\Users\peter\source\repos\prodSettings.json";
@@ -58,9 +54,19 @@ namespace EquipmentManagementSystem {
             var credentials = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText(path)).Credentials;
             var connection = $"Server={credentials.Server};port=3306;Database={credentials.DbName};user={credentials.User};password={credentials.Password}";
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => {
+                    options.AccessDeniedPath = "/Forbidden/";
+                });
 
-            services.AddAuthentication(IISDefaults.AuthenticationScheme);
-            
+            services.AddHttpContextAccessor();
+            services.AddRazorPages();
+
+            // Sets database to MySQL, and connects it to database using ManagementContext          
+            services.AddDbContextPool<ManagementContext>(
+                options => options.UseMySQL(connection));
+
+
             // Sets Localization to use SharedResource.sv-SE.resx
             services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
 
@@ -82,11 +88,9 @@ namespace EquipmentManagementSystem {
                 }
             );
 
-
-
             // Inserts Localization into MVC framework
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization(options => {
                     options.DataAnnotationLocalizerProvider = (type, factory) => {
@@ -95,51 +99,33 @@ namespace EquipmentManagementSystem {
                     };
                 });
 
-            services.AddMvcCore().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
-            services.AddMvcCore().AddRazorViewEngine();
-
-            services.AddTransient<IAuthorizationHandler, UserAuthenticationHandler>();
-
-            // Sets database to MySQL, and connects it to database using ManagementContext
-            services.AddDbContextPool<ManagementContext>(
-                options => options.UseMySQL(connection));
-
-            services.AddAuthorization(options => {
-                options.AddPolicy("Administrators", policy => {
-                    policy.Requirements.Add(
-                        new UserRequirement(services
-                            .BuildServiceProvider()
-                            .GetService<ManagementContext>()
-                            .Users
-                            .ToArrayAsync()
-                            .Result));
-                });
-                
-            });
 
             services.AddSingleton<Localizer>();
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
-
-            if (env.IsDevelopment()) {
-
-                app.UseDeveloperExceptionPage();
-            }
+        public void Configure(IApplicationBuilder app) {
 
             app.UseStaticFiles();
             app.UseRequestLocalization();
-            app.UseAuthentication();
-            app.UseHttpsRedirection();
-            app.UseCookiePolicy();
+            var cookiePolicyOptions = new CookiePolicyOptions {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                Secure = CookieSecurePolicy.Always
+            };
 
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Login}/{action=Login}/{id?}");
+            app.UseRouting();
+            app.UseCookiePolicy(cookiePolicyOptions);
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseHttpsRedirection();
+            
+
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllerRoute(name: "default", pattern:"{controller=Login}/{action=Login}/{id?}");
+                endpoints.MapRazorPages();                
             });
+
         }
 
 
