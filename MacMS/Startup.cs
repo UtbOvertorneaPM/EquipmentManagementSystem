@@ -6,12 +6,10 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Server.IISIntegration;
-using Microsoft.AspNetCore.Authorization;
+
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +18,6 @@ using Newtonsoft.Json;
 using EquipmentManagementSystem.Business.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Service;
-using EquipmentManagementSystem.Domain.Service.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace EquipmentManagementSystem {
