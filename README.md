@@ -31,8 +31,8 @@ You can choose to either use the CLI or workbench for managing MySql
   }
 }
   ```
-	User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can 
-	use the root user you created during the MySql setup.
+User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can 
+use the root user you created during the MySql setup.
 
  4. Add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
  
