@@ -100,12 +100,10 @@ namespace OwnerManagementSystem.Domain.Business {
             }
             else {
 
-                var minSerialLength = 5;
+                var names = selection.Trim().Replace("                             ", " ").Split("                            ");
+                //names = names.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length > 2).Distinct().ToArray();
 
-                var names = selection.Trim().Replace("\n", " ").Split(" ");
-                names = names.Where(s => !string.IsNullOrWhiteSpace(s) && s.Length > minSerialLength).Distinct().ToArray();
-
-                List<Owner> temp = new List<Owner>();
+                List <Owner> temp = new List<Owner>();
                 for (int i = 0; i < names.Count(); i++) {
 
                     temp.Add(await _service.FirstOrDefault<Owner>(x => x.FullName == names[i]).FirstAsync());
