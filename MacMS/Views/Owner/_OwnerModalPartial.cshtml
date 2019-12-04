@@ -19,22 +19,51 @@
 
                 var modal = document.getElementById('modal-placeholder');
                 modal.style.display = "none";
-                window.location.reload(true);
+                window.location.reload(false);
+                return false;
             }
             else {
                 alert("something went wrong");
             }
         };
 
-        $('#modalForm').on("submit", function (event) {
+        $('#modalSubmit').on("click", function (event) {
 
+            alert("oi");
             event.preventDefault();
             var form = $('#modalForm');
 
-            $.getScript("/js/ajaxPost.js", function (data) {
-                PostForm(form, callBackOwner);
-            });
+            PostForm(form);
         });
+
+        function PostForm(form) {
+
+    $.ajax({
+        dataType: 'JSON',
+        type: 'POST',
+        url: form.attr('action'),
+        data: form.serialize(),
+        success: function (data) {
+
+            switch (data) {
+                case true:
+                    var modal = document.getElementById('modal-placeholder');
+                    modal.style.display = "none";
+                    break;
+                case false:
+                    break;
+                case null:
+                    alert("Model invalid");
+                    break;
+                default:
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(errorThrown);
+            return false;
+        }
+    });
+};
 
 
     </script>
@@ -101,7 +130,7 @@
 
 
         <div class="SubmitDiv">
-            <input type="submit" value="Submit" id="modalSubmit" />
+            <input type="button" value="Submit" id="modalSubmit" />
         </div>
     </div>
 }
