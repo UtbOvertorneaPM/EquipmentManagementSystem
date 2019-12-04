@@ -95,7 +95,6 @@ function SubmitExport(url) {
 // Prevents doubleclicking from selecting text in table
 function PreventDoubleClick() {
 
-    alert("click");
     var table = document.getElementById('table');
     table.addEventListener('mousedown', function (event) {
 

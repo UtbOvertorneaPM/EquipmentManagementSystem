@@ -19,6 +19,7 @@ using EquipmentManagementSystem.Business.Data;
 using EquipmentManagementSystem.Domain.Data.DbAccess;
 using EquipmentManagementSystem.Domain.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EquipmentManagementSystem {
 

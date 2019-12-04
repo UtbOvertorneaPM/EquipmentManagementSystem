@@ -23,7 +23,7 @@ namespace EquipmentManagementSystem.Controllers {
     public class OwnerController : BaseController  {
 
         private IRequestHandler _service;
-        private int pageSize = 25;
+        private int _pageSize = 25;
 
 
         public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
@@ -56,7 +56,7 @@ namespace EquipmentManagementSystem.Controllers {
                     SortVariable = ViewData["CurrentSort"].ToString(),
                     Page = page,
                     SearchString = searchString,
-                    PageSize = pageSize
+                    PageSize = _pageSize
                 })
             );
         }
