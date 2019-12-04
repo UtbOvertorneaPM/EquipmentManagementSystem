@@ -269,15 +269,27 @@ namespace EquipmentManagementSystem.Controllers {
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteSelection(string mail) {
+        public async Task<IActionResult> DeleteSelection(string names) {
 
             try {
-                var mails = mail.Trim().Replace("\n", " ").Split(" ");
+                var ownerList = new List<Owner>();
 
-                for (int i = 0; i < mails.Count(); i++) {
+                names = names.Replace(",", "");
+                var nameArray = names.Split("\n");
 
-                    var owner = _service.FirstOrDefault<Owner>(o => mails[i] == o.Mail);
-                    await _service.Remove(owner);
+                for (int i = 0; i < nameArray.Count(); i++) {
+
+                    if (string.IsNullOrWhiteSpace(nameArray[i]) is false) {
+
+                        var firstName = nameArray[i].Trim();
+                        var lastName = nameArray[i + 2].Trim();
+                        var mail = nameArray[i + 3].Trim();
+
+                        var owner = await _service.Get<Owner>(o => o.FirstName == firstName && o.LastName == lastName).FirstOrDefaultAsync();
+                        await _service.Remove(owner);
+
+                        i += 3;
+                    }
                 }
 
                 return Json(true);

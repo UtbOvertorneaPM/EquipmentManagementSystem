@@ -172,15 +172,15 @@
         function Delete() {
 
             var rows = document.getElementById("deleteTable");
-            var mail = Array();
+            var names = Array();
 
             for (var i = 0, row; row = rows.rows[i]; i++) {
 
-                mail[i] = row.cells[3].innerHTML;
+                names[i] = row.cells[1].innerHTML + row.cells[2].innerHTML + row.cells[3].innerHTML;
             }
 
-            $.post("@Url.Action("DeleteSelection", "Owner", new { mail = "_mail_" })"
-                .replace("_mail_", encodeURIComponent(mail)), function (response) {
+            $.post("@Url.Action("DeleteSelection", "Owner", new { names = "_names_"})"
+                .replace("_names_", encodeURIComponent(names)), function (response) {
 
                     switch (response) {
                         case true:
@@ -189,7 +189,7 @@
                             break;
                         case null:
 
-                            alert("Deletion failed, check that the user has a valid E-mail address");
+                            alert("Deletion failed");
                             break;
                         default:
                     }
