@@ -10,7 +10,7 @@ $("table").click(function (event) {
 
     if (window.getSelection().type == "Caret") {
 
-        event.stopPropagation();
+        event.stopPropagation();        
 
         if (event.ctrlKey == false) {
             var $start = $(event.target);
@@ -95,6 +95,7 @@ function SubmitExport(url) {
 // Prevents doubleclicking from selecting text in table
 function PreventDoubleClick() {
 
+    alert("click");
     var table = document.getElementById('table');
     table.addEventListener('mousedown', function (event) {
 
@@ -112,7 +113,7 @@ function PreventDoubleClick() {
                 $target.removeClass("SelectedRow");
             }
             else {
-                $target.addClass("SelectedRow");
+                $target.addClass("SelectedRow");    
             }
 
             var rowItems = $('.SelectedRow');
@@ -126,7 +127,7 @@ function PreventDoubleClick() {
             }
         }
     }, false);
-
+}
 
 
     $("#selectionExport").click(function () {
@@ -169,7 +170,6 @@ function PreventDoubleClick() {
         });
 
     });
-};
 
 
 
