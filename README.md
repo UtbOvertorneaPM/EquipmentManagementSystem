@@ -22,13 +22,11 @@ Searchable database with web GUI for managing IT equipment and user information
     
 2. Download the [ASP .Net Core Runtime Hosting Bundle 3.0](https://download.visualstudio.microsoft.com/download/pr/32b71802-0b4d-4064-a7e6-083b5155d3b1/080cf60a5c06be4ed27e2eac6c693f2f/dotnet-hosting-3.0.1-win.exe)
 
-3. Open Turn on windows features and select the options in the table below
+3. Open Turn on windows features and select the folder in the list from the table below
 
     Name                                               |
     -------------------------------------------------- |
     Web Server(IIS) / Internet Information Services    |
-    IIS Management Console                             |
-    World Wide Web Services                            |
     
     [Install and Configure IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.0#iis-configuration)
 
