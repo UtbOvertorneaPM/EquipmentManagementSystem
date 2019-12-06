@@ -24,11 +24,11 @@ Searchable database with web GUI for managing IT equipment and user information
 
 3. Open Turn on windows features and select the options in the table below
 
-    Name                                             |
-    ------------------------------------------------ |
-    Web Server(IIS)/Internet Information Services    |
-    IIS Management Console                           |
-    World Wide Web Services                          |
+    Name                                               |
+    -------------------------------------------------- |
+    Web Server(IIS) / Internet Information Services    |
+    IIS Management Console                             |
+    World Wide Web Services                            |
     
     [Install and Configure IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.0#iis-configuration)
 
