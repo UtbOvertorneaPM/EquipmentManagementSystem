@@ -9,7 +9,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 > [7-Zip](https://www.7-zip.org/a/7z1900-x64.exe)
 
-> [ASP Net Core Runtime Hosting Bundle 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+> [ASP Net Core Runtime Hosting Bundle 3.0](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-aspnetcore-3.0.1-windows-hosting-bundle-installer)
 
 > [MySql Installer Community](https://dev.mysql.com/downloads/installer/)
 
@@ -20,7 +20,7 @@ Searchable database with web GUI for managing IT equipment and user information
     a. For server deployment, when prompted select server computer option, standalone MySql server, config type server computer(no need to change the parameters unless necessary), use recommended.
     a2. when prompted for a password, input the password you wish the root owner of the database to use.
     
-2. Download the [ASP .Net Core Runtime Hosting Bundle 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+2. Download the [ASP .Net Core Runtime Hosting Bundle 3.0](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-aspnetcore-3.0.1-windows-hosting-bundle-installer)
 
 3. [Install and Configure IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.0#iis-configuration)
 
