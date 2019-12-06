@@ -22,7 +22,7 @@ Searchable database with web GUI for managing IT equipment and user information
     
 2. Download the [ASP .Net Core Runtime Hosting Bundle 3.0](https://download.visualstudio.microsoft.com/download/pr/32b71802-0b4d-4064-a7e6-083b5155d3b1/080cf60a5c06be4ed27e2eac6c693f2f/dotnet-hosting-3.0.1-win.exe)
 
-3. Open `Turn windows features on or off` and select the folder in the list named `Web Server(IIS) / Internet Information Services`    
+3. Open `Turn windows features on or off` and select the folder in the list named `Web Server(IIS)` / `Internet Information Services`    
 
 4. Download and (Remember to unblock the archive before extracting!)Extract the [newest version](https://github.com/UtbOvertorneaPM/EquipmentManagementSystem/releases) to the folder on the computer/server where you wish to host the application.
 
