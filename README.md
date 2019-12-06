@@ -14,15 +14,15 @@ Searchable database with web GUI for managing IT equipment and user information
 
 # Installing
 
-1. Extract the files to the location you wish to host the application on.
+Markup : 1. Extract the files to the location you wish to host the application on.
 
 2. Create a new MySql db using either MySql CLI or workbench.
-    2a. Login to the CLI using either root or a user you've set up. To create a database schema using the CLI, type in `create database DATABASENAMEHERE`
+    a. Login to the CLI using either root or a user you've set up. To create a database schema using the CLI, type in `create database DATABASENAMEHERE`
   
-  2b. Using workbench press the add schema and fill in the form.
+  b. Using workbench press the add schema and fill in the form.
   
 3. Create a table called `users`
-    3a. Using the CLI, first select the database by using the command `use DATABASENAMEHERE;`, then input the command
+    a. Using the CLI, first select the database by using the command `use DATABASENAMEHERE;`, then input the command
   ```
   create table users (
   id int not null auto_increment,
@@ -31,7 +31,7 @@ Searchable database with web GUI for managing IT equipment and user information
   primary key(id));
   ```
   
-  3b. Using workbench design the table as follows, 
+  b. Using workbench design the table as follows, 
   
   Column_name | Datatype       | PK | NN | UQ | BIN | UN | ZF | AI
   ----------- | -------------- | -- | -- | -- | --- | -- | -- | --
