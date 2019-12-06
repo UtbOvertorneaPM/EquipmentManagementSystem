@@ -17,7 +17,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 # Installing
 
-1. Download and install the Pre-requisites
+1. Download and install the Prerequisites
 
 2. Download and Extract the [newest version](https://github.com/UtbOvertorneaPM/EquipmentManagementSystem/releases) to the folder on the computer/server where you wish to host the application.
 
