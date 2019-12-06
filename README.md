@@ -14,11 +14,12 @@ Searchable database with web GUI for managing IT equipment and user information
 
 # Installing
 
-1. Extract the files to the location you wish to host the application on.
+1. Extract the files to the location where you wish to host the application.
 
 2. Create a new MySql db using either MySql CLI or workbench.
 
-    a. Login to the CLI using either root or a user you've set up. To create a database schema using the CLI, type in `create database DATABASENAMEHERE`
+    a. Login to the CLI using either root or a user you've setup. 
+    To create a database schema using the CLI, type in `create database DATABASENAMEHERE;`
   
     b. Using workbench press the add schema and fill in the form.
   
@@ -52,14 +53,12 @@ Searchable database with web GUI for managing IT equipment and user information
     }
     }
    ```
-   User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can 
-   use the root user you created during the MySql setup.
+   User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can use the root user you created during the MySql setup.
 
  5. Add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
  
  6. Edit folder permission so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
  
- 7. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases) application add users that will have access
- to the equipment management system.
+ 7. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases) application add users that will have access to the equipment management system.
 
 
