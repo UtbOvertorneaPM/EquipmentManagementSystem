@@ -59,7 +59,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 7. Edit the `prodSettings.json` file in the folder you extrated to using a text editor, with the your data
 
-    User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can use the root user you created during the MySql setup.
+    User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can use the `root` user you created during the MySql setup.
     ```
     {
     "Credentials": {
@@ -70,7 +70,6 @@ Searchable database with web GUI for managing IT equipment and user information
     }
     }
    ```
-   User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can use the root user you created during the MySql setup.
 
  8. Add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
  
