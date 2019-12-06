@@ -32,9 +32,12 @@ Searchable database with web GUI for managing IT equipment and user information
   ```
   
   3b. Using workbench design the table as follows, 
-  first row should be called `id` marked not null, set to auto increment and the type should be int.
-  second row should be called `name`, marked not null and type is varchar 255.
-  third row should be called `password`, marked not null and type is varchar 1500.
+  
+  Column_name | Datatype       | PK | NN | UQ | BIN | UN | ZF | AI
+  ----------- | -------------- | -- | -- | -- | --- | -- | -- | --
+  id          | int            | X  | X  |    |     |    |    | X 
+  name        | varchar(255)   |    | X  |    |     |    |    |    
+  password    | varchar(1500)  |    | X  |    |     |    |    |
 
 4. Edit `prodSettings.json` file in the root, with the neccessary data:
   ```
