@@ -24,7 +24,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 3. Open `Turn windows features on or off` and select the folder in the list named `Web Server(IIS)` / `Internet Information Services`    
 
-4. Download and (Remember to unblock the archive before extracting!)Extract the [newest version](https://github.com/UtbOvertorneaPM/EquipmentManagementSystem/releases) to the folder on the computer/server where you wish to host the application.
+4. Download and extract (Remember to unblock the archive before extracting!) the [newest version](https://github.com/UtbOvertorneaPM/EquipmentManagementSystem/releases) to the folder on the computer/server where you wish to host the application.
 
 5. Create a new MySql database using either MySql CLI(Command Line Interface) or workbench.
 
