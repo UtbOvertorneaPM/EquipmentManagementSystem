@@ -17,30 +17,25 @@ Searchable database with web GUI for managing IT equipment and user information
 
 1. Download and install MySql
 
-    1. For server deployment, when prompted select server computer option, standalone MySql server, config type server computer(no need to change the parameters unless necessary), use recommended.
+    1. For server deployment, when prompted select server computer option in the dropdown, standalone MySql server, config type server computer (no need to change the parameters unless necessary), use recommended.
     2. when prompted for a password, input the password you wish the root owner of the database to use.
     
 2. Download the [ASP .Net Core Runtime Hosting Bundle 3.0](https://download.visualstudio.microsoft.com/download/pr/32b71802-0b4d-4064-a7e6-083b5155d3b1/080cf60a5c06be4ed27e2eac6c693f2f/dotnet-hosting-3.0.1-win.exe)
 
-3. Open `Turn on windows features` and select the folder in the list from the table below
-
-    Name                                               |
-    -------------------------------------------------- |
-    Web Server(IIS) / Internet Information Services    |
-    
+3. Open `Turn windows features on or off` and select the folder in the list named `Web Server(IIS) / Internet Information Services`    
 
 4. Download and (Remember to unblock the archive before extracting!)Extract the [newest version](https://github.com/UtbOvertorneaPM/EquipmentManagementSystem/releases) to the folder on the computer/server where you wish to host the application.
 
 5. Create a new MySql database using either MySql CLI(Command Line Interface) or workbench.
 
     a. Login to the CLI using the root user you setup during the MySql installation. 
-    To create a database schema using the CLI, type in `create database DATABASENAMEHERE;`
+    To create a database schema using the CLI, type in `create database YOURDATABASENAMEHERE;`
   
     b. Using workbench press the add schema and fill in the form.
   
 6. Create a table called `users`
 
-    a. Using the CLI, first select the database by using the command `use DATABASENAMEHERE;`, then paste the commands in the box below
+    a. Using the CLI, first select the database by using the command `use YOURDATABASENAMEHERE;`, then paste the commands in the box below
     ```
     create table users (
     id int not null auto_increment,
@@ -63,7 +58,7 @@ Searchable database with web GUI for managing IT equipment and user information
     
     Server is the IP to the server or `localhost` if database is local.
     
-    DbName is the database named created during step 5
+    DbName is the database name created during step 5
     
    prodsettings.json format:
     ```
