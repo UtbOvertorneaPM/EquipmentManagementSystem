@@ -13,22 +13,27 @@ Searchable database with web GUI for managing IT equipment and user information
 
 > [MySql Installer Community](https://dev.mysql.com/downloads/installer/)
 
-> [Install and Configure IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.0#iis-configuration)
-
 # Installing
 
-1. Download and install the Prerequisites
+1. Download and install MySql
 
-2. Download and Extract the [newest version](https://github.com/UtbOvertorneaPM/EquipmentManagementSystem/releases) to the folder on the computer/server where you wish to host the application.
+    a. For server deployment, when prompted select server computer option, standalone MySql server, config type server computer(no need to change the parameters unless necessary), use recommended.
+    a2. when prompted for a password, input the password you wish the root owner of the database to use.
+    
+2. Download the [ASP .Net Core Runtime Hosting Bundle 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
 
-3. Create a new MySql database using either MySql CLI(Command Line Interface) or workbench.
+3. [Install and Configure IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.0#iis-configuration)
+
+4. Download and Extract the [newest version](https://github.com/UtbOvertorneaPM/EquipmentManagementSystem/releases) to the folder on the computer/server where you wish to host the application.
+
+5. Create a new MySql database using either MySql CLI(Command Line Interface) or workbench.
 
     a. Login to the CLI using either root or a user you've setup. 
     To create a database schema using the CLI, type in `create database DATABASENAMEHERE;`
   
     b. Using workbench press the add schema and fill in the form.
   
-4. Create a table called `users`
+6. Create a table called `users`
 
     a. Using the CLI, first select the database by using the command `use DATABASENAMEHERE;`, then input the command
     ```
@@ -47,7 +52,7 @@ Searchable database with web GUI for managing IT equipment and user information
     name        | varchar(255)   |    | X  |    |     |    |    |    
     password    | varchar(1500)  |    | X  |    |     |    |    |
 
-5. Edit `prodSettings.json` file in the root, with the neccessary data:
+7. Edit `prodSettings.json` file in the root, with the neccessary data:
     ```
     {
     "Credentials": {
@@ -60,10 +65,10 @@ Searchable database with web GUI for managing IT equipment and user information
    ```
    User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can use the root user you created during the MySql setup.
 
- 6. Add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
+ 8. Add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
  
- 7. Edit folder permission so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
+ 9. Edit folder permission so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
  
- 8. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases) application add users that will have access to the equipment management system.
+ 10. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases) application add users that will have access to the equipment management system.
 
 
