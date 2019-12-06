@@ -1,4 +1,5 @@
 # Equipment Management System
+![Net Core 3.0](https://img.shields.io/badge/net%20core-3.0-success)
 
 Searchable database with web GUI for managing IT equipment and user information
 
