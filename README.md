@@ -71,7 +71,8 @@ Searchable database with web GUI for managing IT equipment and user information
     }
    ```
 
- 8. Start the IIS Manager application, and add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
+ 8. Start the IIS Manager application, and add a new site in IIS manager to the computer/server
+     a. Make sure to set binding as https and sign it with a certificate.
  
  9. Edit folder permission so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
  
