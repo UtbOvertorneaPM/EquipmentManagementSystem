@@ -15,7 +15,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 # Installing
 
-1. Download and install MySql
+1. Download and install [MySql](https://dev.mysql.com/downloads/installer/)
 
     1. For server deployment, when prompted select server computer option in the dropdown, standalone MySql server, config type server computer (no need to change the parameters unless necessary), use recommended.
     2. when prompted for a password, input the password you wish the root owner of the database to use.
