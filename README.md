@@ -17,8 +17,8 @@ Searchable database with web GUI for managing IT equipment and user information
 
 1. Download and install MySql
 
-    a. For server deployment, when prompted select server computer option, standalone MySql server, config type server computer(no need to change the parameters unless necessary), use recommended.
-    a2. when prompted for a password, input the password you wish the root owner of the database to use.
+    1. For server deployment, when prompted select server computer option, standalone MySql server, config type server computer(no need to change the parameters unless necessary), use recommended.
+    2. when prompted for a password, input the password you wish the root owner of the database to use.
     
 2. Download the [ASP .Net Core Runtime Hosting Bundle 3.0](https://download.visualstudio.microsoft.com/download/pr/32b71802-0b4d-4064-a7e6-083b5155d3b1/080cf60a5c06be4ed27e2eac6c693f2f/dotnet-hosting-3.0.1-win.exe)
 
@@ -72,8 +72,9 @@ Searchable database with web GUI for managing IT equipment and user information
    ```
 
  8. Start the IIS Manager application, and add a new site in IIS manager to the computer/server
-     a. Set the name of the site, point to the folder of the extracted files.
-     b. Set the binding to HTTPS and sign it with a certificate
+ 
+     1. Set the name of the site, point to the folder of the extracted files.
+     2. Set the binding to HTTPS and sign it with a certificate
  
  9. Edit folder permission of the folder where the extracted files are in, so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
  
