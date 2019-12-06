@@ -50,7 +50,7 @@ Searchable database with web GUI for managing IT equipment and user information
 User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can 
 use the root user you created during the MySql setup.
 
- 65. Add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
+ 5. Add a new site in IIS manager, make sure to set binding as https and sign it with a certificate.
  
  6. Edit folder permission so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
  
