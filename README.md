@@ -79,6 +79,6 @@ Searchable database with web GUI for managing IT equipment and user information
  
  9. Edit folder permission of the folder where the extracted files are in, and add the IIS user or `IIS AppPool\DefaultAppPool` so it has full control over the application folder.
  
- 10. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases/download/v1.1/PasswordHasher.7z) application add users that will have access to the equipment management system.
+ 10. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases/download/v1.1/PasswordHasher.7z) application, add users that will have access to the equipment management system.
 
 
