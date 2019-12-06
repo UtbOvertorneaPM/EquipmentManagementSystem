@@ -58,6 +58,8 @@ Searchable database with web GUI for managing IT equipment and user information
     password    | varchar(1500)  |    | X  |    |     |    |    |
 
 7. Edit the `prodSettings.json` file in the folder you extrated to using a text editor, with the your data
+
+    User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can use the root user you created during the MySql setup.
     ```
     {
     "Credentials": {
