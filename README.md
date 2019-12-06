@@ -57,7 +57,7 @@ Searchable database with web GUI for managing IT equipment and user information
     name        | varchar(255)   |    | X  |    |     |    |    |    
     password    | varchar(1500)  |    | X  |    |     |    |    |
 
-7. Edit the `prodSettings.json` file in the folder you extrated to, with the neccessary data:
+7. Edit the `prodSettings.json` file in the folder you extrated to using a text editor, with the your data
     ```
     {
     "Credentials": {
