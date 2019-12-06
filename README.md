@@ -28,7 +28,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 5. Create a new MySql database using either MySql CLI(Command Line Interface) or workbench.
 
-    a. Login to the CLI using the root user you setup during the MySql installation. 
+    a. Login in the CLI using the root password you setup during the MySql installation. 
     To create a database schema using the CLI, type in `create database YOURDATABASENAMEHERE;`
   
     b. Using workbench press the add schema and fill in the form.
