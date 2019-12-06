@@ -40,7 +40,7 @@ Searchable database with web GUI for managing IT equipment and user information
   
 6. Create a table called `users`
 
-    a. Using the CLI, first select the database by using the command `use DATABASENAMEHERE;`, then input the command
+    a. Using the CLI, first select the database by using the command `use DATABASENAMEHERE;`, then paste the commands in the box below
     ```
     create table users (
     id int not null auto_increment,
