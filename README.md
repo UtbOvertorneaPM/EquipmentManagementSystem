@@ -73,8 +73,9 @@ Searchable database with web GUI for managing IT equipment and user information
 
  8. Start the IIS Manager application, and add a new site in IIS manager to the computer/server
  
-     1. Set the name of the site, choose your applicationpool either DefaultAppPool or a new one, point to the folder of the extracted files.
-     2. Set the binding to HTTPS and sign it with a certificate
+     1. [Create a self signed certificate]() or obtain a certificate though other means
+     2. Set the name of the site, choose your applicationpool either DefaultAppPool or a new one, point to the folder of the extracted files.
+     3. Set the binding to HTTPS and sign it with a certificate
  
  9. Edit folder permission of the folder where the extracted files are in, so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
  
