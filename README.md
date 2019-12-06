@@ -74,7 +74,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
  8. Start the IIS Manager application, and add a new site in IIS manager to the computer/server
  
-     1. [Create a self signed certificate](https://aboutssl.org/how-to-create-a-self-signed-certificate-in-iis/) or obtain a certificate though other means
+     1. [Create a self signed certificate](https://aboutssl.org/how-to-create-a-self-signed-certificate-in-iis/) or obtain a certificate though other means like https://letsencrypt.org/
      2. Set the name of the site, choose your Applicationpool: use either DefaultAppPool or a new one
      3. Set the physical path to point at the folder of the extracted files.
      3. Set the binding to HTTPS and sign it with a certificate
