@@ -72,9 +72,10 @@ Searchable database with web GUI for managing IT equipment and user information
    ```
 
  8. Start the IIS Manager application, and add a new site in IIS manager to the computer/server
-     a. Make sure to set binding as https and sign it with a certificate.
+     a. Set the name of the site, point to the folder of the extracted files.
+     b. Set the binding to HTTPS and sign it with a certificate
  
- 9. Edit folder permission so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
+ 9. Edit folder permission of the folder where the extracted files are in, so that the IIS user or default AppPool(IIS AppPool\DefaultAppPool)has full control over the application folder.
  
  10. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases) application add users that will have access to the equipment management system.
 
