@@ -49,7 +49,7 @@ Searchable database with web GUI for managing IT equipment and user information
     primary key(id));
     ```
   
-    b. Using workbench design the table as follows, 
+    b. Using workbench to design the table as follows 
   
     Column_name | Datatype       | PK | NN | UQ | BIN | UN | ZF | AI
     ----------- | -------------- | -- | -- | -- | --- | -- | -- | --
@@ -57,9 +57,15 @@ Searchable database with web GUI for managing IT equipment and user information
     name        | varchar(255)   |    | X  |    |     |    |    |    
     password    | varchar(1500)  |    | X  |    |     |    |    |
 
-7. Edit the `prodSettings.json` file in the folder you extrated to using a text editor, with the your data
+7. Edit the `prodSettings.json` file in the folder you extracted to using a text editor, to match your settings
 
     User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can use the `root` user you created during the MySql setup.
+    
+    Server is the IP to the server or `localhost` if database is local.
+    
+    DbName is the database named created during step 5
+    
+   prodsettings.json format:
     ```
     {
     "Credentials": {
@@ -73,12 +79,13 @@ Searchable database with web GUI for managing IT equipment and user information
 
  8. Start the IIS Manager application, and add a new site in IIS manager to the computer/server
  
-     1. [Create a self signed certificate]() or obtain a certificate though other means
-     2. Set the name of the site, choose your applicationpool use either DefaultAppPool or a new one, point to the folder of the extracted files.
+     1. [Create a self signed certificate](https://aboutssl.org/how-to-create-a-self-signed-certificate-in-iis/) or obtain a certificate though other means
+     2. Set the name of the site, choose your Applicationpool: use either DefaultAppPool or a new one
+     3. Set the physical path to point at the folder of the extracted files.
      3. Set the binding to HTTPS and sign it with a certificate
  
- 9. Edit folder permission of the folder where the extracted files are in, and add the IIS user or `IIS AppPool\DefaultAppPool` so it has full control over the application folder.
+ 9. Edit folder permission of the folder wherein the extracted files are, and add the IIS user or `IIS AppPool\DefaultAppPool` in folder permissions so it has full control over the application folder.
  
- 10. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases/download/v1.1/PasswordHasher.7z) application, add users that will have access to the equipment management system by following the application instructions.
+ 10. Using the most up-to-date [PasswordHasher](https://github.com/UtbOvertorneaPM/PasswordHasher/releases/download/v1.1/PasswordHasher.7z) application, add any users that will have access to the equipment management system by following the application instructions.
 
 
