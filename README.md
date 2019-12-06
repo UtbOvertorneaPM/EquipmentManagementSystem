@@ -8,7 +8,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 > [ASP Net Core Runtime Hosting Bundle 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
 
-> [MySQL](https://dev.mysql.com/downloads/installer/)
+> [MySql Installer Community](https://dev.mysql.com/downloads/installer/)
 
 > [Install and Configure IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.0#iis-configuration)
 
