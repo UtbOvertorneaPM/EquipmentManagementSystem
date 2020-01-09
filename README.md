@@ -102,19 +102,19 @@ Editing
     
  2. Make your alterations to the fields and submit.
     
- Deleting
+Deleting
  
   For deleting a single row, press the delete link you wish to delete.
   To delete multiple rows simultaneously shift+click on the rows you wish to delete, then press the delete button that appeared at the top of the table.
     
 Exporting
 
- To export a single or multiple entries, please shift+click the row/rows you wish to export, and then press the export button that appeared at the top of the table. And select the format you wish to export to.
+  To export a single or multiple entries, please shift+click the row/rows you wish to export, and then press the export button that appeared at the top of the table. And select the format you wish to export to.
     
   If you wish to export the whole all entries in the table, press the export button at the top and select the format preferred.
     
 Import
 
- To import an earlier export please press the Import button at the top and point it towards the JSON file containing the export.
+  To import an earlier export please press the Import button at the top and point it towards the JSON file containing the export.
  
  
