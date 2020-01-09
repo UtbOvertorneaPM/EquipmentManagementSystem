@@ -35,7 +35,7 @@ Searchable database with web GUI for managing IT equipment and user information
   
 6. Create a table called `users`
 
-    a. Using the CLI, first select the database by using the command `use YOURDATABASENAMEHERE;`, then paste the commands in the box below
+    a. If you are using the CLI, first select the database by using the command `use YOURDATABASENAMEHERE;`, then paste the commands in the box below
     ```
     create table users (
     id int not null auto_increment,
@@ -44,7 +44,7 @@ Searchable database with web GUI for managing IT equipment and user information
     primary key(id));
     ```
   
-    b. Using workbench to design the table as follows 
+    b. If you are using workbench to design the table as follows 
   
     Column_name | Datatype       | PK | NN | UQ | BIN | UN | ZF | AI
     ----------- | -------------- | -- | -- | -- | --- | -- | -- | --
