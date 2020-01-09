@@ -54,7 +54,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 7. Edit the `prodSettings.json` file in the folder you extracted to using a text editor, to match your settings
 
-    User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer you can use the `root` user you created during the MySql setup.
+    User and password should be the MySql user that has access to the database, if this is the only database you will use on the computer use the `root` user you created during the MySql setup.
     
     Server is the IP to the server or `localhost` if database is local.
     
