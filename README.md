@@ -85,7 +85,7 @@ Searchable database with web GUI for managing IT equipment and user information
 
 # Usage
 
-Creating new Equipment/Owner
+**Creating new Equipment/Owner**
 
  1. To create a new Owner/Equipment, press the `Create New` link.
     
@@ -96,24 +96,24 @@ Creating new Equipment/Owner
         
     1. For Equipment you can also create a new owner on the create page, by pressing create new owner and filling in the form and submitting.
 
-Editing
+**Editing**
 
  1. To edit an existing Owner/Equipment, press the edit link on the row you wish to modify.
     
  2. Make your alterations to the fields and submit.
     
-Deleting
+**Deleting**
  
   For deleting a single row, press the delete link you wish to delete.
   To delete multiple rows simultaneously shift+click on the rows you wish to delete, then press the delete button that appeared at the top of the table.
     
-Exporting
+**Exporting**
 
   To export a single or multiple entries, please shift+click the row/rows you wish to export, and then press the export button that appeared at the top of the table. And select the format you wish to export to.
     
   If you wish to export the whole all entries in the table, press the export button at the top and select the format preferred.
     
-Import
+**Import**
 
   To import an earlier export please press the Import button at the top and point it towards the JSON file containing the export.
  
