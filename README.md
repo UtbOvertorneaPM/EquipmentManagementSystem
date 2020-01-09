@@ -91,8 +91,8 @@ Creating new Equipment/Owner
     
  2. Fill in the fields
      
-        For equipment, the serial field is required, it's good to fill in the model.
-        For Owners, only the Firstname field is required, it's good to fill out lastname and mail if possible.
+ For equipment, the serial field is required, it's good to fill in the model.
+ For Owners, only the Firstname field is required, it's good to fill out lastname and mail if possible.
         
         1. For Equipment you can also create a new owner on the create page, by pressing create new owner and filling in the form and submitting.
 
