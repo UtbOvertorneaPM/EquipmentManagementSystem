@@ -85,29 +85,29 @@ Searchable database with web GUI for managing IT equipment and user information
 
 # Usage
 
-**Creating new Equipment/Owner**
+**Create new Equipment/Owner**
 
  1. To create a new Owner/Equipment, press the `Create New` link.
     
  2. Fill in the fields
      
-    For equipment, the serial field is required, it's good to fill in the model.        
+    For equipment, the serial field is required, it's good to fill in the model and EquipmentType as well.        
     You can also create a new owner on the create page, by pressing create new owner and filling in the form and submitting.
     
     For Owners, only the Firstname field is required, it's good to fill out lastname and mail if possible.
 
-**Editing**
+**Edit**
 
  1. To edit an existing Owner/Equipment, press the edit link on the row you wish to modify.
     
  2. Make your alterations to the fields and submit.
     
-**Deleting**
+**Delete**
  
   For deleting a single row, press the delete link you wish to delete.
   To delete multiple rows simultaneously shift+click on the rows you wish to delete, then press the delete button that appeared at the top of the table.
     
-**Exporting**
+**Export**
 
   To export a single or multiple entries, please shift+click the row/rows you wish to export, and then press the export button that appeared at the top of the table. And select the format you wish to export to.
     
