@@ -28,8 +28,9 @@ namespace EquipmentManagementSystem.Controllers {
 
         public OwnerController(ManagementContext ctx, IStringLocalizerFactory factory) : base(factory) {
 
-            var service = new GenericService(ctx);
-            _service = new OwnerRequestHandler(service);
+            ctx.Database.EnsureCreated();
+            
+            _service = new OwnerRequestHandler(new GenericService(ctx));
         }
 
 
