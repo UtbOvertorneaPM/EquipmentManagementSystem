@@ -1,30 +1,25 @@
-﻿using System.IO;
-using System.Globalization;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
-
-using Microsoft.EntityFrameworkCore;
-
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Localization;
-
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using Newtonsoft.Json;
-using EquipmentManagementSystem.Business.Data;
-using EquipmentManagementSystem.Domain.Data.DbAccess;
-using EquipmentManagementSystem.Domain.Service;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Hosting;
+using EquipmentManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace EquipmentManagementSystem {
 
 
     public class Startup {
+
 
         public IConfiguration Configuration { get; }
 
@@ -38,92 +33,65 @@ namespace EquipmentManagementSystem {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
 
-            services.AddControllersWithViews();           
+            services.Configure<CookiePolicyOptions>(options => {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
+            });
 
-            // Gets connectionstring
-            var path = "";
-#if DEBUG
-            path = @"C:\Users\peter\source\repos\prodSettings.json";
-#elif RELEASE
+            services.Configure<CookieTempDataProviderOptions>(options => {
+                options.Cookie.IsEssential = true;
+            });
 
-            path = $"{Configuration.GetValue<string>(WebHostDefaults.ContentRootKey)}" + @"\prodSettings.json";
-#endif
+            services.AddMemoryCache();
 
-            var credentials = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText(path)).Credentials;
-            var connection = $"Server={credentials.Server};port=3306;Database={credentials.DbName};user={credentials.User};password={credentials.Password}";
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(300);
+                options.Cookie.HttpOnly = true;
+                // Make the session cookie essential
+                options.Cookie.IsEssential = true;
+            });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => {
-                    options.AccessDeniedPath = "/Forbidden/";
-                });
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddHttpContextAccessor();
-            services.AddRazorPages();
-
-            // Sets database to MySQL, and connects it to database using ManagementContext          
-            services.AddDbContextPool<ManagementContext>(
-                options => options.UseMySQL(connection));
-
-
-            // Sets Localization to use SharedResource.sv-SE.resx
-            services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
-
-            // Adds in Localization services
-            services.Configure<RequestLocalizationOptions>(
-                options => {
-                    var supportedCultures = new List<CultureInfo> {
-                                    new CultureInfo("en-GB"),
-                                    new CultureInfo("sv-SE")
-                    };
-
-                    options.DefaultRequestCulture = new RequestCulture("en-GB");
-                    options.SupportedCultures = supportedCultures;
-                    options.SupportedUICultures = supportedCultures;
-                    options.RequestCultureProviders = new List<IRequestCultureProvider> {
-                        new QueryStringRequestCultureProvider(),
-                        new CookieRequestCultureProvider()
-                    };
-                }
-            );
-
-            // Inserts Localization into MVC framework
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddViewLocalization()
-                .AddDataAnnotationsLocalization(options => {
-                    options.DataAnnotationLocalizerProvider = (type, factory) => {
-                        var assemblyName = new AssemblyName(typeof(SharedResource).GetTypeInfo().Assembly.FullName);
-                        return factory.Create("SharedResource", assemblyName.Name);
-                    };
-                });
-
-
-            services.AddSingleton<Localizer>();
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<ManagementContext>(options => options.UseSqlServer(connection));
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app) {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
 
-            app.UseStaticFiles();
-            app.UseRequestLocalization();
-            var cookiePolicyOptions = new CookiePolicyOptions {
-                MinimumSameSitePolicy = SameSiteMode.Strict,
-                Secure = CookieSecurePolicy.Always
-            };
+            if (env.IsDevelopment()) {
 
-            app.UseRouting();
-            app.UseCookiePolicy(cookiePolicyOptions);
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseHttpsRedirection();
-            
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
 
-            app.UseEndpoints(endpoints => {
-                endpoints.MapControllerRoute(name: "default", pattern:"{controller=Login}/{action=Login}/{id?}");
-                endpoints.MapRazorPages();                
+            app.UseStaticFiles(new StaticFileOptions {
+                
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Content")),
+                RequestPath = "/Content"
             });
 
+            app.UseStaticFiles(new StaticFileOptions {
+
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Scripts")),
+                RequestPath = "/Scripts"
+            });
+
+
+            app.UseMvc(routes => {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
 
