@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "name": "your-system",
   "devDependencies": {
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "jquery-ajax-unobtrusive": "3.2.6",
     "jquery-ui-dist": "1.12.1",
     "jquery-validation-unobtrusive": "3.2.8",
